@@ -17,16 +17,31 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ieee.cstc",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.ieee.cstc",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "config": {
+        "firebase": {
+          "apiKey": "AIzaSyBQH0riI5e09XX-pEcjvhCMAQEz2gvhDMY",
+          "authDomain": "cstc-2a071.firebaseapp.com",
+          "projectId": "cstc-2a071",
+          "storageBucket": "cstc-2a071.appspot.com",
+          "messagingSenderId": "669579499696",
+          "appId": "1:669579499696:web:dab2291f0cc2886d0b8375",
+          "measurementId": "G-LYQL9V1W9K"
+        }
+      }
     }
   }
 }
