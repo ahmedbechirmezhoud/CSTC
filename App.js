@@ -4,7 +4,7 @@ import * as FirebaseCore from 'expo-firebase-core';
 import { getApp, initializeApp } from 'firebase/app';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
-import LoginPageScreen from './screens/LoginPageScreen';
+import LoginPageScreen from './screens/LoginPage/LoginPageScreen';
 
 
 export default function App() {
