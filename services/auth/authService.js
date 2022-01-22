@@ -1,7 +1,8 @@
 import { 
     signUpEmail,
     addPhoneToCurrentUser,
-    sendVerificationCode
+    sendVerificationCode,
+    verifyUserEmail
 } from './signupService';
 
 import { 
@@ -21,5 +22,6 @@ export {
     signinWithFacebook,
     addPhoneToCurrentUser,
     sendVerificationCode,
-    signInWithPhone
+    signInWithPhone,
+    verifyUserEmail
 };

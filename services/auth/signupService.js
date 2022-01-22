@@ -2,7 +2,8 @@ import {
     getAuth, 
     createUserWithEmailAndPassword, 
     PhoneAuthProvider, 
-    linkWithCredential 
+    linkWithCredential,
+    sendEmailVerification
 } from 'firebase/auth';
 
 export async function signUpEmail(email, password) {
@@ -11,10 +12,20 @@ export async function signUpEmail(email, password) {
 
   try{
     const user = await createUserWithEmailAndPassword(auth, email, password);
+
+    verifyUserEmail(auth.currentUser)
   }
   catch(err){
     // TODO : Handle errors
-    console.log(err);
+    switch(err.code){
+      case "":{
+        break;
+      }
+
+      default:{
+        console.log(err.code);
+      }
+    }
   }
 }
 
@@ -34,4 +45,8 @@ export async function addPhoneToCurrentUser(verificationId, code){
 
   await linkWithCredential(auth.currentUser, credential);
   console.log('Linked!')
+}
+
+export async function verifyUserEmail(user){
+  await sendEmailVerification(user)
 }

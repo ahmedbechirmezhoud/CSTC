@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
 import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
-import * as authService from './services/authService';
+import * as authService from './services/auth/authService';
 
 export default function App() {
   const recaptchaVerifier = useRef(null);
@@ -27,8 +27,8 @@ export default function App() {
         attemptInvisibleVerification={true}
       />
       <Text>Open up App.js to start working on your app!</Text>
-      <Button title='Signin' onPress={()=>{authService.signinWithEmail('test@blabl.com', 'randomPass0')}} />
-      <Button title='Signup' onPress={()=>{authService.signUpEmail('test@blabl.com', 'randomPass0')}} />
+      <Button title='Signin' onPress={()=>{authService.signinWithEmail('testemail@qa.team', 'randomPass0')}} />
+      <Button title='Signup' onPress={()=>{authService.signUpEmail('testemail@qa.team', 'randomPass0')}} />
       <Button title='PhoneLink' onPress={async ()=>{
         let verificationId = await authService.sendVerificationCode("+216 95262865", recaptchaVerifier.current)
         authService.addPhoneToCurrentUser(verificationId, "000000");
