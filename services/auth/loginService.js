@@ -1,18 +1,18 @@
+import { auth } from './../../configInit';
 import { 
-    getAuth,
     signInWithEmailAndPassword,
     signOut as firebaseSignOut,
     PhoneAuthProvider,
     FacebookAuthProvider,
     signInWithCredential
 } from 'firebase/auth';
-
 import * as Facebook from 'expo-facebook';
+import { initCurrentUser, isCurrentUserInited } from '../firestore/userFuncs';
 
 export async function signinWithEmail(email, password) {
-  const auth = getAuth();
   try{
     const user = await signInWithEmailAndPassword(auth, email, password);
+    
   }
   catch(err){
     console.log("Error: " + err); // TODO : handle errors
@@ -20,13 +20,11 @@ export async function signinWithEmail(email, password) {
 }
 
 export function signOut(){
-  const auth = getAuth();
   firebaseSignOut(auth);
 }
 
 export async function signinWithFacebook() {
   const provider = new FacebookAuthProvider();
-  const auth = getAuth();
 
   try {
     const { type, token, expirationDate, permissions, declinedPermissions } =
@@ -42,7 +40,9 @@ export async function signinWithFacebook() {
 
       const credential = FacebookAuthProvider.credential(token);
       // Sign in with the credential from the Facebook user.
-      signInWithCredential(auth, credential);
+      await signInWithCredential(auth, credential);
+
+      if(!(await isCurrentUserInited())) initCurrentUser();
     } else {
       // type === 'cancel'
       console.log('Canceled');
@@ -55,8 +55,6 @@ export async function signinWithFacebook() {
 }
 
 export async function signInWithPhone(verificationId, code){
-  const auth = getAuth();
-
   const credential = PhoneAuthProvider.credential(verificationId, code);
   const user = await signInWithCredential(auth, credential);
 }

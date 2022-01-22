@@ -5,17 +5,22 @@ import { useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
 import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
+
 import * as authService from './services/auth/authService';
+import * as userData from './services/firestore/userFuncs';
+
+import { LogBox } from 'react-native'; // Suppress a warning caused by firestore
+
 
 export default function App() {
   const recaptchaVerifier = useRef(null);
 
   useEffect(()=>{
-    auth.onAuthStateChanged(user=>{
+    auth.onAuthStateChanged(async (user)=> {
       console.log('Auth Changed!');
       console.log(user ? 'Logged in' : 'Not logged in')
       if(user){
-        console.log(user);
+        console.log(await userData.getCurrentUserData());
       }
     })
   }, []);
@@ -56,3 +61,4 @@ const styles = StyleSheet.create({
   },
 });
 
+LogBox.ignoreLogs(['Setting a timer for a long period of time'])
