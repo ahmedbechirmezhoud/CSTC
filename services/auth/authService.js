@@ -1,27 +1,5 @@
-import { 
-    signUpEmail,
-    addPhoneToCurrentUser,
-    sendVerificationCode,
-    verifyUserEmail
-} from './signupService';
+export { getAuth } from 'firebase/auth';
 
-import { 
-    signinWithEmail,
-    signOut,
-    signinWithFacebook,
-    signInWithPhone
-} from './loginService';
-
-import { getAuth } from 'firebase/auth';
-
-export {
-    signUpEmail,
-    signinWithEmail,
-    signOut,
-    getAuth,
-    signinWithFacebook,
-    addPhoneToCurrentUser,
-    sendVerificationCode,
-    signInWithPhone,
-    verifyUserEmail
-};
+export * from './loginService';
+export * from './signupService';
+export * from './accountService';
