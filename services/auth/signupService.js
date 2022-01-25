@@ -1,8 +1,6 @@
 import { auth } from './../../configInit';
 import { 
     createUserWithEmailAndPassword, 
-    PhoneAuthProvider, 
-    linkWithCredential,
     sendEmailVerification
 } from 'firebase/auth';
 import { initCurrentUser, linkPhoneToEmail } from '../firestore/userFuncs';
@@ -17,20 +15,25 @@ export async function signUpEmail(email, password) {
   await auth.signOut(); // Wait for email verification
 }
 
-export async function sendVerificationCode(number, verifier){ // Phone verif
-  const phoneProvider = new PhoneAuthProvider(auth);
-  return await phoneProvider.verifyPhoneNumber(number, verifier);
-}
-
-export async function addPhoneToCurrentUser(verificationId, code){
+export async function addPhoneToCurrentUser(phone){
   if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN, "Not logged in");
 
-  const credential = PhoneAuthProvider.credential(verificationId, code);
-  // const userCredential = await signInWithCredential(auth, credential);
+  phone = phone.replace(/\n/g, '');
+  phone = phone.replace(/ /g, '');
 
-  await linkWithCredential(auth.currentUser, credential);
-  await linkPhoneToEmail(auth.currentUser.phoneNumber, auth.currentUser.email);
+  if(phone.startsWith('+')) phone = phone.substr(1);
+  if(phone.length == 11){
+    if(phone.startsWith('216')) phone = phone.substr(3);
+    else {
+      if(phone.search(new RegExp('^[0-9]{1,}$'))) // Just numbers
+        throw new FirebaseError(AuthErrorCodes.INVALID_PHONE_NUMBER, 'Invalid phone number.');
+    }
+  }
 
+  if(phone.search(new RegExp('^[1-9]{1}[0-9]{7}')) == -1)
+    throw new FirebaseError(AuthErrorCodes.INVALID_PHONE_NUMBER, 'Invalid phone number.');
+
+  await linkPhoneToEmail(phone, auth.currentUser.email);
   console.log('Linked!')
 }
 

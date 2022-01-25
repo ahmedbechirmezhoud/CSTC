@@ -8,7 +8,8 @@ import {
     signInWithCredential,
     linkWithCredential,
     updateProfile,
-    AuthErrorCodes
+    AuthErrorCodes,
+    fetchSignInMethodsForEmail
 } from 'firebase/auth';
 
 import { 
@@ -31,27 +32,26 @@ export async function loginUser(identifier, password){
     if(identifier.startsWith('216')) identifier = identifier.substr(3);
     else {
       if(identifier.search(new RegExp('^[0-9]{1,}$'))) // Just numbers
-        throw new FirebaseError(AuthErrorCodes.INVALID_PHONE_NUMBER, 'Phone number doesn\'t exist');
+        throw new FirebaseError(AuthErrorCodes.INVALID_PHONE_NUMBER, 'Invalid phone number.');
     }
   }
 
   if(identifier.search(new RegExp('^[1-9]{1}[0-9]{7}')) != -1) identifier = await phoneToEmail(identifier);
 
   if(identifier) await signinWithEmail(identifier, password);
-  else throw new FirebaseError(AuthErrorCodes.INVALID_PHONE_NUMBER, 'Phone number doesn\'t exist')
+  else throw new FirebaseError(AuthErrorCodes.INVALID_PHONE_NUMBER, 'Phone number doesn\'t exist.')
 }
 
 export async function signinWithEmail(email, password) {
   const user = (await signInWithEmailAndPassword(auth, email, password)).user;
 
+  userInfo = await getCurrentUserData();
+  CurrentUser.login(user.uid, user.displayName, user.email, userInfo.email, userInfo.checkIn, userInfo.phone)
+
   if(!(await isUserVerified(user))) { // Force to verify using phone/FB/Email so don't logout
     verifyUserEmail(user)
     throw new FirebaseError(ErrorCodes.EMAIL_NOT_VERIFIED, 'User email is not verified');
   }
-
-  userInfo = await getCurrentUserData();
-  CurrentUser.login(user.uid, user.displayName, user.email, userInfo.email, userInfo.checkIn)
-
 }
 
 export async function signOut(){
@@ -82,7 +82,7 @@ export async function signinWithFacebook() {
       if(!(await isCurrentUserInited())) await initCurrentUser(false, token);
 
       userInfo = await getCurrentUserData();
-      CurrentUser.login(auth.currentUser.uid, auth.currentUser.displayName, auth.currentUser.email, userInfo.email, userInfo.checkIn)
+      CurrentUser.login(auth.currentUser.uid, auth.currentUser.displayName, auth.currentUser.email, userInfo.email, userInfo.checkIn, userInfo.phone)
       CurrentUser.fbToken = token;
     }
     else {
@@ -99,5 +99,5 @@ export async function signinWithFacebook() {
 export async function isUserVerified(user){
   let methods = await fetchSignInMethodsForEmail(auth, user.email)
   
-  return (user.emailVerified || user.phoneNumber != null || methods.indexOf("facebook.com") != -1)
+  return (user.emailVerified || methods.indexOf("facebook.com") != -1)
 }

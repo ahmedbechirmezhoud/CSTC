@@ -4,12 +4,10 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
-import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
-
 import * as authService from './services/auth/authService';
 
 import { LogBox } from 'react-native'; // Suppress a warning caused by firestore
-import { fetchSignInMethodsForEmail } from '@firebase/auth';
+import { CurrentUser } from './utils/user';
 
 export default function App() {
   const recaptchaVerifier = useRef(null);
@@ -20,6 +18,7 @@ export default function App() {
       console.log('Auth Changed!');
       if(user){
         console.log('Logged in')
+        
       }
       else console.log('Not logged in')
     })
@@ -27,13 +26,9 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <FirebaseRecaptchaVerifierModal
-        ref={recaptchaVerifier}
-        attemptInvisibleVerification={true}
-      />
       <Text>Open up App.js to start working on your app!</Text>
-      <Button title='Signup' onPress={()=>{
-        authService.signUpEmail(testemail, testpassword) // Will disconnect user for email verif
+      <Button title='Signup' onPress={async ()=>{
+        await authService.signUpEmail(testemail, testpassword) // Will disconnect user for email verif
       }} />
       <Button title='Signout' onPress={async ()=>{
         await authService.signOut()
@@ -57,8 +52,7 @@ export default function App() {
 
       }} />
       <Button title='Link phone' onPress={async ()=>{
-        let verificationId = await authService.sendVerificationCode("+216 95262865", recaptchaVerifier.current)
-        await authService.addPhoneToCurrentUser(verificationId, "000000");
+        await authService.addPhoneToCurrentUser("+216 95262865");
       }} />
 
       <Text />
@@ -70,8 +64,6 @@ export default function App() {
         authService.updateUserPassword("randomPass0")
       }} />
       <StatusBar style="auto" />
-      
-      <FirebaseRecaptchaBanner />
     </View>
   );
 }
