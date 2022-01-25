@@ -1,4 +1,3 @@
-
 import { getApps, initializeApp, FirebaseApp } from 'firebase/app';
 import * as FirebaseCore from 'expo-firebase-core';
 import * as Facebook from 'expo-facebook';
