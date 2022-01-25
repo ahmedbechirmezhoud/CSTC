@@ -36,22 +36,6 @@ const styles = StyleSheet.create({
       alignSelf: "center"
   
     },
-    signInButton: {
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
-      width: "70%",
-      height: 50,
-      borderRadius: 180,
-      marginVertical: 20,
-      backgroundColor: "#024069",
-    },
-    signInButtonText: {
-      color: "white",
-      fontSize: 24,
-      fontWeight: "bold"
-    },
-  
     seperatorContainer: {
       flexDirection: 'row',
       alignItems: 'center',

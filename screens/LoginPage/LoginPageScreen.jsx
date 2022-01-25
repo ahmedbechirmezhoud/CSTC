@@ -2,17 +2,25 @@ import React, { useState } from 'react';
 import {
   Text,
   View,
-  ScrollView,
-  KeyboardAvoidingView,
+  Alert,
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
 import { Entypo, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
-import FacebookLogin from '../../components/FacebookLogin/FacebookLogin';
+import LoginButton from '../../components/LoginButton/LoginButton';
+import FacebookLoginButton from '../../components/FacebookLogin/FacebookLogin';
 import styles from './LoginPageStyles';
 
+
+const IncorrectPasswordPopup = () => (
+    Alert.alert(
+      "Please try again...",
+      "The email and password you entered did not match our records. Please try again.",
+      [{text:"OK",style:"cancel"}]
+    )
+  );
 
 
 const LoginPageScreen = () => {
@@ -50,7 +58,9 @@ const LoginPageScreen = () => {
     <TouchableWithoutFeedback onPress={() => {
       Keyboard.dismiss();
     }}>
+     
       <View style={styles.loginContainer}>
+  
         <FontAwesome5 name="react" size={80} color="white" />
 
         <View style={styles.inputContainers}>
@@ -94,9 +104,7 @@ const LoginPageScreen = () => {
 
         </View>
  
-        <TouchableOpacity style={styles.signInButton} onPress={signUpButtonHandler}>
-          <Text style={styles.signInButtonText}>Sign in</Text>
-        </TouchableOpacity>
+        <LoginButton text = {"Sign in"} buttonHandler = {signUpButtonHandler} />
         
         <View style={styles.seperatorContainer}>
 
@@ -106,7 +114,7 @@ const LoginPageScreen = () => {
 
         </View>
 
-        <FacebookLogin />
+        <FacebookLoginButton />
 
       </View>
   

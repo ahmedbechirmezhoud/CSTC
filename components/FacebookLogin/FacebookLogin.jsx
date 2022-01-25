@@ -3,7 +3,7 @@ import { TouchableOpacity, View, Text, } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import styles from "./FacebookLoginStyles";
 
-const FacebookLogin = () => {
+const FacebookLoginButton = () => {
     return (
         <TouchableOpacity style={styles.facebookButton}>
             <FontAwesome name="facebook" size={24} color="white" style={styles.facebookIcon} />
@@ -12,4 +12,4 @@ const FacebookLogin = () => {
     );
 }
 
-export default FacebookLogin;
+export default FacebookLoginButton;
