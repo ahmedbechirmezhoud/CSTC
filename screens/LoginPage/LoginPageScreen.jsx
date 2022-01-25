@@ -12,6 +12,7 @@ import { Entypo, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import LoginButton from '../../components/LoginButton/LoginButton';
 import FacebookLoginButton from '../../components/FacebookLogin/FacebookLogin';
 import styles from './LoginPageStyles';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 const IncorrectPasswordPopup = () => (
@@ -58,7 +59,7 @@ const LoginPageScreen = () => {
     <TouchableWithoutFeedback onPress={() => {
       Keyboard.dismiss();
     }}>
-     
+      <LinearGradient colors={['#1A2980', '#1CB5E0']} style={styles.background}>
       <View style={styles.loginContainer}>
   
         <FontAwesome5 name="react" size={80} color="white" />
