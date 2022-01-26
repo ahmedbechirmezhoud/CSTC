@@ -1,20 +1,58 @@
 import { auth } from './../../configInit';
 import { 
     createUserWithEmailAndPassword, 
-    sendEmailVerification
+    sendEmailVerification,
+    User
 } from 'firebase/auth';
 import { initCurrentUser, linkPhoneToEmail } from '../firestore/userFuncs';
+import { CurrentUser } from '../../utils/user';
 
+/**
+ * Creates a new user account associated with the specified email address and password.
+ * Initializes the Firestore document for the new user.
+ * Sends verification email to the user email.
+ *
+ * @remarks
+ * On success, the user will stay signed in.
+ * 
+ * User account creation can fail if the account already exists or the password is invalid.
+ * 
+ * @returns Firebase {@link User}
+ *
+ * @param {String} email - The user's email address.
+ * @param {String} password - The user's chosen password.
+ *
+ * @public
+ */
 export async function signUpEmail(email, password) {
-  console.log('Signup');
-
-  const user = await createUserWithEmailAndPassword(auth, email, password);
+  const user = (await createUserWithEmailAndPassword(auth, email, password)).user;
   initCurrentUser(true);
 
-  await verifyUserEmail(auth.currentUser);
-  await auth.signOut(); // Wait for email verification
+  CurrentUser.login(user.uid, user.displayName, user.email, true, false, null)
+
+  await verifyUserEmail(user);
+  // await auth.signOut(); // Wait for email verification
+  return user;
 }
 
+/**
+ * Links the given phone number to the current logged in user.
+ * 
+ * @remarks
+ * Throws an error {@link FirebaseError}) with error code {@link ErrorCodes.NOT_LOGGED_IN} 
+ * if no user is logged in.
+ * 
+ * Throws an error {@link FirebaseError}) with error code {@link AuthErrorCodes.INVALID_PHONE_NUMBER} 
+ * if the given number is invalid.
+ * 
+ * A valid phone format: 8 digits phone number, first digit can't be 0 & can have "+216" as a prefix.
+ * 
+ * @returns {boolean} true on success.
+ * 
+ * @param {String} phone - The phone number to link.
+ * 
+ * @public
+*/
 export async function addPhoneToCurrentUser(phone){
   if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN, "Not logged in");
 
@@ -35,8 +73,17 @@ export async function addPhoneToCurrentUser(phone){
 
   await linkPhoneToEmail(phone, auth.currentUser.email);
   console.log('Linked!')
+  return true;
 }
 
+/**
+ * Sends a verification email to the given user.
+ * 
+ * @returns {boolean} true on success.
+ * 
+ * @param {User} user 
+ */
 export async function verifyUserEmail(user){
   await sendEmailVerification(user)
+  return true;
 }
