@@ -16,12 +16,12 @@ import { CurrentUser } from '../../utils/user';
  * On success, the user will stay signed in.
  * 
  * User account creation can fail if the account already exists or the password is invalid.
- * 
- * @returns Firebase {@link User}
  *
  * @param {String} email - The user's email address.
  * @param {String} password - The user's chosen password.
- *
+ * 
+ * @returns Firebase {@link User}
+ * 
  * @public
  */
 export async function signUpEmail(email, password) {
@@ -30,7 +30,7 @@ export async function signUpEmail(email, password) {
 
   CurrentUser.login(user.uid, user.displayName, user.email, true, false, null)
 
-  await verifyUserEmail(user);
+  verifyUserEmail(user);
   // await auth.signOut(); // Wait for email verification
   return user;
 }
@@ -39,17 +39,17 @@ export async function signUpEmail(email, password) {
  * Links the given phone number to the current logged in user.
  * 
  * @remarks
- * Throws an error {@link FirebaseError}) with error code {@link ErrorCodes.NOT_LOGGED_IN} 
+ * Throws a {@link FirebaseError}) with error code {@link ErrorCodes.NOT_LOGGED_IN} 
  * if no user is logged in.
  * 
- * Throws an error {@link FirebaseError}) with error code {@link AuthErrorCodes.INVALID_PHONE_NUMBER} 
+ * Throws a {@link FirebaseError}) with error code {@link AuthErrorCodes.INVALID_PHONE_NUMBER} 
  * if the given number is invalid.
  * 
  * A valid phone format: 8 digits phone number, first digit can't be 0 & can have "+216" as a prefix.
  * 
- * @returns {boolean} true on success.
- * 
  * @param {String} phone - The phone number to link.
+ * 
+ * @returns {boolean} true on success.
  * 
  * @public
 */
@@ -79,9 +79,9 @@ export async function addPhoneToCurrentUser(phone){
 /**
  * Sends a verification email to the given user.
  * 
- * @returns {boolean} true on success.
- * 
  * @param {User} user 
+ * 
+ * @returns {boolean} true on success.
  */
 export async function verifyUserEmail(user){
   await sendEmailVerification(user)
