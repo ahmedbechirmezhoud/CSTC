@@ -2,7 +2,10 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
-
+    background: {
+      flex: 1,
+      flex: 1,
+    },
     loginContainer: {
       justifyContent: "center",
       alignItems: "center",
@@ -53,8 +56,7 @@ const styles = StyleSheet.create({
       backgroundColor: "#ffffff99",
       maxWidth: "28%"
   
-    },
-
+    }
   });
   
   export default styles;
