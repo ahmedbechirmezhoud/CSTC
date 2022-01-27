@@ -9,6 +9,17 @@ import {
 import { CurrentUser } from '../../utils/user';
 import { ErrorCodes } from '../../const/errorCodes';
 
+/**
+ * Changes the current user's password, enables email login for facebook users.
+ * 
+ * @remark
+ * Throws {@link FirebaseError} with error code {@link ErrorCodes.NOT_LOGGED_IN}
+ * if no user is logged in.
+ * 
+ * @param {String} password - New password to use.
+ * 
+ * @returns {boolean} true on success.
+ */
 export async function updateUserPassword(password){
   if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN, "Not logged in");
   
@@ -23,4 +34,5 @@ export async function updateUserPassword(password){
     )
     CurrentUser.emailLogin = true;
   }
+  return true;
 }
