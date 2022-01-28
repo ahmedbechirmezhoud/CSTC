@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor:"#024069",
         borderRadius:180,
-        margin:36,
+        marginTop:36,
 
     },
     facebookIcon:{

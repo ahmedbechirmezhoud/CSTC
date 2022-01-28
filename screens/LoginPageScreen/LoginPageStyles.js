@@ -4,7 +4,6 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
     background: {
       flex: 1,
-      flex: 1,
     },
     loginContainer: {
       justifyContent: "center",
@@ -31,14 +30,7 @@ const styles = StyleSheet.create({
       fontSize: 16,
       padding: 10,
     },
-    forgotButtonText: {
-      color: "white",
-      fontSize: 16,
-      marginTop: 12,
-      marginBottom: 20,
-      alignSelf: "center"
-  
-    },
+
     seperatorContainer: {
       flexDirection: 'row',
       alignItems: 'center',

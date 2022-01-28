@@ -8,11 +8,13 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Entypo, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import LoginButton from '../../components/LoginButton/LoginButton';
 import FacebookLoginButton from '../../components/FacebookLogin/FacebookLogin';
+import SimpleTextButton from "../../components/SimpleTextButton/SimpleTextButton.js";
 import styles from './LoginPageStyles';
-import { LinearGradient } from 'expo-linear-gradient';
 
 
 const IncorrectPasswordPopup = () => (
@@ -30,6 +32,7 @@ export default LoginPageScreen = () => {
   const [passwordInput, setPassowrdInput] = useState("");
   const [isSecureText, setIsSecureText] = useState(true);
   const [eyeIcon, setEyeIcon] = useState("eye");
+  const navigation = useNavigation();
 
   const handlePasswordVisibility = () => {
     if (eyeIcon == "eye") {
@@ -53,14 +56,17 @@ export default LoginPageScreen = () => {
   const signUpButtonHandler = () => {
     Keyboard.dismiss();
   }
+  const CreateAccountButtonHandler = () => {
+
+  }
 
 
   return (
     <LinearGradient colors={['#1A2980', '#1CB5E0']} style={styles.background}>
-    <TouchableWithoutFeedback onPress={() => {
-      Keyboard.dismiss();
-    }}>
- 
+      <TouchableWithoutFeedback onPress={() => {
+        Keyboard.dismiss();
+      }}>
+
         <View style={styles.loginContainer}>
 
           <FontAwesome5 name="react" size={80} color="white" />
@@ -100,9 +106,8 @@ export default LoginPageScreen = () => {
 
             </View>
 
-            <TouchableOpacity style={styles.forgotButton} onPress={forgotButtonHandler}>
-              <Text style={styles.forgotButtonText}>Forgot password?</Text>
-            </TouchableOpacity>
+            <SimpleTextButton text='Forgot password?' buttonHandler={forgotButtonHandler} />
+
 
           </View>
 
@@ -115,14 +120,12 @@ export default LoginPageScreen = () => {
             <View style={styles.straightLine} />
 
           </View>
-
           <FacebookLoginButton />
+          <SimpleTextButton text='Create an account' onPress={() => navigation.navigate("Register")} style = {{marginVertical:16}}/>
 
         </View>
-       
-    </TouchableWithoutFeedback >
+      </TouchableWithoutFeedback >
     </LinearGradient>
   );
 }
-
 
