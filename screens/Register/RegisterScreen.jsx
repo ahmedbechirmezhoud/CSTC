@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import {
     View,
+    KeyboardAvoidingView,
     TouchableWithoutFeedback,
     TextInput,
     Keyboard,
     Alert
 } from "react-native";
+import { signUpEmail } from "../../services/auth/signupService";
 import LoginButton from '../../components/LoginButton/LoginButton';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Entypo, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
@@ -38,7 +40,7 @@ export default RegisterPage = () => {
         }
     }
 
-    const ConfirmPwd = () => {
+    const SignUpHandler = () => {
         let title;
         let text;
 
@@ -50,9 +52,11 @@ export default RegisterPage = () => {
                 title = "Oops";
                 text = "The password must have at least 8 characters.";
             }
-        else{
+        else{ 
                 title = "Almost done!";
                 text = "Please click on the link that has just been sent to your email account to verify your email.";
+                // Send email verification link
+                signUpEmail(emailInput,passwordInput);
         }
         Alert.alert(
             title,
@@ -67,7 +71,7 @@ export default RegisterPage = () => {
                 Keyboard.dismiss();
             }}>
 
-                <View style={styles.registerContainer}>
+                <KeyboardAvoidingView style={styles.registerContainer}>
 
                     <View style={styles.inputContainers}>
 
@@ -141,9 +145,9 @@ export default RegisterPage = () => {
 
                     </View>
 
-                    <LoginButton text={"Sign Up"} buttonHandler={ConfirmPwd} />
-                </View>
-            </TouchableWithoutFeedback >
+                    <LoginButton text={"Sign Up"} buttonHandler={SignUpHandler} />
+                </KeyboardAvoidingView>
+            </TouchableWithoutFeedback  >
         </LinearGradient>
     );
 }
