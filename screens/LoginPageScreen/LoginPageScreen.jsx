@@ -14,6 +14,7 @@ import { Entypo, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import LoginButton from '../../components/LoginButton/LoginButton';
 import FacebookLoginButton from '../../components/FacebookLogin/FacebookLogin';
 import SimpleTextButton from "../../components/SimpleTextButton/SimpleTextButton.js";
+import Seperator from '../../components/Seperator/Seperator';
 import styles from './LoginPageStyles';
 
 
@@ -103,24 +104,17 @@ export default LoginPageScreen = () => {
                 color="#507686"
                 style={styles.inputIcon, { marginRight: 10 }}
                 onPress={handlePasswordVisibility} />
-
             </View>
 
             <SimpleTextButton text='Forgot password?' buttonHandler={forgotButtonHandler} />
-
-
           </View>
 
           <LoginButton text={"Sign in"} buttonHandler={signUpButtonHandler} />
 
-          <View style={styles.seperatorContainer}>
+          <Seperator/>
 
-            <View style={styles.straightLine} />
-            <Text style={styles.seperatorText} >    Or    </Text>
-            <View style={styles.straightLine} />
+          <FacebookLoginButton text={"Sign in with Facebook"} />
 
-          </View>
-          <FacebookLoginButton />
           <SimpleTextButton text='Create an account' onPress={() => navigation.navigate("Register")} style = {{marginVertical:16}}/>
 
         </View>

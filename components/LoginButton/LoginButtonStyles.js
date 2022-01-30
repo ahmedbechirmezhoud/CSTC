@@ -13,11 +13,13 @@ const styles = StyleSheet.create({
     borderRadius: 180,
     marginVertical: 20,
     backgroundColor: "#024069",
+    
   },
   signInButtonText: {
     color: "white",
     fontSize: 24,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    
   },
 });
 export default styles;

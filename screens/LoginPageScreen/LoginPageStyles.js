@@ -31,24 +31,6 @@ const styles = StyleSheet.create({
       padding: 10,
     },
 
-    seperatorContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: "center"
-    },
-    seperatorText: {
-      color: "#ffffff99",
-      fontSize: 16,
-      textAlign: "center"
-  
-    },
-    straightLine: {
-      height: 1,
-      flex: 1,
-      backgroundColor: "#ffffff99",
-      maxWidth: "28%"
-  
-    }
   });
   
   export default styles;
