@@ -15,6 +15,7 @@ import LoginButton from '../../components/LoginButton/LoginButton';
 import Seperator from "../../components/Seperator/Seperator";
 import FacebookLoginButton from "../../components/FacebookLogin/FacebookLogin";
 import { CurrentUser } from '../../utils/user';
+
 import { signUpEmail } from "../../services/auth/signupService";
 import { signinWithFacebook } from "../../services/auth/loginService";
 import { useNavigation } from '@react-navigation/core';
@@ -84,6 +85,7 @@ export default RegisterPage = () => {
     }
     const SignupFBHandler = () => {
         signinWithFacebook();
+        // the code below needs review 
         if (CurrentUser.uid)
             navigation.navigate("FbRegistrationCompletion");
         else {

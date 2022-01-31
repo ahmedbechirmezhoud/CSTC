@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginPageScreen from '../screens/LoginPageScreen/LoginPageScreen'
 import RegisterScreen from '../screens/Register/RegisterScreen';
 import FbRegistrationScreen from '../screens/FbRegistrationScreen/FbRegistrationScreen';
+import ForgotPwdScreen from '../screens/ForgotPwdScreen/ForgotPwdScreen';
 import { View, Text } from 'react-native';
 import { auth } from '../configInit';
 
@@ -36,6 +37,9 @@ function AuthNavigator() {
             <Stack.Screen name="Login" component={LoginPageScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
             <Stack.Screen name="FbRegistrationCompletion" component={FbRegistrationScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="ForgotPwd" component={ForgotPwdScreen} options={{ headerShown: false }} />
+
+        
         </Stack.Navigator>
       );
 }
