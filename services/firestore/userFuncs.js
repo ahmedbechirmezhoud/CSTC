@@ -1,5 +1,6 @@
 import { auth, firestore } from './../../configInit'; // Init config
 import { setDoc, doc, getDocFromServer } from 'firebase/firestore';
+import { registerForPushNotificationsAsync } from '../Notification';
 
 export async function getPath(path){
     return (await getDocFromServer(doc(firestore, path)));
@@ -18,7 +19,8 @@ export async function initCurrentUser(emailSignup, fbToken=null){
         {
             checkedIn: false,
             email: emailSignup,
-            fbToken: fbToken
+            fbToken: fbToken,
+            notificationToken: await registerForPushNotificationsAsync()
         }
     )
 }
