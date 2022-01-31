@@ -11,6 +11,16 @@ export default styles = StyleSheet.create({
         alignItems: "center",
         minWidth:"100%"
     },
+    headerText: {
+        fontSize:30,
+        color:"#FFFFFF",
+        padding:16,
+    },
+    subHeaderText: {
+        fontSize:16,
+        color:"#FFFFFF",
+        padding:16,
+    },
     inputContainers: {
         width: "70%"
     },

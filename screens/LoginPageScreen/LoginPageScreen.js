@@ -12,6 +12,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { Entypo, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
+import { signinWithEmail } from "../../services/auth/loginService";
 import { signinWithFacebook } from "../../services/auth/loginService";
 import { useNavigation } from "@react-navigation/core";
 import { CurrentUser } from "../../utils/user";
@@ -22,31 +23,21 @@ import SimpleTextButton from "../../components/SimpleTextButton/SimpleTextButton
 import Seperator from "../../components/Seperator/Seperator";
 import styles from "./LoginPageStyles";
 
-const IncorrectPasswordPopup = () =>
-    Alert.alert(
-        "Please try again...",
-        "The email and password you entered did not match our records. Please try again.",
-        [{ text: "OK", style: "cancel" }]
-    );
-
-
-const signUpButtonHandler = () => {
-    Keyboard.dismiss();
-};
 const SigninFBHandler = () => {
     signinWithFacebook();
-    // the code below needs review
 
-    if (CurrentUser.uid) {
-        //Should be updated when facebook signin is done
-        navigation.navigate("Timeline");
-    } else {
-        Alert.alert(
-            "Oops",
-            "Something wrong happened try again or choose an other signin method",
-            [{ text: "OK", style: "cancel" }]
-        );
-    }
+    //   ***** the code below needs review, missing exception catchs *****
+
+    // if (CurrentUser.uid) {
+    //     //Should be updated when facebook signin is done
+    //     navigation.navigate("Timeline");
+    // } else {
+    //     Alert.alert(
+    //         "Oops",
+    //         "Something wrong happened try again or choose an other signin method",
+    //         [{ text: "OK", style: "cancel" }]
+    //     );
+    // }
 };
 const CreateAccountButtonHandler = () => {};
 
@@ -73,9 +64,25 @@ export default LoginPageScreen = () => {
         setPassowrdInput(textInput);
     };
     const forgotButtonHandler = () => {
-      Keyboard.dismiss();
-      navigation.navigate("ForgotPwd");
-  };
+        Keyboard.dismiss();
+        navigation.navigate("ForgotPwd");
+    };
+    const signUpButtonHandler = () => {
+        Keyboard.dismiss();
+        signinWithEmail(emailInput, passwordInput);
+        // 
+        //   ***** the code below needs review, missing exception catchs *****
+        // if (CurrentUser.uid) {
+        //
+        //     navigation.navigate("Timeline");
+        // } else {
+        //        Alert.alert(
+        //     "Please try again...",
+        //     "The email and password you entered did not match our records. Please try again or reset your password.",
+        //     [{ text: "OK", style: "cancel" }]
+        //  );
+        // }
+    };
 
     return (
         <LinearGradient
@@ -153,7 +160,7 @@ export default LoginPageScreen = () => {
                     <SimpleTextButton
                         text="Create an account"
                         onPress={() => navigation.navigate("Register")}
-                        style={{ marginVertical: 16 }}
+                        style={{ marginVertical: 16, fontSize:20 }}
                     />
                 </View>
             </TouchableWithoutFeedback>

@@ -86,15 +86,15 @@ export default RegisterPage = () => {
     const SignupFBHandler = () => {
         signinWithFacebook();
         // the code below needs review 
-        if (CurrentUser.uid)
-            navigation.navigate("FbRegistrationCompletion");
-        else {
-            Alert.alert(
-                "Oops",
-                "Something wrong happened try again or choose an other signup method",
-                [{ text: "OK", style: "cancel" }]
-            );
-        }
+      //  if (CurrentUser.uid)
+           navigation.navigate("FbRegistrationCompletion");
+      //  else {
+      //      Alert.alert(
+      //          "Oops",
+      //          "Something wrong happened try again or choose an other signup method",
+      //          [{ text: "OK", style: "cancel" }]
+      //      );
+      //  }
     }
 
     return (

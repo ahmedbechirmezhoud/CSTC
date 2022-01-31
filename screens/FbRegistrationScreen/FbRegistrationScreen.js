@@ -4,7 +4,7 @@ import {
     TouchableWithoutFeedback,
     TextInput,
     Keyboard,
-    Alert,
+    Text,
     ScrollView,
 } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -41,6 +41,9 @@ export default function FbRegistrationScreen() {
         }}>
             <View  style={{ justifyContent:"center"}}>
             <ScrollView contentContainerStyle={styles.registerContainer} >
+            <Text style={styles.headerText} >Just One Last Step</Text>
+                <Text style={styles.subHeaderText} >Please confirm that these informations are correct.</Text>
+               
                 <View style={styles.inputContainers}>
                     <View style={[styles.inputContainer,{marginTop:50}]}>
                         {/*full name Box */}

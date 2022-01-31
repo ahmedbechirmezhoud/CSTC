@@ -6,6 +6,7 @@ import {
     Keyboard,
     Alert,
     ScrollView,
+    Text
 } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import { Entypo } from '@expo/vector-icons';
@@ -36,6 +37,8 @@ export default function FbRegistrationScreen() {
         }}>
             <View  style={{ justifyContent:"center"}}>
             <ScrollView contentContainerStyle={styles.registerContainer} >
+                <Text style={styles.headerText} >Forgot Your Password?</Text>
+                <Text style={styles.subHeaderText} >Enter your email adress and we will send you instructions to reset your password.</Text>
                 <View style={styles.inputContainers}>
 
                     <View style={styles.inputContainer}>
