@@ -20,7 +20,7 @@ import {
 import { CurrentUser } from '../../utils/user';
 import { ErrorCodes } from '../../const/errorCodes';
 import { verifyUserEmail } from './signupService';
-
+import { updateNotificationToken } from './accountService';
 
 export async function loginUser(identifier, password){
   identifier = identifier.replace(/\n/g, '');
@@ -51,7 +51,7 @@ export async function signinWithEmail(email, password) {
 
   userInfo = await getCurrentUserData();
   CurrentUser.login(user.uid, user.displayName, user.email, userInfo.email, userInfo.checkIn)
-
+  updateNotificationToken();
 }
 
 export async function signOut(){
@@ -92,6 +92,7 @@ export async function signinWithFacebook() {
       CurrentUser.name = response.name;
       CurrentUser.fbToken = token;
     }
+    updateNotificationToken();
 
   } else throw new FirebaseError(ErrorCodes.FB_LOGIN_CANCEL, "Facebook login canceled by user");
 }
