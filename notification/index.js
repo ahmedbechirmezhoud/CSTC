@@ -5,6 +5,7 @@ import inquirer from 'inquirer';
 import figlet from 'figlet';
 import { createSpinner } from 'nanospinner';
 import SendNotication from './services';
+import { getTokens } from './db';
 
 var notification = {};
 
@@ -40,7 +41,7 @@ async function getMessage(){
 
 async function handleAnswer(notification){
     const spinner = createSpinner('Sending Notification...').start();
-    SendNotication(notification)
+    SendNotication(notification, await getTokens())
         .then(() => spinner.success())
         .catch(() => spinner.error())
 }

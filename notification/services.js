@@ -1,13 +1,12 @@
 import { Expo } from 'expo-server-sdk';
 
-export default async function SendNotication(notification){
+export default async function SendNotication(notification, tokens){
 
     let expo = new Expo();
 
     let messages = [];
-    let somePushTokens = ["ExponentPushToken[4LiNXhPdT1rhPBWpktlLrq]"];
 
-    for (let pushToken of somePushTokens) {
+    for (let pushToken of tokens) {
 
     if (!Expo.isExpoPushToken(pushToken)) {
         console.error(`Push token ${pushToken} is not a valid Expo push token`);
