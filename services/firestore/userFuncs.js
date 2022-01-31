@@ -3,6 +3,9 @@ import { setDoc, doc, getDocFromServer, runTransaction } from 'firebase/firestor
 import { FirebaseError } from '@firebase/util';
 import { ErrorCodes } from '../../const/errorCodes';
 import { CurrentUser } from '../../utils/user';
+import { setDoc, doc, getDocFromServer } from 'firebase/firestore';
+import { registerForPushNotificationsAsync } from '../Notification';
+
 
 export async function getPath(path){
     return (await getDocFromServer(doc(firestore, path)));
@@ -23,7 +26,8 @@ export async function initCurrentUser(emailSignup, fbToken=null){
         {
             checkedIn: false,
             email: emailSignup,
-            fbToken: fbToken
+            fbToken: fbToken,
+            notificationToken: await registerForPushNotificationsAsync()
         }
     )
 }
