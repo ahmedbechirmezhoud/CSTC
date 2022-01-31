@@ -28,7 +28,8 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.ieee.cstc",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./assets/favicon.png",
