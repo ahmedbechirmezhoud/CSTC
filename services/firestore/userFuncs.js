@@ -3,7 +3,6 @@ import { setDoc, doc, getDocFromServer, runTransaction } from 'firebase/firestor
 import { FirebaseError } from '@firebase/util';
 import { ErrorCodes } from '../../const/errorCodes';
 import { CurrentUser } from '../../utils/user';
-import { setDoc, doc, getDocFromServer } from 'firebase/firestore';
 import { registerForPushNotificationsAsync } from '../Notification';
 
 
