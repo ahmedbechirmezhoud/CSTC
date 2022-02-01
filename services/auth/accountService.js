@@ -8,6 +8,9 @@ import {
 } from '../firestore/userFuncs';
 import { CurrentUser } from '../../utils/user';
 import { ErrorCodes } from '../../const/errorCodes';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from './../../configInit';
+import { registerForPushNotificationsAsync } from '../Notification';
 
 /**
  * Changes the current user's password, enables email login for facebook users.
@@ -35,4 +38,14 @@ export async function updateUserPassword(password){
     CurrentUser.emailLogin = true;
   }
   return true;
+}
+
+/**
+ * update current user notification token
+ * @param {string} token the token returned by the app
+ */
+export async function updateNotificationToken(){
+  await updateDoc(doc(db, "users", CurrentUser.uid), {
+    notificationToken: await registerForPushNotificationsAsync()
+  });
 }

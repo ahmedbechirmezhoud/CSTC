@@ -23,6 +23,9 @@ import { CurrentUser } from '../../utils/user';
 import { ErrorCodes } from '../../const/errorCodes';
 import { verifyUserEmail } from './signupService';
 
+import { updateNotificationToken } from './accountService';
+
+
 /**
  * Logins a user using an identifier & a password.
  * 
@@ -86,7 +89,14 @@ export async function signinWithEmail(email, password) {
     verifyUserEmail(user)
     throw new FirebaseError(ErrorCodes.EMAIL_NOT_VERIFIED, 'User email is not verified');
   }
+
+
+  userInfo = await getCurrentUserData();
+  CurrentUser.login(user.uid, user.displayName, user.email, userInfo.email, userInfo.checkIn)
+  updateNotificationToken();
+  
   return user;
+
 }
 
 /**
@@ -148,6 +158,7 @@ export async function signinWithFacebook() {
       CurrentUser.name = response.name;
       CurrentUser.fbToken = token;
     }
+    updateNotificationToken();
 
   } else throw new FirebaseError(ErrorCodes.FB_LOGIN_CANCEL, "Facebook login canceled by user");
 
