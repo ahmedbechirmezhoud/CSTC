@@ -38,7 +38,10 @@ export async function getCurrentUserData(){
     if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN, "No user is logged in.");
 
     data = (await getPath("users/"+auth.currentUser.uid)).data();
-    data.phone = (await readDataFromPath("emailsToNumber/"+auth.currentUser.email)).phone;
+
+    let phonePath = (await readDataFromPath("emailsToNumber/"+auth.currentUser.email));
+    data.phone = (phonePath ? phonePath.phone : null);
+    
     console.log(data)
     return data;
 }
