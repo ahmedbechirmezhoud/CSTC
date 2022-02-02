@@ -7,9 +7,9 @@ export class CurrentUser{
     static checkedIn;
     static fbToken;
 
-    static login(uid, name, email, emailLogin, checkedIn, phone){
+    static login(uid, uname, email, emailLogin, checkedIn, phone){
         CurrentUser.uid = uid;
-        CurrentUser.name = name;
+        CurrentUser.uname = uname;
         CurrentUser.email = email;
         CurrentUser.emailLogin = emailLogin;
         CurrentUser.checkedIn = checkedIn;
