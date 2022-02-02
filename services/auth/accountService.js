@@ -33,7 +33,9 @@ export async function updateUserPassword(password){
  * @param {string} token the token returned by the app
  */
 export async function updateNotificationToken(){
+  let token = await registerForPushNotificationsAsync();
   await updateDoc(doc(db, "users", CurrentUser.uid), {
-    notificationToken: await registerForPushNotificationsAsync()
+    notificationToken: token
   });
+  CurrentUser.notificationToken = token;
 }

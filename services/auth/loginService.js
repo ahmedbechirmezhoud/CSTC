@@ -83,7 +83,17 @@ export async function signinWithEmail(email, password) {
   const user = (await signInWithEmailAndPassword(auth, email, password)).user;
 
   userInfo = await getCurrentUserData();
-  CurrentUser.login(user.uid, user.displayName, user.email, userInfo.email, userInfo.checkIn, userInfo.phone)
+  CurrentUser.login(
+    user.uid, 
+    user.displayName, 
+    user.email, 
+    userInfo.email, 
+    userInfo.checkedIn, 
+    userInfo.phone,
+    userInfo.notificationToken
+  );
+
+  updateNotificationToken();  
 
   if(!(await isUserVerified(user))) { // Force to verify using phone/FB/Email so don't logout
     verifyUserEmail(user)
@@ -108,6 +118,7 @@ export async function signinWithEmail(email, password) {
  */
 export async function signOut(){
   await firebaseSignOut(auth);
+  CurrentUser.login(null, null, null, null, null, null, null);
   return true;
 }
 
@@ -148,7 +159,15 @@ export async function signinWithFacebook() {
       if(!(await isCurrentUserInited())) await initCurrentUser(false, token);
 
       userInfo = await getCurrentUserData();
-      CurrentUser.login(auth.currentUser.uid, auth.currentUser.displayName, auth.currentUser.email, userInfo.email, userInfo.checkIn, userInfo.phone)
+      CurrentUser.login(
+        auth.currentUser.uid, 
+        auth.currentUser.displayName, 
+        auth.currentUser.email, 
+        userInfo.email, 
+        userInfo.checkIn, 
+        userInfo.phone,
+        userInfo.notificationToken
+      );
       CurrentUser.fbToken = token;
     }
     else {
