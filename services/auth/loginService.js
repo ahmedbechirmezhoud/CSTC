@@ -83,18 +83,14 @@ export async function signinWithEmail(email, password) {
   const user = (await signInWithEmailAndPassword(auth, email, password)).user;
 
   userInfo = await getCurrentUserData();
-  CurrentUser.login(user.uid, user.displayName, user.email, userInfo.email, userInfo.checkIn, userInfo.phone)
+  CurrentUser.login(user.uid, user.displayName, user.email, userInfo.email, userInfo.checkedIn, userInfo.phone)
+
+  updateNotificationToken();  
 
   if(!(await isUserVerified(user))) { // Force to verify using phone/FB/Email so don't logout
     verifyUserEmail(user)
     throw new FirebaseError(ErrorCodes.EMAIL_NOT_VERIFIED, 'User email is not verified');
   }
-
-
-  userInfo = await getCurrentUserData();
-  CurrentUser.login(user.uid, user.displayName, user.email, userInfo.email, userInfo.checkIn)
-  updateNotificationToken();
-  
   return user;
 
 }
@@ -108,6 +104,7 @@ export async function signinWithEmail(email, password) {
  */
 export async function signOut(){
   await firebaseSignOut(auth);
+  CurrentUser.login(null, null, null, null, null, null);
   return true;
 }
 
@@ -155,7 +152,7 @@ export async function signinWithFacebook() {
       await linkWithCredential(auth.currentUser, credential); // Or link fb account
 
       if(!auth.currentUser.displayName) await updateProfile(auth.currentUser, {displayName: respJson.name});
-      CurrentUser.name = response.name;
+      CurrentUser.uname = response.name;
       CurrentUser.fbToken = token;
     }
     updateNotificationToken();
