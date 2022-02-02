@@ -23,6 +23,7 @@ describe('Sign up test', ()=>{
         expect(data.email).toBe(true);
         expect(data.fbToken).toBe(null);
         expect(data.phone).toBe(null);
+        expect(data.notificationToken).toBe("TESTING")
     })
 
     it('Logs the user out', async ()=>{
@@ -34,6 +35,7 @@ describe('Sign up test', ()=>{
         expect(CurrentUser.checkedIn).toBe(null);
         expect(CurrentUser.phone).toBe(null);
         expect(CurrentUser.fbToken).toBe(null);
+        expect(CurrentUser.notificationToken).toBe(null);
     })
 })
 
@@ -48,15 +50,36 @@ describe('Email signin test', ()=>{
             expect(e.code).toBe(ErrorCodes.EMAIL_NOT_VERIFIED)
         }
 
-        console.log(CurrentUser.uname);
-
-        expect(data).toBe(null);
+        expect(data).toBe(null); // No error was thrown? (Acc isn't verified)
         expect(CurrentUser.uid).not.toBe(null);
         expect(CurrentUser.uname).toBe(null); // We didn't set it
         expect(CurrentUser.emailLogin).toBe(true);
         expect(CurrentUser.checkedIn).toBe(false);
         expect(CurrentUser.phone).toBe(null);
         expect(CurrentUser.fbToken).toBe(null);
+        expect(CurrentUser.notificationToken).toBe("TESTING");
+
+        await authServ.signOut();
+    });
+
+    it('Logins using loginUser', async ()=>{
+        let data = null;
+
+        try{
+            data = await authServ.loginUser(EMAIL, PASS);
+        } catch(e){
+            expect(e).toBeInstanceOf(FirebaseError);
+            expect(e.code).toBe(ErrorCodes.EMAIL_NOT_VERIFIED)
+        }
+
+        expect(data).toBe(null); // No error was thrown? (Acc isn't verified)
+        expect(CurrentUser.uid).not.toBe(null);
+        expect(CurrentUser.uname).toBe(null); // We didn't set it
+        expect(CurrentUser.emailLogin).toBe(true);
+        expect(CurrentUser.checkedIn).toBe(false);
+        expect(CurrentUser.phone).toBe(null);
+        expect(CurrentUser.fbToken).toBe(null);
+        expect(CurrentUser.notificationToken).toBe("TESTING");
     });
 })
 

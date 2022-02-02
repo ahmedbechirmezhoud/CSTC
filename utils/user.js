@@ -6,8 +6,9 @@ export class CurrentUser{
     static phone;
     static checkedIn;
     static fbToken;
+    static notificationToken;
 
-    static login(uid, uname, email, emailLogin, checkedIn, phone){
+    static login(uid, uname, email, emailLogin, checkedIn, phone, notifTkn){
         CurrentUser.uid = uid;
         CurrentUser.uname = uname;
         CurrentUser.email = email;
@@ -15,5 +16,6 @@ export class CurrentUser{
         CurrentUser.checkedIn = checkedIn;
         CurrentUser.phone = phone;
         CurrentUser.fbToken = null;
+        CurrentUser.notificationToken = notifTkn;
     }
 }
