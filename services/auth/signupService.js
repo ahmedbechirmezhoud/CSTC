@@ -26,7 +26,7 @@ import { CurrentUser } from '../../utils/user';
  */
 export async function signUpEmail(email, password) {
   const user = (await createUserWithEmailAndPassword(auth, email, password)).user;
-  initCurrentUser(true);
+  await initCurrentUser(true);
 
   CurrentUser.login(user.uid, user.displayName, user.email, true, false, null)
 

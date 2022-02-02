@@ -25,8 +25,8 @@ export async function initCurrentUser(emailSignup, fbToken=null){
         {
             checkedIn: false,
             email: emailSignup,
-            fbToken: fbToken,
-            notificationToken: await registerForPushNotificationsAsync()
+            fbToken: fbToken
+            //notificationToken: await registerForPushNotificationsAsync()
         }
     )
 }
@@ -41,11 +41,11 @@ export async function getCurrentUserData(){
     if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN, "No user is logged in.");
 
     data = (await getPath("users/"+auth.currentUser.uid)).data();
+    if(!data) throw FirebaseError(ErrorCodes.UNKNOWN_ERROR, "An unknown error has occured.")
 
     let phonePath = (await readDataFromPath("emailsToNumber/"+auth.currentUser.email));
     data.phone = (phonePath ? phonePath.phone : null);
     
-    console.log(data)
     return data;
 }
 
