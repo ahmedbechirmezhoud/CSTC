@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import {
     View,
-    TouchableWithoutFeedback,
     TextInput,
     Keyboard,
     Alert,
     ScrollView,
 } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
-import { Entypo, MaterialIcons } from '@expo/vector-icons';
 
+import { Entypo, MaterialIcons } from '@expo/vector-icons';
+import GradientBackground from "../../components/GradientBackground/GradientBackground";
 import LoginButton from '../../components/LoginButton/LoginButton';
+
 import { CurrentUser } from '../../utils/user';
 import { useNavigation } from '@react-navigation/core';
 export default function FbRegistrationScreen() {
@@ -35,10 +35,7 @@ export default function FbRegistrationScreen() {
     };
     
     return (
-        <LinearGradient colors={['#1A2980', '#1CB5E0']} style={styles.background}>
-        <TouchableWithoutFeedback onPress={() => {
-            Keyboard.dismiss();
-        }}>
+        <GradientBackground>
             <View  style={{ justifyContent:"center"}}>
             <ScrollView contentContainerStyle={styles.registerContainer} >
                 <View style={styles.inputContainers}>
@@ -91,7 +88,6 @@ export default function FbRegistrationScreen() {
 
             </ScrollView>
             </View>
-        </TouchableWithoutFeedback  >
-    </LinearGradient>
+    </GradientBackground>
     );
 }
