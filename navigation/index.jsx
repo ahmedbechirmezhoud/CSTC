@@ -5,6 +5,7 @@ import LoginPageScreen from '../screens/LoginPageScreen/LoginPageScreen'
 import RegisterScreen from '../screens/Register/RegisterScreen';
 import FbRegistrationScreen from '../screens/FbRegistrationScreen/FbRegistrationScreen';
 import ForgotPwdScreen from '../screens/ForgotPwdScreen/ForgotPwdScreen';
+import SettingsScreen from '../screens/Settings/SettingsScreen';
 import { View, Text } from 'react-native';
 import { auth } from '../configInit';
 
@@ -38,7 +39,8 @@ function AuthNavigator() {
             <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
             <Stack.Screen name="FbRegistrationCompletion" component={FbRegistrationScreen} options={{ headerShown: false }} />
             <Stack.Screen name="ForgotPwd" component={ForgotPwdScreen} options={{ headerShown: false }} />
-
+            {/*To be removed along with the import*/}
+            <Stack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }} />
         
         </Stack.Navigator>
       );

@@ -77,9 +77,9 @@ export default LoginPageScreen = () => {
 	return (
 		<GradientBackground>
 			<FontAwesome5 name='react' size={80} color='white' />
-
 			<View style={styles.inputContainers}>
 				<View style={styles.inputContainer}>
+					{/*Email Box */}
 					<Entypo
 						name='email'
 						size={20}
@@ -97,6 +97,7 @@ export default LoginPageScreen = () => {
 				</View>
 
 				<View style={styles.inputContainer}>
+					{/*Password Box */}
 					<MaterialIcons
 						name='lock'
 						size={20}
