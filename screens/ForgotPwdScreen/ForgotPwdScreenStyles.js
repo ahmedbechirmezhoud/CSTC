@@ -3,11 +3,6 @@ import { StyleSheet } from "react-native";
 
 export default styles = StyleSheet.create({
 
-    registerContainer: {
-        justifyContent: "center",
-        alignItems: "center",
-        minWidth:"100%"
-    },
     inputContainers: {
         width: "70%"
     },

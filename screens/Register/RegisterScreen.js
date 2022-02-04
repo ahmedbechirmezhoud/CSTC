@@ -12,7 +12,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 
 import GradientBackground from "../../components/GradientBackground/GradientBackground";
-import LoginButton from "../../components/LoginButton/LoginButton";
+import BlueButton from "../../components/BlueButton/BlueButton";
 import Seperator from "../../components/Seperator/Seperator";
 import FacebookLoginButton from "../../components/FacebookLogin/FacebookLogin";
 import { CurrentUser } from "../../utils/user";
@@ -92,8 +92,6 @@ export default RegisterPage = () => {
 
 	return (
 		<GradientBackground>
-			<View style={{ justifyContent: "center" }}>
-				<ScrollView contentContainerStyle={styles.registerContainer}>
 					<View style={styles.inputContainers}>
 						<View
 							style={[styles.inputContainer, { marginTop: 50 }]}>
@@ -200,7 +198,7 @@ export default RegisterPage = () => {
 						</View>
 					</View>
 
-					<LoginButton
+					<BlueButton
 						text={"Sign up"}
 						buttonHandler={SignUpHandler}
 					/>
@@ -209,8 +207,6 @@ export default RegisterPage = () => {
 						text={"Sign up with Facebook"}
 						onPress={SignupFBHandler}
 					/>
-				</ScrollView>
-			</View>
 		</GradientBackground>
 	);
 };

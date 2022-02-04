@@ -1,17 +1,9 @@
 import React, { useState } from "react";
-import {
-	View,
-	TouchableWithoutFeedback,
-	TextInput,
-	Keyboard,
-	Alert,
-	ScrollView,
-} from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import { View, TextInput, Alert, ScrollView } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 
 import GradientBackground from "../../components/GradientBackground/GradientBackground";
-import LoginButton from "../../components/LoginButton/LoginButton";
+import BlueButton from "../../components/BlueButton/BlueButton";
 import { useNavigation } from "@react-navigation/core";
 import styles from "./ForgotPwdScreenStyles";
 export default function FbRegistrationScreen() {
@@ -38,8 +30,6 @@ export default function FbRegistrationScreen() {
 
 	return (
 		<GradientBackground>
-			<View style={{ justifyContent: "center" }}>
-				<ScrollView contentContainerStyle={styles.registerContainer}>
 					<View style={styles.inputContainers}>
 						<View style={styles.inputContainer}>
 							{/*email Box */}
@@ -60,12 +50,10 @@ export default function FbRegistrationScreen() {
 						</View>
 					</View>
 
-					<LoginButton
+					<BlueButton
 						text={"Reset password"}
 						buttonHandler={resetButtonHandler}
 					/>
-				</ScrollView>
-			</View>
 		</GradientBackground>
 	);
 }

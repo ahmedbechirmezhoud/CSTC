@@ -1,7 +1,12 @@
 import React, { useState } from "react";
-import { View, Alert, TextInput, TouchableOpacity, Keyboard } from "react-native";
+import {
+	View,
+	Alert,
+	TextInput,
+	TouchableOpacity,
+	Keyboard,
+} from "react-native";
 
-import { LinearGradient } from "expo-linear-gradient";
 import { Entypo, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
 import GradientBackground from "../../components/GradientBackground/GradientBackground";
@@ -9,7 +14,7 @@ import { signinWithFacebook } from "../../services/auth/loginService";
 import { useNavigation } from "@react-navigation/core";
 import { CurrentUser } from "../../utils/user";
 
-import LoginButton from "../../components/LoginButton/LoginButton";
+import BlueButton from "../../components/BlueButton/BlueButton";
 import FacebookLoginButton from "../../components/FacebookLogin/FacebookLogin";
 import SimpleTextButton from "../../components/SimpleTextButton/SimpleTextButton.js";
 import Seperator from "../../components/Seperator/Seperator";
@@ -71,75 +76,70 @@ export default LoginPageScreen = () => {
 
 	return (
 		<GradientBackground>
-			<View style={styles.loginContainer}>
-				<FontAwesome5 name='react' size={80} color='white' />
+			<FontAwesome5 name='react' size={80} color='white' />
 
-				<View style={styles.inputContainers}>
-					<View style={styles.inputContainer}>
-						<Entypo
-							name='email'
-							size={20}
-							color='#507686'
-							style={styles.inputIcon}
-						/>
-						<TextInput
-							style={styles.inputBox}
-							placeholder={"E-mail"}
-							placeholderTextColor='#507686'
-							keyboardType='email-address'
-							onChangeText={emailInputHandler}
-							value={emailInput}
-						/>
-					</View>
-
-					<View style={styles.inputContainer}>
-						<MaterialIcons
-							name='lock'
-							size={20}
-							color='#507686'
-							style={styles.inputIcon}
-						/>
-						<TextInput
-							style={styles.inputBox}
-							placeholder={"Password"}
-							placeholderTextColor='#507686'
-							secureTextEntry={isSecureText}
-							onChangeText={passwordInputHandler}
-							value={passwordInput}
-						/>
-						<Entypo
-							name={eyeIcon}
-							size={20}
-							color='#507686'
-							style={(styles.inputIcon, { marginRight: 10 })}
-							onPress={handlePasswordVisibility}
-						/>
-					</View>
-
-					<SimpleTextButton
-						text='Forgot password?'
-						onPress={forgotButtonHandler}
+			<View style={styles.inputContainers}>
+				<View style={styles.inputContainer}>
+					<Entypo
+						name='email'
+						size={20}
+						color='#507686'
+						style={styles.inputIcon}
+					/>
+					<TextInput
+						style={styles.inputBox}
+						placeholder={"E-mail"}
+						placeholderTextColor='#507686'
+						keyboardType='email-address'
+						onChangeText={emailInputHandler}
+						value={emailInput}
 					/>
 				</View>
 
-				<LoginButton
-					text={"Sign in"}
-					buttonHandler={signUpButtonHandler}
-				/>
-
-				<Seperator />
-
-				<FacebookLoginButton
-					text={"Sign in with Facebook"}
-					onPress={SigninFBHandler}
-				/>
+				<View style={styles.inputContainer}>
+					<MaterialIcons
+						name='lock'
+						size={20}
+						color='#507686'
+						style={styles.inputIcon}
+					/>
+					<TextInput
+						style={styles.inputBox}
+						placeholder={"Password"}
+						placeholderTextColor='#507686'
+						secureTextEntry={isSecureText}
+						onChangeText={passwordInputHandler}
+						value={passwordInput}
+					/>
+					<Entypo
+						name={eyeIcon}
+						size={20}
+						color='#507686'
+						style={(styles.inputIcon, { marginRight: 10 })}
+						onPress={handlePasswordVisibility}
+					/>
+				</View>
 
 				<SimpleTextButton
-					text='Create an account'
-					onPress={() => navigation.navigate("Register")}
-					style={{ marginVertical: 16 }}
+					text='Forgot password?'
+					onPress={forgotButtonHandler}
 				/>
 			</View>
+
+			<BlueButton text={"Sign in"} buttonHandler={signUpButtonHandler} />
+
+			<Seperator />
+
+			<FacebookLoginButton
+				text={"Sign in with Facebook"}
+				onPress={SigninFBHandler}
+			/>
+
+			<SimpleTextButton
+				text='Create an account'
+				onPress={() => navigation.navigate("Register")}
+				style={{ marginVertical: 16 }}
+			/>
 		</GradientBackground>
 	);
 };

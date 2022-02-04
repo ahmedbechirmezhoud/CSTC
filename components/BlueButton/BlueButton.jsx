@@ -1,8 +1,8 @@
 import React from "react"
 import { TouchableOpacity, Text } from "react-native"
-import styles from "./LoginButtonStyles"
+import styles from "./BlueButtonStyles"
 
-const LoginButton = (props) => {
+const BlueButton = (props) => {
 
     return (
         <TouchableOpacity style={styles.signInButton} onPress={props.buttonHandler}>
@@ -11,4 +11,4 @@ const LoginButton = (props) => {
     );
 }
 
-export default LoginButton;
+export default BlueButton;
