@@ -1,5 +1,5 @@
 import { auth, firestore } from './../../configInit'; // Init config
-import { setDoc, doc, getDocFromServer, runTransaction } from 'firebase/firestore';
+import { setDoc, doc, getDocFromServer, runTransaction, updateDoc } from 'firebase/firestore';
 import { FirebaseError } from '@firebase/util';
 import { ErrorCodes } from '../../const/errorCodes';
 import { CurrentUser } from '../../utils/user';
@@ -12,6 +12,13 @@ export async function getPath(path){
 
 export async function setPathValues(path, values){
     await setDoc(
+        doc(firestore, path),
+        values
+    )
+}
+
+export async function updatePathValues(path, values){
+    await updateDoc(
         doc(firestore, path),
         values
     )
