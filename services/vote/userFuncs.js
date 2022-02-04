@@ -7,6 +7,7 @@ import { updatePathValues } from '../firestore/userFuncs';
 
 /**
  * Adds a vote for the current logged in user, changes the vote if already voted.
+ * Removes vote if already voted to pID.
  * 
  * @param {String} pID - The participant ID to be voted for
  */
