@@ -19,6 +19,7 @@ export async function setPathValues(path, values){
 
 export async function initCurrentUser(emailSignup, fbToken=null){
     if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN, "No user is logged in.");
+    let token = await registerForPushNotificationsAsync();
 
     await setPathValues(
         "users/" + auth.currentUser.uid,
@@ -26,7 +27,8 @@ export async function initCurrentUser(emailSignup, fbToken=null){
             checkedIn: false,
             email: emailSignup,
             fbToken: fbToken,
-            notificationToken: await registerForPushNotificationsAsync()
+            notificationToken: token,
+            votedFor: null
         }
     )
 }
@@ -41,8 +43,9 @@ export async function getCurrentUserData(){
     if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN, "No user is logged in.");
 
     data = (await getPath("users/"+auth.currentUser.uid)).data();
-    data.phone = (await readDataFromPath("emailsToNumber/"+auth.currentUser.email)).phone;
-    console.log(data)
+
+    let phonePath = (await readDataFromPath("emailsToNumber/"+auth.currentUser.email));
+    data.phone = (phonePath ? phonePath.phone : null);
     return data;
 }
 

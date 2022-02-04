@@ -1,19 +1,18 @@
 export class CurrentUser{
-    static uid;
-    static name;
-    static email;
-    static emailLogin;
-    static phone;
-    static checkedIn;
-    static fbToken;
+    
 
-    static login(uid, name, email, emailLogin, checkedIn, phone){
+    static login(uid, name, email, emailLogin, checkedIn, phone, votedFor){
         CurrentUser.uid = uid;
-        CurrentUser.name = name;
+        CurrentUser.uname = name;
         CurrentUser.email = email;
         CurrentUser.emailLogin = emailLogin;
         CurrentUser.checkedIn = checkedIn;
         CurrentUser.phone = phone;
+        CurrentUser.votedFor = votedFor;
         CurrentUser.fbToken = null;
+    }
+
+    static loginJson(data){
+        Object.assign(CurrentUser, data);
     }
 }

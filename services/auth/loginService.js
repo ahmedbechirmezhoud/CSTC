@@ -83,7 +83,15 @@ export async function signinWithEmail(email, password) {
   const user = (await signInWithEmailAndPassword(auth, email, password)).user;
 
   userInfo = await getCurrentUserData();
-  CurrentUser.login(user.uid, user.displayName, user.email, userInfo.email, userInfo.checkIn, userInfo.phone)
+  CurrentUser.loginJson({
+    ...userInfo,
+    uid: user.uid,
+    uname: user.displayName,
+    email: user.email,
+    fbToken: null
+  })
+
+  // CurrentUser.login(user.uid, user.displayName, user.email, userInfo.email, userInfo.checkIn, userInfo.phone)
 
   if(!(await isUserVerified(user))) { // Force to verify using phone/FB/Email so don't logout
     verifyUserEmail(user)
@@ -92,7 +100,17 @@ export async function signinWithEmail(email, password) {
 
 
   userInfo = await getCurrentUserData();
-  CurrentUser.login(user.uid, user.displayName, user.email, userInfo.email, userInfo.checkIn)
+
+  CurrentUser.loginJson({
+    ...userInfo,
+    uid: user.uid,
+    uname: user.displayName,
+    email: user.email,
+    fbToken: null
+  })
+
+  // CurrentUser.login(user.uid, user.displayName, user.email, userInfo.email, userInfo.checkIn)
+  
   updateNotificationToken();
   
   return user;
@@ -148,8 +166,24 @@ export async function signinWithFacebook() {
       if(!(await isCurrentUserInited())) await initCurrentUser(false, token);
 
       userInfo = await getCurrentUserData();
-      CurrentUser.login(auth.currentUser.uid, auth.currentUser.displayName, auth.currentUser.email, userInfo.email, userInfo.checkIn, userInfo.phone)
-      CurrentUser.fbToken = token;
+
+      CurrentUser.loginJson({
+        ...userInfo,
+        uid: auth.currentUser.uid,
+        uname: auth.currentUser.displayName,
+        email: auth.currentUser.email,
+        fbToken: token
+      })
+
+      // CurrentUser.login(
+      //   auth.currentUser.uid, 
+      //   auth.currentUser.displayName, 
+      //   auth.currentUser.email, 
+      //   userInfo.email, 
+      //   userInfo.checkIn, 
+      //   userInfo.phone
+      // )
+      // CurrentUser.fbToken = token;
     }
     else {
       await linkWithCredential(auth.currentUser, credential); // Or link fb account
