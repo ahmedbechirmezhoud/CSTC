@@ -44,8 +44,8 @@ function AuthNavigator() {
       <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
       <Stack.Screen name="FbRegistrationCompletion" component={FbRegistrationScreen} options={{ headerShown: false }} />
       <Stack.Screen name="ForgotPwd" component={ForgotPwdScreen} options={{ headerShown: false }} />
+      
       {/*To be removed along with the import*/}
-
       <Stack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="AddEmail" component={AddEmail} options={{ headerShown: false }} />
       <Stack.Screen name="ChangePwd" component={ChangePwd} options={{ headerShown: false }} />
