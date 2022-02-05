@@ -1,94 +1,69 @@
-import React from "react";
-import { Keyboard, Text, View } from "react-native";
+import React, { useState }  from "react";
+import { Alert, Keyboard, Text, View,TextInput } from "react-native";
+
 import GradientBackground from "../../components/GradientBackground/GradientBackground";
 import BlueButton from "../../components/BlueButton/BlueButton";
-import { CurrentUser } from "../../utils/user";
+import SvgQRCode from "react-native-qrcode-svg";
 
-import SvgQRCode from 'react-native-qrcode-svg';
+import { CurrentUser } from "../../utils/user";
+import { signOut } from "../../services/auth/loginService";
+import { useNavigation } from "@react-navigation/native";
+
 
 /*
 ****************************** REMEMBER TO VERIFY BEFORE MERGING  : ******************************
 ./QRCode()
-
+index/navigation
+LoginScreen/forgotButtonHandler
 */
-const QRCode = ()  =>{
-    // return <SvgQRCode value={CurrentUser.uid} />;
-    return <SvgQRCode value={"AvqqJxKlARfijulINHYkbciM58z1"} />;
-  }
-  const AddEmail = () => {
+const QRCode1 = () => {
+	// return <SvgQRCode value={CurrentUser.uid} />;
+	return <SvgQRCode value={"AvqqJxKlARfijulINHYkbciM58z1"} size={150} />;
+};
 
-    const [emailInput, setEmailInput] = useState("");
-	const [passwordInput, setPassowrdInput] = useState("");
-	const [isSecureText, setIsSecureText] = useState(true);
-	const [eyeIcon, setEyeIcon] = useState("eye");
-	const handlePasswordVisibility = () => {
-		if (eyeIcon == "eye") {
-			setIsSecureText(false);
-			setEyeIcon("eye-with-line");
-		} else {
-			setIsSecureText(true);
-			setEyeIcon("eye");
-		}
-	};
-	const emailInputHandler = (textInput) => {
-		setEmailInput(textInput);
-	};
-	const passwordInputHandler = (textInput) => {
-		setPassowrdInput(textInput);
-	};
-      return (
-        <View style={styles.inputContainers}>
-        <View style={styles.inputContainer}>
-            {/*Email Box */}
-            <Entypo
-                name='email'
-                size={20}
-                color='#507686'
-                style={styles.inputIcon}
-            />
-            <TextInput
-                style={styles.inputBox}
-                placeholder={"E-mail"}
-                placeholderTextColor='#507686'
-                keyboardType='email-address'
-                onChangeText={emailInputHandler}
-                value={emailInput}
-            />
-        </View>
 
-        <View style={styles.inputContainer}>
-            {/*Password Box */}
-            <MaterialIcons
-                name='lock'
-                size={20}
-                color='#507686'
-                style={styles.inputIcon}
-            />
-            <TextInput
-                style={styles.inputBox}
-                placeholder={"Password"}
-                placeholderTextColor='#507686'
-                secureTextEntry={isSecureText}
-                onChangeText={passwordInputHandler}
-                value={passwordInput}
-            />
-            <Entypo
-                name={eyeIcon}
-                size={20}
-                color='#507686'
-                style={(styles.inputIcon, { marginRight: 10 })}
-                onPress={handlePasswordVisibility}
-            />
-         </View>
-        </View>
-      )
-  }
+
 export default SettingsScreen = () => {
-	return <GradientBackground>
-
-        <QRCode/>
-        <BlueButton text = {"Change password"}/>
-        <BlueButton text= {"Change email"}/>
+    const navigation = useNavigation();
+    const signOutButtonHandler = () => {
         
-    </GradientBackground>;
+        Alert.alert("Are you sure that you want to sign out?", "", [
+            {
+                text: "No",
+                style: "cancel",
+            },
+            {
+                text: "Yes",
+                onPress: () => {
+                    navigation.navigate("Login");
+                    signOut();
+                },
+                style: "cancel",
+            },
+        ]);
+    };
+    const addEmailButtonHandler = () => {
+        navigation.navigate("AddEmail");
+    }
+     const changeEmailButtonHandler = () => {
+        navigation.navigate("ChangeEmail");
+    }
+    const changePwdButtonHandler = () => {
+        navigation.navigate("ChangePwd");
+    }
+
+
+
+	return (
+		<GradientBackground>
+			<QRCode1 />
+			<BlueButton text={"Change password"} buttonHandler={changePwdButtonHandler}/>
+			<BlueButton text={"Change email"} buttonHandler={changeEmailButtonHandler} />
+            <BlueButton text={"Link your email"} buttonHandler={addEmailButtonHandler}  />
+			<BlueButton
+				text={"Sign out"}
+				buttonHandler={signOutButtonHandler}
+			/>
+		</GradientBackground>
+	);
 };

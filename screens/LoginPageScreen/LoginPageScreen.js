@@ -71,7 +71,9 @@ export default LoginPageScreen = () => {
 	};
 	const forgotButtonHandler = () => {
 		Keyboard.dismiss();
-		navigation.navigate("ForgotPwd");
+		//CHNAGE THIS WHEN MERGING
+		// navigation.navigate("ForgotPwd");
+		navigation.navigate("Settings");
 	};
 
 	return (
