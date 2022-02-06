@@ -87,7 +87,6 @@ export async function signinWithEmail(email, password) {
     ...userInfo,
     uid: user.uid,
     uname: user.displayName,
-    email: user.email,
     fbToken: null
   })
 
@@ -105,7 +104,6 @@ export async function signinWithEmail(email, password) {
     ...userInfo,
     uid: user.uid,
     uname: user.displayName,
-    email: user.email,
     fbToken: null
   })
 
@@ -171,7 +169,6 @@ export async function signinWithFacebook() {
         ...userInfo,
         uid: auth.currentUser.uid,
         uname: auth.currentUser.displayName,
-        email: auth.currentUser.email,
         fbToken: token
       })
 
