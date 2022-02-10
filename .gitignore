@@ -14,3 +14,7 @@ package-lock.json
 
 # macOS
 .DS_Store
+
+Python/Badge Image Creator/*.json
+Python/Badge Image Creator/badges/*.jpg
+Python/Badge Image Creator/badges/*.png
