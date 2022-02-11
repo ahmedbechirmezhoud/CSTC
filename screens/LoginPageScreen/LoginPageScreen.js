@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
 	View,
 	Alert,
@@ -19,6 +19,7 @@ import FacebookLoginButton from "../../components/FacebookLogin/FacebookLogin";
 import SimpleTextButton from "../../components/SimpleTextButton/SimpleTextButton.js";
 import Seperator from "../../components/Seperator/Seperator";
 import styles from "./LoginPageStyles";
+import { InfoContext } from "../../Context/InfoContext";
 
 const IncorrectPasswordPopup = () =>
 	Alert.alert(
@@ -28,18 +29,7 @@ const IncorrectPasswordPopup = () =>
 	);
 
 
-const SigninFBHandler = () => {
-	signinWithFacebook();
-	// the code below needs review
 
-	/*
-	Alert.alert(
-		"Oops",
-		"Something wrong happened try again or choose an other signin method",
-		[{ text: "OK", style: "cancel" }]
-	);*/
-	
-};
 const CreateAccountButtonHandler = () => {};
 
 export default LoginPageScreen = () => {
@@ -48,10 +38,16 @@ export default LoginPageScreen = () => {
 	const [isSecureText, setIsSecureText] = useState(true);
 	const [eyeIcon, setEyeIcon] = useState("eye");
 	const navigation = useNavigation();
+	const {info, dispatchInfo} = useContext(InfoContext);
 
 	const signUpButtonHandler = () => {
 		Keyboard.dismiss();
-		loginUser(emailInput, passwordInput);
+
+		loginUser(emailInput, passwordInput).catch((error)=> {
+			dispatchInfo({payload : {error}});	
+		})
+
+		
 	};
 
 	const handlePasswordVisibility = () => {
@@ -71,9 +67,15 @@ export default LoginPageScreen = () => {
 	};
 	const forgotButtonHandler = () => {
 		Keyboard.dismiss();
-		//CHNAGE THIS WHEN MERGING
-		// navigation.navigate("ForgotPwd");
-		navigation.navigate("Settings");
+		navigation.navigate("ForgotPwd");
+	};
+
+
+	const SigninFBHandler = () => {
+		signinWithFacebook().catch((error)=> {
+			dispatchInfo({payload : {error}});	
+		})	
+
 	};
 
 	return (

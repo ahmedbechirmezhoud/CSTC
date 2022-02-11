@@ -13,6 +13,8 @@ import ChangePwd from '../screens/Settings/ChangePwd/ChangePwd';
 import { View, Text } from 'react-native';
 import { useState } from 'react';
 import { auth } from '../configInit';
+import { InfoConsumer } from '../Context/InfoContext';
+import ErrorModal from '../screens/ErrorModal';
 
 
 export default function Navigator() {
@@ -25,9 +27,15 @@ export default function Navigator() {
   });
 
   return (
-    <NavigationContainer>
-      {user ? <RootNavigator /> : <AuthNavigator />}
-    </NavigationContainer>
+    <InfoConsumer>
+      {({ info, dispatchInfo }) => {
+        return(
+        <NavigationContainer>
+          <ErrorModal />
+          {user ? <RootNavigator /> : <AuthNavigator />}
+        </NavigationContainer>);
+      }}
+    </InfoConsumer>
   );
 }
 
