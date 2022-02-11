@@ -10,7 +10,7 @@ import {
 import { Entypo, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
 import GradientBackground from "../../components/GradientBackground/GradientBackground";
-import { signinWithFacebook } from "../../services/auth/loginService";
+import { signinWithFacebook, loginUser } from "../../services/auth/loginService";
 import { useNavigation } from "@react-navigation/core";
 import { CurrentUser } from "../../utils/user";
 
@@ -27,23 +27,18 @@ const IncorrectPasswordPopup = () =>
 		[{ text: "OK", style: "cancel" }]
 	);
 
-const signUpButtonHandler = () => {
-	Keyboard.dismiss();
-};
+
 const SigninFBHandler = () => {
 	signinWithFacebook();
 	// the code below needs review
 
-	if (CurrentUser.uid) {
-		//Should be updated when facebook signin is done
-		navigation.navigate("Timeline");
-	} else {
-		Alert.alert(
-			"Oops",
-			"Something wrong happened try again or choose an other signin method",
-			[{ text: "OK", style: "cancel" }]
-		);
-	}
+	/*
+	Alert.alert(
+		"Oops",
+		"Something wrong happened try again or choose an other signin method",
+		[{ text: "OK", style: "cancel" }]
+	);*/
+	
 };
 const CreateAccountButtonHandler = () => {};
 
@@ -53,6 +48,11 @@ export default LoginPageScreen = () => {
 	const [isSecureText, setIsSecureText] = useState(true);
 	const [eyeIcon, setEyeIcon] = useState("eye");
 	const navigation = useNavigation();
+
+	const signUpButtonHandler = () => {
+		Keyboard.dismiss();
+		loginUser(emailInput, passwordInput);
+	};
 
 	const handlePasswordVisibility = () => {
 		if (eyeIcon == "eye") {
@@ -112,7 +112,7 @@ export default LoginPageScreen = () => {
 						placeholderTextColor='#507686'
 						secureTextEntry={isSecureText}
 						onChangeText={passwordInputHandler}
-						value={passwordInput}
+						value={passwordInput}	
 					/>
 					<Entypo
 						name={eyeIcon}

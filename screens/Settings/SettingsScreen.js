@@ -32,7 +32,6 @@ export default SettingsScreen = () => {
 			{
 				text: "Yes",
 				onPress: () => {
-					navigation.navigate("Login");
 					signOut();
 				},
 				style: "cancel",
