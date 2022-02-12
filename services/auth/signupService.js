@@ -4,7 +4,7 @@ import {
     sendEmailVerification,
     User
 } from 'firebase/auth';
-import { initCurrentUser, linkPhoneToEmail } from '../firestore/userFuncs';
+import { getCurrentUserData, initCurrentUser, linkPhoneToEmail } from '../firestore/userFuncs';
 import { CurrentUser } from '../../utils/user';
 
 /**
@@ -26,9 +26,19 @@ import { CurrentUser } from '../../utils/user';
  */
 export async function signUpEmail(email, password) {
   const user = (await createUserWithEmailAndPassword(auth, email, password)).user;
-  initCurrentUser(true);
+  await initCurrentUser(true);
 
-  CurrentUser.login(user.uid, user.displayName, user.email, true, false, null)
+  let data = await getCurrentUserData();
+
+  CurrentUser.login(
+    user.uid, 
+    user.displayName, 
+    user.email, 
+    true, 
+    false, 
+    null,
+    data.notificationToken
+  );
 
   verifyUserEmail(user);
   // await auth.signOut(); // Wait for email verification

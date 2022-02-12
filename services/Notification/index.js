@@ -4,6 +4,8 @@ import * as Notifications from 'expo-notifications';
 
 export async function registerForPushNotificationsAsync() {
     let token;
+    if(process.env.JEST_WORKER_ID !== undefined) return "TESTING";
+    
     if (isDevice) {
       const { status: existingStatus } = await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
@@ -29,6 +31,5 @@ export async function registerForPushNotificationsAsync() {
         lightColor: '#FF231F7C',
       });
     }
-  
     return token;
 }

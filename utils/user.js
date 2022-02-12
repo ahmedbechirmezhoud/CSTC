@@ -6,14 +6,16 @@ export class CurrentUser{
     static phone;
     static checkedIn;
     static fbToken;
+    static notificationToken;
 
-    static login(uid, name, email, emailLogin, checkedIn, phone){
+    static login(uid, uname, email, emailLogin, checkedIn, phone, notifTkn){
         CurrentUser.uid = uid;
-        CurrentUser.name = name;
+        CurrentUser.uname = uname;
         CurrentUser.email = email;
         CurrentUser.emailLogin = emailLogin;
         CurrentUser.checkedIn = checkedIn;
         CurrentUser.phone = phone;
         CurrentUser.fbToken = null;
+        CurrentUser.notificationToken = notifTkn;
     }
 }
