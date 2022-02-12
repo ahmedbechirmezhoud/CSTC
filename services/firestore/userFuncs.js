@@ -45,7 +45,7 @@ export async function getCurrentUserData(){
 
     let phonePath = (await readDataFromPath("emailsToNumber/"+auth.currentUser.email));
     data.phone = (phonePath ? phonePath.phone : null);
-    
+  
     return data;
 }
 
