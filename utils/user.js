@@ -15,7 +15,12 @@ export class CurrentUser{
         CurrentUser.emailLogin = emailLogin;
         CurrentUser.checkedIn = checkedIn;
         CurrentUser.phone = phone;
+        CurrentUser.votedFor = votedFor;
         CurrentUser.fbToken = null;
         CurrentUser.notificationToken = notifTkn;
+    }
+
+    static loginJson(data){
+        Object.assign(CurrentUser, data);
     }
 }

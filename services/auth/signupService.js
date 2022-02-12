@@ -28,6 +28,7 @@ export async function signUpEmail(email, password) {
   const user = (await createUserWithEmailAndPassword(auth, email, password)).user;
   await initCurrentUser(true);
 
+<<<<<<< HEAD
   let data = await getCurrentUserData();
 
   CurrentUser.login(
@@ -39,6 +40,19 @@ export async function signUpEmail(email, password) {
     null,
     data.notificationToken
   );
+=======
+  CurrentUser.loginJson({
+    checkedIn: false,
+    email: emailSignup,
+    votedFor: null,
+    uid: user.uid,
+    uname: user.displayName,
+    email: user.email,
+    fbToken: null
+  })
+
+  // CurrentUser.login(user.uid, user.displayName, user.email, true, false, null)
+>>>>>>> origin/Voting
 
   verifyUserEmail(user);
   // await auth.signOut(); // Wait for email verification

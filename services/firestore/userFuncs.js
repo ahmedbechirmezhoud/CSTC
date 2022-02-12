@@ -1,5 +1,5 @@
 import { auth, firestore } from './../../configInit'; // Init config
-import { setDoc, doc, getDocFromServer, runTransaction } from 'firebase/firestore';
+import { setDoc, doc, getDocFromServer, runTransaction, updateDoc, collection, where, query, getDoc, getDocs } from 'firebase/firestore';
 import { FirebaseError } from '@firebase/util';
 import { ErrorCodes } from '../../const/errorCodes';
 import { CurrentUser } from '../../utils/user';
@@ -17,8 +17,16 @@ export async function setPathValues(path, values){
     )
 }
 
+export async function updatePathValues(path, values){
+    await updateDoc(
+        doc(firestore, path),
+        values
+    )
+}
+
 export async function initCurrentUser(emailSignup, fbToken=null){
     if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN, "No user is logged in.");
+    let token = await registerForPushNotificationsAsync();
 
     await setPathValues(
         "users/" + auth.currentUser.uid,
@@ -26,7 +34,10 @@ export async function initCurrentUser(emailSignup, fbToken=null){
             checkedIn: false,
             email: emailSignup,
             fbToken: fbToken,
-            notificationToken: await registerForPushNotificationsAsync()
+            notificationToken: token,
+            votedFor: null,
+            email: auth.currentUser.email,
+            phone: null
         }
     )
 }
@@ -54,29 +65,30 @@ export async function readDataFromPath(path){
     return (d.exists() ? d.data() : null)
 }
 
-export async function linkPhoneToEmail(phone, Email){
-    const emailDoc = doc(firestore, "phoneNumbers", phone)
-    const emailsToNumberDoc = doc(firestore, "emailsToNumber", Email)
+export async function linkPhoneToEmail(phone){
+    const userDoc = doc(firestore, "users", auth.currentUser.uid);
+
+    const usersColl = collection(firestore, "users");
+    const q1 = query(usersColl, where("phone", "==", phone));
 
     // Transactions: Do all or nothing
     await runTransaction(firestore, async (transaction)=>{
-        const emailField = await transaction.get(emailDoc);
-        const emailsToNumberField = await transaction.get(emailsToNumberDoc);
-        if(emailField.exists()){
+        const phoneCheck = await getDocs(q1);
+
+        if(phoneCheck.size != 0){
             throw new FirebaseError(ErrorCodes.PHONE_ALREADY_INUSE, "Phone number is already used.")
         }
 
-        transaction.set(emailDoc, {email: Email});
-
-        if(emailsToNumberField.exists()) transaction.update(emailsToNumberDoc, phone);
-        else transaction.set(emailsToNumberDoc, {phone:phone});
-
+        transaction.update(userDoc, {phone: phone});
         CurrentUser.phone = phone;
     })
 }
 
 export async function phoneToEmail(number){
-    d = await readDataFromPath("phoneNumbers/"+number);
-    if(d) return (d.email ? d.email : null);
+    const usersColl = collection(firestore, "users");
+    const q1 = query(usersColl, where("phone", "==", number));
+    const phoneCheck = await getDocs(q1);
+    if(phoneCheck.size == 1) return phoneCheck.docs[0].data().email;
     return null;
+    
   }
