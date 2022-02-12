@@ -1,11 +1,11 @@
 import React from "react";
-import { TouchableOpacity, View, Text, } from "react-native";
+import { TouchableOpacity,Text, } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import styles from "./FacebookLoginStyles";
 
-const FacebookLoginButton = ({text, onPress}) => {
+const FacebookLoginButton = ({text, onPress,style}) => {
     return (
-        <TouchableOpacity style={styles.facebookButton} onPress={onPress}>
+        <TouchableOpacity style={{...styles.facebookButton,...style}} onPress={onPress}>
             <FontAwesome name="facebook" size={24} color="white" style={styles.facebookIcon} />
             <Text style={styles.facebookButtonText}>{text}</Text>
         </TouchableOpacity>

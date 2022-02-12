@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
 	View,
 	Alert,
@@ -10,7 +10,7 @@ import {
 import { Entypo, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
 import GradientBackground from "../../components/GradientBackground/GradientBackground";
-import { signinWithFacebook } from "../../services/auth/loginService";
+import { signinWithFacebook, loginUser } from "../../services/auth/loginService";
 import { useNavigation } from "@react-navigation/core";
 import { CurrentUser } from "../../utils/user";
 
@@ -19,6 +19,7 @@ import FacebookLoginButton from "../../components/FacebookLogin/FacebookLogin";
 import SimpleTextButton from "../../components/SimpleTextButton/SimpleTextButton.js";
 import Seperator from "../../components/Seperator/Seperator";
 import styles from "./LoginPageStyles";
+import { InfoContext } from "../../Context/InfoContext";
 
 const IncorrectPasswordPopup = () =>
 	Alert.alert(
@@ -27,24 +28,8 @@ const IncorrectPasswordPopup = () =>
 		[{ text: "OK", style: "cancel" }]
 	);
 
-const signUpButtonHandler = () => {
-	Keyboard.dismiss();
-};
-const SigninFBHandler = () => {
-	signinWithFacebook();
-	// the code below needs review
 
-	if (CurrentUser.uid) {
-		//Should be updated when facebook signin is done
-		navigation.navigate("Timeline");
-	} else {
-		Alert.alert(
-			"Oops",
-			"Something wrong happened try again or choose an other signin method",
-			[{ text: "OK", style: "cancel" }]
-		);
-	}
-};
+
 const CreateAccountButtonHandler = () => {};
 
 export default LoginPageScreen = () => {
@@ -53,6 +38,17 @@ export default LoginPageScreen = () => {
 	const [isSecureText, setIsSecureText] = useState(true);
 	const [eyeIcon, setEyeIcon] = useState("eye");
 	const navigation = useNavigation();
+	const {info, dispatchInfo} = useContext(InfoContext);
+
+	const signUpButtonHandler = () => {
+		Keyboard.dismiss();
+
+		loginUser(emailInput, passwordInput).catch((error)=> {
+			dispatchInfo({payload : {error}});	
+		})
+
+		
+	};
 
 	const handlePasswordVisibility = () => {
 		if (eyeIcon == "eye") {
@@ -74,12 +70,20 @@ export default LoginPageScreen = () => {
 		navigation.navigate("ForgotPwd");
 	};
 
+
+	const SigninFBHandler = () => {
+		signinWithFacebook().catch((error)=> {
+			dispatchInfo({payload : {error}});	
+		})	
+
+	};
+
 	return (
 		<GradientBackground>
 			<FontAwesome5 name='react' size={80} color='white' />
-
 			<View style={styles.inputContainers}>
 				<View style={styles.inputContainer}>
+					{/*Email Box */}
 					<Entypo
 						name='email'
 						size={20}
@@ -97,6 +101,7 @@ export default LoginPageScreen = () => {
 				</View>
 
 				<View style={styles.inputContainer}>
+					{/*Password Box */}
 					<MaterialIcons
 						name='lock'
 						size={20}
@@ -109,7 +114,7 @@ export default LoginPageScreen = () => {
 						placeholderTextColor='#507686'
 						secureTextEntry={isSecureText}
 						onChangeText={passwordInputHandler}
-						value={passwordInput}
+						value={passwordInput}	
 					/>
 					<Entypo
 						name={eyeIcon}

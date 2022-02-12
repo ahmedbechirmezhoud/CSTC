@@ -2,9 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Navigator from   './navigation';
 import { registerForPushNotificationsAsync } from "./services/Notification";
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import { LogBox } from 'react-native'; 
 
+import ErrorModal from './screens/ErrorModal';
+import {setJSExceptionHandler} from 'react-native-exception-handler';
+import { InfoProvider } from './Context/InfoContext';
 import * as Notifications from 'expo-notifications';
 
 
@@ -20,6 +23,7 @@ export default function App() {
 
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
+  const [error, setError] = useState(null);
   const notificationListener = useRef();
   const responseListener = useRef();
 
@@ -40,11 +44,21 @@ export default function App() {
   }, []);
 
 
+  setJSExceptionHandler((error, isFatal) => {
+    setError(error);
+  });
+
+
   return (
-    <SafeAreaProvider>
-      <Navigator />
-      <StatusBar />
-    </SafeAreaProvider>
+    <InfoProvider>
+      <SafeAreaProvider>
+          
+          { /*info?.error && <ErrorModal error={info?.error} setModalVisible={setError} /> */ }
+          <Navigator />
+          
+        <StatusBar />
+      </SafeAreaProvider>
+    </InfoProvider>
   ); 
 }
 

@@ -73,21 +73,20 @@ export default RegisterPage = () => {
 			text =
 				"Please click on the link that has just been sent to your email account to verify your email.";
 			// Send email verification link
-			signUpEmail(emailInput, passwordInput);
+			signUpEmail(emailInput, passwordInput).catch((error)=> {
+				dispatchInfo({payload : {error}});	
+			})
 		}
 		Alert.alert(title, text, [{ text: "OK", style: "cancel" }]);
 	};
 	const SignupFBHandler = () => {
-		signinWithFacebook();
-		// the code below needs review
-		if (CurrentUser.uid) navigation.navigate("FbRegistrationCompletion");
-		else {
-			Alert.alert(
-				"Oops",
-				"Something wrong happened try again or choose an other signup method",
-				[{ text: "OK", style: "cancel" }]
-			);
-		}
+		signinWithFacebook()
+			.then(()=> {
+				navigation.navigate("FbRegistrationCompletion");
+			})
+			.catch((error)=> {
+			dispatchInfo({payload : {error}});	
+		})
 	};
 
 	return (

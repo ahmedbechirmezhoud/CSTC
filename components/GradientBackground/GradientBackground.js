@@ -10,18 +10,20 @@ import { LinearGradient } from "expo-linear-gradient";
 
 export default function GradientBackground({ children }) {
 	return (
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 		<LinearGradient
 			colors={["#1A2980", "#1CB5E0"]}
 			style={styles.background}>
-			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+		
 				<View style={{ justifyContent: "center" }}>
 					<ScrollView
 						contentContainerStyle={styles.registerContainer}>
 						{children}
 					</ScrollView>
 				</View>
-			</TouchableWithoutFeedback>
+			
 		</LinearGradient>
+		</TouchableWithoutFeedback>
 	);
 }
 
