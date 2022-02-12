@@ -16,6 +16,12 @@ import { auth } from '../configInit';
 import { InfoConsumer } from '../Context/InfoContext';
 import ErrorModal from '../screens/ErrorModal';
 
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'; 
+import TimelineScreen from '../screens/TimelineScreen/TimelineScreen';
+import VoteScreen from '../screens/VoteScreen/VoteScreen';
+
+
 
 export default function Navigator() {
 
@@ -45,12 +51,12 @@ const Stack = createNativeStackNavigator();
 function RootNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="Timeline" component={() => <View><Text>Hi</Text></View>} options={{ headerShown: false }} />
-
-      <Stack.Screen name="AddEmail" component={AddEmail} options={{ headerShown: false }} />
-      <Stack.Screen name="ChangePwd" component={ChangePwd} options={{ headerShown: false }} />
-      <Stack.Screen name="ChangeEmail" component={ChangeEmail} options={{ headerShown: false }} />
+      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
+      <Stack.Group screenOptions={{ presentation: 'modal' }}>
+        <Stack.Screen name="AddEmail" component={AddEmail} options={{headerTitle : ""}} />
+        <Stack.Screen name="ChangePwd" component={ChangePwd} options={{headerTitle : ""}} />
+        <Stack.Screen name="ChangeEmail" component={ChangeEmail} options={{headerTitle : ""}} />
+      </Stack.Group>
     </Stack.Navigator>
   );
 }
@@ -65,4 +71,48 @@ function AuthNavigator() {
       <Stack.Screen name="ForgotPwd" component={ForgotPwdScreen} options={{ headerShown: false }} />
    </Stack.Navigator>
   );
+}
+
+
+const BottomTab = createBottomTabNavigator();
+
+function BottomTabNavigator() {
+
+  return (
+    <BottomTab.Navigator
+      initialRouteName="Settings"
+      screenOptions={{
+        tabBarActiveTintColor: '#2f95dc',
+      }}>
+      <BottomTab.Screen
+        name="Timeline"
+        component={TimelineScreen}
+        options={{
+          title: 'Timeline',
+          tabBarIcon: ({ color }) => <TabBarIcon name="timer" color={color} />
+        }}
+      />
+      <BottomTab.Screen
+        name="Vote"
+        component={VoteScreen}
+        options={{
+          title: 'Vote',
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="vote" color={color} size={30} style={{ marginBottom: -3 }} />
+        }}
+      />
+      <BottomTab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={({ navigation }) => ({
+          title: 'Settings',
+          tabBarIcon: ({ color }) => <TabBarIcon name="settings" color={color} />
+        })}
+      />
+    </BottomTab.Navigator>
+  );
+}
+
+
+function TabBarIcon(props) {
+  return <Ionicons size={30} style={{ marginBottom: -3 }} {...props} />;
 }
