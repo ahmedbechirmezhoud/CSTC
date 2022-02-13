@@ -1,4 +1,13 @@
 .filterZone{
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
+    background-color: #f0f2f6;
+    margin-left: auto;
+    margin-right: auto;
+
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+    border-radius: 15px;
+    width: 60vw;
 }

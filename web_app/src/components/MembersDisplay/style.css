@@ -1,0 +1,52 @@
+.displayContainer{
+    width: 85vw;
+    padding-left: 5vw;
+}
+
+table{
+    margin-top: 25px;
+    width: 80vw;
+    height: 100%;
+    border-collapse: collapse;
+}
+
+th{
+    padding: 10px;
+}
+
+.selectedDisplay{
+    margin-top: 20px;
+    margin-right: 0vw;
+    width: 80vw;
+    display: flex;
+    flex-direction: row;
+    justify-content:flex-end;
+}
+
+.container{
+    margin-right: 1vw;
+    text-align: center;
+    width: 10vw;
+}
+
+.setBtn{
+    margin-top: 10px;
+
+}
+
+.statusDisplay{
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 10px;
+}
+
+.paidStatus{
+    background-color: #d0e7dc;
+    color: #3d9a6d;
+}
+
+.notPaidStatus{
+    background-color: #e7d0d0;
+    color: #9a3d3d;
+}

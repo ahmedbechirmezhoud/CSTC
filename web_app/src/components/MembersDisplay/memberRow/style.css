@@ -1,0 +1,29 @@
+.selector{
+    width: 3vw;
+    text-align: center;
+}
+
+.memberRow{
+    height: fit-content;
+    padding-top: 25px;
+}
+
+.emailCol{
+    width: 30vw;
+}
+
+
+
+.statCol{
+    width: 10vw;
+    text-align: center;
+}
+
+td{
+    padding: 15px;
+}
+
+tr{
+    border-bottom: solid gray 1px;
+
+}

@@ -1,5 +1,12 @@
 body{
-  background-color: #ffffff;
+  background-color: #184691;
+}
+
+* {
   margin: 0;
   padding: 0;
+}
+
+.clickable{
+  cursor: pointer;
 }

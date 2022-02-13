@@ -1,0 +1,25 @@
+.tableTitle{
+    font-family: "Oswald",sans-serif;
+    margin-left: 5vw;
+    margin-bottom: 2.5vh;
+    font-size: larger;
+    font-weight: bold;
+}
+
+.homeRoot{
+    background-color: #fff;
+    width: 90vw;
+    height: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+    border: solid gray 2px;
+
+    margin-top: 5vh;
+    padding-top: 5vh;
+
+    margin-bottom: 5vh;
+    padding-bottom: 5vh;
+
+    z-index: 1;
+}

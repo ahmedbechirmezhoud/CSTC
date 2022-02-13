@@ -1,10 +1,21 @@
-export default function FilterOptionSelect(){
+import './style.css';
+
+export default function FilterOptionSelect(props){
     return (
-        <div>
-            <select>
-                <option>Test</option>
-                <option>Test 2</option>
-            </select>
-        </div>
+        <select 
+            className="filterOption clickable" 
+            value={props.option} 
+            onChange={(e)=>{
+                props.onChange(e.target.value);
+            }} 
+        >
+            {
+                props.options.map((option)=>{
+                    return (
+                        <option key={option.value} value={option.value}>{option.name}</option>
+                    );
+                })
+            }
+        </select>
     );
 }

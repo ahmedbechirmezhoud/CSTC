@@ -1,0 +1,23 @@
+.inputField{
+    position: relative;
+}
+
+.searchIcon{
+    margin-top: 30%;
+    padding-left: 10px;
+    filter: invert(73%) sepia(3%) saturate(328%) hue-rotate(175deg) brightness(97%) contrast(95%);
+}
+
+.iconContainer{
+    position: absolute;
+    height: 100%;
+}
+
+.inputBox{
+    padding-left: 30px;
+    height: 100%;
+    width: 29vw;
+    color: black;
+    font-weight: bold;
+
+}
