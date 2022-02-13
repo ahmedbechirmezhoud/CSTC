@@ -26,7 +26,8 @@ export async function initCurrentUser(emailSignup, fbToken=null){
             checkedIn: false,
             email: emailSignup,
             fbToken: fbToken,
-            notificationToken: await registerForPushNotificationsAsync()
+            notificationToken: await registerForPushNotificationsAsync(),
+            paidFee: false
         }
     )
 }
