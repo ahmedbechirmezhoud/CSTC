@@ -19,7 +19,7 @@ app.get("/api/getUsers", async (req, res) => {
 
 app.post("/api/changeUserStatus", async (req, res)=>{
     // curl "http://localhost:3001/api/changeUserStatus" -d "{\"test\": true}" -H "Content-Type: application/json"
-    if(!req.body.uid || !req.body.paid) return res.json({ code: 501, error: "Missing parameters"});
+    if(!req.body.uid || req.body.paid === undefined) return res.json({ code: 501, error: "Missing parameters"});
 
     res.json( await firestore.updateUserPayment(req.body.uid, req.body.paid) );
 })

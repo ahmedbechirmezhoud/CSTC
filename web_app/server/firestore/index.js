@@ -49,6 +49,6 @@ module.exports.updateUserPayment = async (uid, paid)=>{
             name: user.displayName ?? ""
         }
     }
-    usersArray[uid].paidFee = true;
+    usersArray[uid].paidFee = paid;
     return {code: 200, res: 'ok'};
 }

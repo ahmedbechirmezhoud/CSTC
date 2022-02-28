@@ -26,7 +26,7 @@ export default function HomeScreen(){
                 setDisplayMask(new Array(newUsersArr.length).fill(true))
             }
         })
-    }, [])
+    }, [modalData])
 
     let [displayMask, setDisplayMask] = useState(new Array(usersArr.length).fill(true));
 
