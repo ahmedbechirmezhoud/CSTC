@@ -12,6 +12,7 @@ app.get("/api/getUsers", async (req, res) => {
     try{
         res.json({ code: 200, res: await firestore.getUsers(page) });
     } catch(e){
+        console.log(e);
         res.json({ code: 500, error: e});
     }
 });
@@ -20,9 +21,6 @@ app.post("/api/changeUserStatus", async (req, res)=>{
     // curl "http://localhost:3001/api/changeUserStatus" -d "{\"test\": true}" -H "Content-Type: application/json"
     if(!req.body.uid || !req.body.paid) return res.json({ code: 501, error: "Missing parameters"});
 
-    let resp = await firestore.updateUserPayment(req.body.uid, req.body.paid);
-
-    if(resp) res.json({code: 200, res: 'ok'})
-    else res.json({code: 502, error: 'User not found'})
+    res.json( await firestore.updateUserPayment(req.body.uid, req.body.paid) );
 })
 
