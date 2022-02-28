@@ -7,7 +7,12 @@ export default function MemberRow(props){
             <td className='nameCol'><div>{props.name}</div><div>#12345</div></td>
             <td className='emailCol'>{props.email}</td>
             <td className='statCol'>
-                <div className={"statusDisplay clickable " + (props.paidFee ? "paidStatus" : "notPaidStatus")}>
+                <div 
+                    className={"statusDisplay clickable " + (props.paidFee ? "paidStatus" : "notPaidStatus")}
+                    onClick={()=>{
+                        props.modalController({display: true, ...props})
+                        
+                    }}>
                     {(props.paidFee ? "Paid" : "Not paid")}
                 </div>
             </td>

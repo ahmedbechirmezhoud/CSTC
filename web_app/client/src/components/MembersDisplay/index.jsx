@@ -1,23 +1,25 @@
 import './style.css'
 import MemberRow from "./memberRow";
-import { useState } from "react";
 import Button from '../Button';
+import { useState, useEffect } from 'react';
 
 export default function MembersDisplay(props){
-    const [checkedUsers, setCheckedState] = useState(
+    let [checkedUsers, setCheckedState] = useState(
         new Array(props.rows.length).fill(false)
     );
-
     let [selectedCount, setSelectedCount] = useState(0);
 
+    useEffect(()=>{
+        setCheckedState(new Array(props.rows.length).fill(false));
+    }, [props.rows])
+
+
     const onChange = (position)=>{
-        const updatedCheckedState = checkedUsers.map((item, index) =>
-            index === position ? !item : item
-        );
-        if(updatedCheckedState[position]) setSelectedCount(++selectedCount);
+        checkedUsers[position] = !checkedUsers[position];
+        if(checkedUsers[position]) setSelectedCount(++selectedCount);
         else setSelectedCount(--selectedCount);
 
-        setCheckedState(updatedCheckedState)
+        setCheckedState(checkedUsers)
     }
 
     const inverseSelected = ()=>{
@@ -50,7 +52,7 @@ export default function MembersDisplay(props){
                     {
                         props.rows.map((row, index)=>{
                             if(props.displayMask[index])
-                            return <MemberRow checked={checkedUsers[index]} key={index} onChange={()=>{
+                            return <MemberRow modalController={props.modalController} checked={checkedUsers[index]} key={index} onChange={()=>{
                                 onChange(index);
                             }} {...row} />;
                         })

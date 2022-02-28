@@ -24,7 +24,7 @@ module.exports.getUsers = async (page) => {
             usersArray[jsonArr.uid] = {
                 email: jsonArr.email,
                 name: jsonArr.displayName ?? "",
-                paidFee: data.paidFee
+                paidFee: data.paidFee ? true : false
             }
         }
 

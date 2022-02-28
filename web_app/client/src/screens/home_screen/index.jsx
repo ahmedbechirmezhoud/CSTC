@@ -2,11 +2,13 @@ import './style.css';
 import MembersDisplay from '../../components/MembersDisplay/';
 import FilterZone from '../../components/filter_components/';
 import { useState, useEffect } from 'react';
+import ModalPopup from '../../components/modal';
 
 export default function HomeScreen(){
     let [searchQuery, setSearchQuery] = useState("");
     let [searchOption, setSearchOption] = useState("-1");
     let [usersArr, setUsersArr] = useState([]);
+    let [modalData, setModalData] = useState({display: false});
 
     useEffect(()=>{
         fetch("http://localhost:3001/api/getUsers/")
@@ -26,7 +28,7 @@ export default function HomeScreen(){
         })
     }, [])
 
-    const [displayMask, setDisplayMask] = useState(new Array(usersArr.length).fill(true));
+    let [displayMask, setDisplayMask] = useState(new Array(usersArr.length).fill(true));
 
     useEffect(()=>{
         let newArr = usersArr.map((user)=>{
@@ -48,6 +50,8 @@ export default function HomeScreen(){
     }, [searchOption, searchQuery])
 
     return (
+        <>
+        <ModalPopup modalController={setModalData} {...modalData} />
         <div className='homeRoot'>
             <div className='tableTitle'>
                 Members list
@@ -66,7 +70,8 @@ export default function HomeScreen(){
                 onChangeOption={setSearchOption}
                 rows={usersArr}
                 displayMask={displayMask}
+                modalController={setModalData}
             />
         </div>
-    );
+        </>);
 }

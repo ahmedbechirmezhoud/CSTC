@@ -1,0 +1,48 @@
+.hidden{
+    display: none;
+}
+
+.visible{
+    display: block;
+}
+
+.modal{
+    position: fixed;
+    width: 50vw;
+    height: fit-content;
+    top: 25%;
+    left: 25%;
+    z-index: 11;
+    background-color: white;
+    border-radius: 10px;
+
+}
+
+.modalContainer{
+    background-color: rgba(0, 0, 0, 0.74);
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    z-index: 10;
+}
+
+.modalBtns{
+    margin: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modalText{
+    margin: 5%;
+    display:inline-block;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.action{
+    display:inline-block;
+}
+
+.green{
+    color:green;
+}
