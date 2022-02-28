@@ -23,7 +23,7 @@ module.exports.getUsers = async (page) => {
             console.log(jsonArr.uid);
             usersArray[jsonArr.uid] = {
                 email: jsonArr.email,
-                displayName: jsonArr.displayName ?? "",
+                name: jsonArr.displayName ?? "",
                 paidFee: data.paidFee
             }
         }
@@ -46,7 +46,7 @@ module.exports.updateUserPayment = async (uid, paid)=>{
         const user = await auth.getUser(uid);
         usersArray[uid] = {
             email: user.email,
-            displayName: user.displayName ?? ""
+            name: user.displayName ?? ""
         }
     }
     usersArray[uid].paidFee = true;

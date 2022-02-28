@@ -6,28 +6,30 @@ import { useState, useEffect } from 'react';
 export default function HomeScreen(){
     let [searchQuery, setSearchQuery] = useState("");
     let [searchOption, setSearchOption] = useState("-1");
-
-    const arr = [
-        {name: "Name", email: "Email", paidFee:true},
-        {name: "Name", email: "Email", paidFee:true},
-        {name: "Name", email: "Email", paidFee:true},
-        {name: "Name", email: "Email", paidFee:false},
-        {name: "Name", email: "Email", paidFee:false},
-        {name: "Name", email: "Email", paidFee:false},
-        {name: "Name", email: "Email", paidFee:false},
-        {name: "Name", email: "Email", paidFee:false},
-        {name: "NameLol", email: "Email", paidFee:true},
-        {name: "Name", email: "Email", paidFee:false},
-        {name: "Name", email: "Email", paidFee:false},
-        {name: "Name", email: "Email", paidFee:false},
-        {name: "Name", email: "Email", paidFee:false},
-        {name: "Name", email: "Email", paidFee:false}
-    ];
-
-    const [displayMask, setDisplayMask] = useState(new Array(arr.length).fill(true));
+    let [usersArr, setUsersArr] = useState([]);
 
     useEffect(()=>{
-        let newArr = arr.map((user)=>{
+        fetch("http://localhost:3001/api/getUsers/")
+        .then(response => response.json())
+        .then(response => {
+            if(response.code === 200){
+                let newUsersArr = [];
+                let i=0;
+                while(response.res[i]){
+                    newUsersArr.push(response.res[i]);
+                    i++;
+                }
+                //console.log(newUsersArr);
+                setUsersArr(newUsersArr);
+                setDisplayMask(new Array(newUsersArr.length).fill(true))
+            }
+        })
+    }, [])
+
+    const [displayMask, setDisplayMask] = useState(new Array(usersArr.length).fill(true));
+
+    useEffect(()=>{
+        let newArr = usersArr.map((user)=>{
             console.log(searchOption)
             if(searchOption === "-1") return true;
             else if(searchOption === "0"){
@@ -62,7 +64,7 @@ export default function HomeScreen(){
                 onChangeQuery={setSearchQuery}
                 option={searchOption}
                 onChangeOption={setSearchOption}
-                rows={arr}
+                rows={usersArr}
                 displayMask={displayMask}
             />
         </div>
