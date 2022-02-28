@@ -1,9 +1,9 @@
+const { app } = require("./config");
 const express = require("express");
+const firestore = require('./firestore');
 
-const PORT = process.env.PORT || 3001;
-
-const app = express();
-
-app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
+app.get("/api/getUsers", (req, res) => {
+    res.json({ code: 200 });
+    firestore.getUsers();
 });
+
