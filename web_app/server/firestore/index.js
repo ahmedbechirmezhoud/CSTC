@@ -24,7 +24,7 @@ module.exports.getUsers = async (page) => {
             usersArray[jsonArr.uid] = {
                 email: jsonArr.email,
                 displayName: jsonArr.displayName ?? "",
-                checkedIn: data.checkedIn
+                paidFee: data.paidFee
             }
         }
 
@@ -40,7 +40,7 @@ module.exports.updateUserPayment = async (uid, paid)=>{
 
     if(typeof paid !== "boolean") return {code: 503, error: 'Invalid parameters.'};
 
-    await userDoc.update({checkedIn: paid});
+    await userDoc.update({paidFee: paid});
 
     if(!usersArray[uid]){
         const user = await auth.getUser(uid);
@@ -49,6 +49,6 @@ module.exports.updateUserPayment = async (uid, paid)=>{
             displayName: user.displayName ?? ""
         }
     }
-    usersArray[uid].checkedIn = true;
+    usersArray[uid].paidFee = true;
     return {code: 200, res: 'ok'};
 }
