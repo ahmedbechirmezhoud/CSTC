@@ -6,7 +6,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/api/getUsers", async (req, res) => {
-    let page = 0;
+    let page = -1;
     if(req.query.page) page = parseInt(req.query.page, 10);
 
     try{

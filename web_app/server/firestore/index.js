@@ -8,7 +8,7 @@ const MAX_PER_PAGE = 2;
 let usersArray = {};
 
 module.exports.getUsers = async (page) => {
-    let users = await auth.listUsers(MAX_PER_PAGE);
+    let users = await auth.listUsers(page === -1 ? 1000 : MAX_PER_PAGE);
     while(page > 0){
         users = await auth.listUsers(MAX_PER_PAGE, users.pageToken);
         page--;
