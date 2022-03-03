@@ -1,17 +1,28 @@
 .displayContainer{
-    width: 85vw;
-    padding-left: 5vw;
+    width: 100%;
+    padding-left: 0vw;
 }
 
 table{
     margin-top: 25px;
-    width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
     height: 100%;
     border-collapse: collapse;
 }
 
 th{
     padding: 10px;
+}
+
+.checkboxHeader{
+    display: flex;
+    flex-direction: column;
+}
+
+.invcheckbox{
+    margin-top: 5px;
 }
 
 .selectedDisplay{

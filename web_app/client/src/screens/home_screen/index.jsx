@@ -54,7 +54,7 @@ export default function HomeScreen(){
         <ModalPopup modalController={setModalData} {...modalData} />
         <div className='homeRoot'>
             <div className='tableTitle'>
-                Members list
+                Members List
             </div>
             <FilterZone 
                 query={searchQuery} 

@@ -33,7 +33,7 @@ export default function MembersDisplay(props){
         <div className='displayContainer'>
             <div className='selectedDisplay'>
                 <div className='container'>
-                    {selectedCount} selected user{selectedCount > 1 ? "s" : ""}.
+                    {selectedCount} selected{selectedCount > 1 ? "s" : ""}
                     <div className='setBtn'>
                         <Button clickable={selectedCount !== 0} text="Mark as paid" />
                     </div>
@@ -42,7 +42,12 @@ export default function MembersDisplay(props){
             <table>
                 <thead>
                     <tr className='tableHeader'>
-                        <th><input type="checkbox" onChange={inverseSelected}/></th>
+                        <th className='selector'>
+                            <div className='checkboxHeader'>
+                                Inverse
+                                <input type="checkbox" className='invcheckbox clickable' onChange={inverseSelected}/>
+                            </div>
+                        </th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Status</th>
