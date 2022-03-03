@@ -9,7 +9,7 @@
 }
 
 .emailCol{
-    width: 30vw;
+    width: 25vw;
 }
 
 .userID{
@@ -31,4 +31,22 @@ td{
 tr{
     border-bottom: solid gray 1px;
 
+}
+
+.statusDisplay{
+    border-radius: 20px;
+    min-width: 85px;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 10px;
+}
+
+.paidStatus{
+    background-color: #d0e7dc;
+    color: #3d9a6d;
+}
+
+.notPaidStatus{
+    background-color: #e7d0d0;
+    color: #9a3d3d;
 }
