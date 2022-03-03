@@ -12,7 +12,12 @@
     width: 30vw;
 }
 
-
+.userID{
+    color: rgb(61, 59, 59);
+    font-size: medium;
+    margin-left: 25px;
+    font-family: monospace;
+}
 
 .statCol{
     width: 10vw;
