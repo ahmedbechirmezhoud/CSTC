@@ -10,15 +10,16 @@
     position: fixed;
     width: 50vw;
     height: fit-content;
-    top: 25%;
-    left: 25%;
     z-index: 11;
     background-color: white;
     border-radius: 10px;
-
+    max-height: 85vh;
 }
 
 .modalContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: rgba(0, 0, 0, 0.74);
     position: fixed;
     width: 100vw;
@@ -45,4 +46,23 @@
 
 .green{
     color:green;
+}
+
+.red{
+    color: red;
+}
+
+.usersListModal{
+    padding-top: 5px;
+    margin-top: 20px;
+    margin-left: 15px;
+    max-height: 45vh;
+    width: calc(50vw - 15px - 5% - 10px);
+    overflow-y: auto;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.userModalLine{
+    margin-bottom: 5px;
 }

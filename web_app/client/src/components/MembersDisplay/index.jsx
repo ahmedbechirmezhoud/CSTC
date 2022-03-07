@@ -8,11 +8,11 @@ export default function MembersDisplay(props){
         new Array(props.rows.length).fill(false)
     );
     let [selectedCount, setSelectedCount] = useState(0);
+    let [isInverseChecked, setInverseChecked] = useState(false);
 
     useEffect(()=>{
         setCheckedState(new Array(props.rows.length).fill(false));
     }, [props.rows])
-
 
     const onChange = (position)=>{
         checkedUsers[position] = !checkedUsers[position];
@@ -23,19 +23,30 @@ export default function MembersDisplay(props){
     }
 
     const inverseSelected = ()=>{
-        const updatedCheckedState = checkedUsers.map((item) =>
-            !item
+        let count = 0;
+        console.log(props.displayMask);
+        console.log(checkedUsers);
+        const updatedCheckedState = checkedUsers.map((item, ind) =>
+            props.displayMask[ind] ? (item ? false : (()=>{count++; return true;})() ) : item
         );
+        console.log(updatedCheckedState);
         setCheckedState(updatedCheckedState);
-        setSelectedCount(checkedUsers.length - selectedCount);
+        setSelectedCount(count);
+        setInverseChecked(!isInverseChecked);
     }
+
+    const resetCheckbox = ()=>{
+        setInverseChecked(false); 
+        setSelectedCount(0);
+        setCheckedState(new Array(props.rows.length).fill(false));
+    };
     return (
         <div className='displayContainer'>
             <div className='selectedDisplay'>
                 <div className='container'>
-                    {selectedCount} selected{selectedCount > 1 ? "s" : ""}
+                    {selectedCount} selected
                     <div className='setBtn'>
-                        <Button clickable={selectedCount !== 0} text="Mark as paid" />
+                        <Button resetCheckbox={resetCheckbox} users={props.rows} checkedUsers={checkedUsers} modalController={props.modalController} clickable={selectedCount !== 0} text="Mark as paid" />
                     </div>
                 </div>
             </div>
@@ -45,11 +56,12 @@ export default function MembersDisplay(props){
                         <th className='selector'>
                             <div className='checkboxHeader'>
                                 Inverse
-                                <input type="checkbox" className='invcheckbox clickable' onChange={inverseSelected}/>
+                                <input checked={isInverseChecked} type="checkbox" className='invcheckbox clickable' onChange={inverseSelected}/>
                             </div>
                         </th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Payment</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -57,9 +69,15 @@ export default function MembersDisplay(props){
                     {
                         props.rows.map((row, index)=>{
                             if(props.displayMask[index])
-                            return <MemberRow modalController={props.modalController} checked={checkedUsers[index]} key={index} onChange={()=>{
-                                onChange(index);
-                            }} {...row} />;
+                                return <MemberRow 
+                                    modalController={props.modalController} 
+                                    checked={checkedUsers[index]} 
+                                    key={index} 
+                                    onChange={()=>{
+                                        onChange(index);
+                                    }}
+                                    {...row} 
+                                />;
                         })
                     }
                 </tbody>

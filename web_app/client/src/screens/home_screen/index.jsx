@@ -7,7 +7,14 @@ import ModalPopup from '../../components/modal';
 export default function HomeScreen(){
     let [searchQuery, setSearchQuery] = useState("");
     let [searchOption, setSearchOption] = useState("-1");
-    let [usersArr, setUsersArr] = useState([]);
+    let [usersArr, setUsersArr] = useState(
+        [   
+            // {name: "hi", uid: "123", email: "test@gmail.com", paidFee: false},
+            // {name: "hi", uid: "123", email: "test@gmail.com", paidFee: false},
+            // {name: "hi", uid: "123", email: "test@gmail.com", paidFee: false},
+            // {name: "hifff", uid: "123", email: "test@gmail.com", paidFee: false}
+        ]
+    );
     let [modalData, setModalData] = useState({display: false});
 
     useEffect(()=>{
@@ -41,6 +48,12 @@ export default function HomeScreen(){
             }
             else if(searchOption === "1"){
                 if(user.email.toUpperCase().match(searchQuery.toUpperCase())){
+                    return true;
+                }
+            }
+            else if(searchOption === "2"){
+                console.log(user);
+                if(user.cin.toUpperCase().match(searchQuery.toUpperCase())){
                     return true;
                 }
             }

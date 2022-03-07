@@ -2,9 +2,10 @@ import ModalBtn from "./modalBtn";
 import "./style.css";
 
 export default function ModalPopup(props){
+    console.log(props.users)
     if(props.display){
-        const confirmPayment = () => {
-            fetch(
+        const confirmPayment = async () => {
+            await fetch(
                 "http://localhost:3001/api/changeUserStatus",
                 {
                     "method": "POST",
@@ -13,20 +14,22 @@ export default function ModalPopup(props){
                       "accept": "application/json"
                     },
                     "body": JSON.stringify({
-                      uid: props.uid,
-                      paid: !props.paidFee
+                      uid: props.users[0].uid,
+                      paid: !props.users[0].paidFee
                     })
                 }
             ).then(response => response.json())
             .then(response => {
                 if(response.code === 200){
-                    closeModalDialog();
-                    console.log(response);
+                    // Success
                 }
                 else console.log(response);
-            })
+            });
+
+            closeModalDialog();
         }
         const closeModalDialog = () => {
+            props.resetCheckbox();
             props.modalController({display: false})
         }
         document.getElementsByTagName('body')[0].style = "overflow: hidden;"
@@ -38,8 +41,18 @@ export default function ModalPopup(props){
             }}>
                 <div className={"modal " + (props.display ? "visible" : "visible")}>
                     <div className="modalText">
-                        You're about to <div className={"action " + (props.paidFee ? "red" : "green")}><b>{props.paidFee ? "cancel" : "confirm"}</b></div> {props.name} ({props.email}) payment.
-                        <br/><br/>Proceed?
+                        You're about to mark the following users as <div className={"action " + (props.users[0].paidFee ? "red" : "green")}><b>{props.users[0].paidFee ? "Not paid" : "Paid"}</b></div>, Proceed?
+                        <div className="usersListModal">
+                            {
+                                props.users.map((user, index)=>{
+                                    return (
+                                        <div key={index} className="userModalLine">
+                                            {user.name === "" ? "[!] NOT SET" : user.name} ({user.email} - ID: {user.uid})
+                                        </div>
+                                    );
+                                })
+                            }
+                        </div>
                     </div>
                     <div className="modalBtns">
                         <ModalBtn action={closeModalDialog} text="Cancel"/>

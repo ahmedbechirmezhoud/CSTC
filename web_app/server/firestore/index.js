@@ -21,14 +21,16 @@ module.exports.getUsers = async (page) => {
             console.log("Load")
             const data = (await firestore.doc("users/"+jsonArr.uid).get()).data();
             if(data === undefined){
-                usersList[i] = {uid: jsonArr.uid, name: "[!] NOT FOUND", email: "[!] NOT FOUND", paidFee: true}
+                usersList[i] = {uid: jsonArr.uid, name: "[!] NOT FOUND", email: "[!] NOT FOUND", paidFee: true, cin: "00000000"}
                 continue;
             }
 
             usersArray[jsonArr.uid] = {
                 email: jsonArr.email,
-                name: jsonArr.displayName ?? "",
-                paidFee: data.paidFee ? true : false
+                name: data.name ?? "",
+                paidFee: data.paidFee ? true : false,
+                cin: data.cin,
+                payementMethod: data.payementMethod ? data.payementMethod : "Not set"
             }
         }
 

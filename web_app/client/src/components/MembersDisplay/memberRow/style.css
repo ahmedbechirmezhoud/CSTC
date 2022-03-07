@@ -9,7 +9,12 @@
 }
 
 .emailCol{
-    width: 25vw;
+    width: 20vw;
+}
+
+.paymentOptCol{
+    width: 5vw;
+    text-align: center;
 }
 
 .userID{
