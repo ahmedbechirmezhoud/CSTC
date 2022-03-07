@@ -24,12 +24,9 @@ export default function MembersDisplay(props){
 
     const inverseSelected = ()=>{
         let count = 0;
-        console.log(props.displayMask);
-        console.log(checkedUsers);
         const updatedCheckedState = checkedUsers.map((item, ind) =>
             props.displayMask[ind] ? (item ? false : (()=>{count++; return true;})() ) : item
         );
-        console.log(updatedCheckedState);
         setCheckedState(updatedCheckedState);
         setSelectedCount(count);
         setInverseChecked(!isInverseChecked);

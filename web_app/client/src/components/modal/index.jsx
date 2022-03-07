@@ -2,29 +2,33 @@ import ModalBtn from "./modalBtn";
 import "./style.css";
 
 export default function ModalPopup(props){
-    console.log(props.users)
+    // console.log(props.users)
     if(props.display){
         const confirmPayment = async () => {
-            await fetch(
-                "http://localhost:3001/api/changeUserStatus",
-                {
-                    "method": "POST",
-                    "headers": {
-                      "Content-Type": "application/json",
-                      "accept": "application/json"
-                    },
-                    "body": JSON.stringify({
-                      uid: props.users[0].uid,
-                      paid: !props.users[0].paidFee
-                    })
-                }
-            ).then(response => response.json())
-            .then(response => {
-                if(response.code === 200){
-                    // Success
-                }
-                else console.log(response);
-            });
+            for(let i=0; i<props.users.length; i++){
+                await fetch(
+                    "http://localhost:3001/api/changeUserStatus",
+                    {
+                        "method": "POST",
+                        "headers": {
+                        "Content-Type": "application/json",
+                        "accept": "application/json"
+                        },
+                        "body": JSON.stringify({
+                        uid: props.users[i].uid,
+                        paid: !props.users[i].paidFee
+                        })
+                    }
+                ).then(response => response.json())
+                .then(response => {
+                    if(response.code === 200){
+                        // Success
+                    }
+                    else {
+                        alert("Error when setting " + props.users[i].name + ".\nResponse: " + response)
+                    }
+                });
+            }
 
             closeModalDialog();
         }

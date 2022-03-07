@@ -39,7 +39,7 @@ export default function HomeScreen(){
 
     useEffect(()=>{
         let newArr = usersArr.map((user)=>{
-            console.log(searchOption)
+            // console.log(searchOption)
             if(searchOption === "-1") return true;
             else if(searchOption === "0"){
                 if(user.name.toUpperCase().match(searchQuery.toUpperCase())){
