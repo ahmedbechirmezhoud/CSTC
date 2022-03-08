@@ -14,7 +14,8 @@ export default function ModalPopup(props){
                         "Content-Type": "application/json",
                         "accept": "application/json"
                         },
-                        "body": JSON.stringify({
+                        credentials: 'include',
+                        body: JSON.stringify({
                         uid: props.users[i].uid,
                         paid: !props.users[i].paidFee
                         })

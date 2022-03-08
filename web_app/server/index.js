@@ -13,6 +13,11 @@ const mypassword = 'REDACTED'
 
 let authToken = "";
 
+app.get("/api/signout", (req, res) =>{
+    req.session.destroy();
+    res.json({code: 200, res: "Logged out"})
+})
+
 app.post("/api/authAdmin", (req, res) =>{
     if(req.session.userid){
         res.json({ code: 200 })

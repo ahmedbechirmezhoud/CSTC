@@ -4,7 +4,7 @@ import FilterZone from '../../components/filter_components/';
 import { useState, useEffect } from 'react';
 import ModalPopup from '../../components/modal';
 
-export default function HomeScreen(){
+export default function HomeScreen(props){
     let [searchQuery, setSearchQuery] = useState("");
     let [searchOption, setSearchOption] = useState("-1");
     let [usersArr, setUsersArr] = useState(
@@ -16,6 +16,12 @@ export default function HomeScreen(){
         ]
     );
     let [modalData, setModalData] = useState({display: false});
+    let [displayMask, setDisplayMask] = useState(new Array(usersArr.length).fill(true));
+
+    const signOut = async ()=>{
+        await fetch("http://localhost:3001/api/signout", {credentials: 'include'});
+        props.loginState(false);
+    }
 
     useEffect(()=>{
         fetch("http://localhost:3001/api/getUsers/", {credentials: 'include'})
@@ -36,8 +42,6 @@ export default function HomeScreen(){
             }
         })
     }, [modalData])
-
-    let [displayMask, setDisplayMask] = useState(new Array(usersArr.length).fill(true));
 
     useEffect(()=>{
         let newArr = usersArr.map((user)=>{
@@ -69,7 +73,9 @@ export default function HomeScreen(){
         <ModalPopup modalController={setModalData} {...modalData} />
         <div className='homeRoot'>
             <div className='tableTitle'>
-                Members List
+                <div></div>
+                <div>Members List</div>
+                <button onClick={signOut} className='clickable signoutButton'>Signout</button>
             </div>
             <FilterZone 
                 query={searchQuery} 

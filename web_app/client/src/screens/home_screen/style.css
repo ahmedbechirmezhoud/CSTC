@@ -1,10 +1,31 @@
 .tableTitle{
     font-family: "Oswald",sans-serif;
     margin-left: 5vw;
+    margin-right: 5vw;
     margin-bottom: 2.5vh;
     font-size: larger;
     font-weight: bold;
     text-align: center;
+
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.signoutButton{
+    border-radius: 10px;
+    border: 0px;
+    height: 8%;
+    min-width: 90px;
+    min-height: 35px;
+
+    background-color: #212529;
+    color: white;
+    font-weight: bold;
+}
+
+.signoutButton:hover{
+    background-color: #323437;
 }
 
 .homeRoot{
