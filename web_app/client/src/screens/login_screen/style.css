@@ -1,0 +1,40 @@
+.loginRoot{
+    margin: auto;
+    margin-top: 10vh;
+    background-color: white;
+    width: 70vw;
+    height: 80vh;
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginBtn{
+    margin-top: 40px;
+    border-radius: 10px;
+    border: 0px;
+    width: 100%;
+    height: 8%;
+    min-height: 35px;
+
+    background-color: #212529;
+    color: white;
+}
+
+.loginBtn:hover{
+    background-color: #323437;
+}
+
+.form{
+    margin-top: 20px;
+    width: 30%;
+    height: 70%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

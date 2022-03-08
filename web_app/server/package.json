@@ -10,7 +10,9 @@
   "author": "M0ngi",
   "license": "ISC",
   "dependencies": {
+    "cookie-parser": "^1.4.6",
     "express": "^4.17.3",
+    "express-session": "^1.17.2",
     "firebase-admin": "^10.0.2"
   },
   "devDependencies": {

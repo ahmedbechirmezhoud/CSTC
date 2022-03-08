@@ -11,7 +11,7 @@ export default function MembersDisplay(props){
     let [isInverseChecked, setInverseChecked] = useState(false);
 
     useEffect(()=>{
-        setCheckedState(new Array(props.rows.length).fill(false));
+        resetCheckbox();
     }, [props.rows])
 
     const onChange = (position)=>{

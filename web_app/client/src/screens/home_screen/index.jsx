@@ -9,16 +9,16 @@ export default function HomeScreen(){
     let [searchOption, setSearchOption] = useState("-1");
     let [usersArr, setUsersArr] = useState(
         [   
-            // {name: "hi", uid: "123", email: "test@gmail.com", paidFee: false},
-            // {name: "hi", uid: "123", email: "test@gmail.com", paidFee: false},
-            // {name: "hi", uid: "123", email: "test@gmail.com", paidFee: false},
-            // {name: "hifff", uid: "123", email: "test@gmail.com", paidFee: false}
+            // {name: "hi", uid: "123", email: "test@gmail.com", paidFee: false, cin: "12345678"},
+            // {name: "hi", uid: "123", email: "test@gmail.com", paidFee: false, cin: "12345678"},
+            // {name: "hi", uid: "123", email: "test@gmail.com", paidFee: false, cin: "12345678"},
+            // {name: "hifff", uid: "123", email: "test@gmail.com", paidFee: false, cin: "12345678"}
         ]
     );
     let [modalData, setModalData] = useState({display: false});
 
     useEffect(()=>{
-        fetch("http://localhost:3001/api/getUsers/")
+        fetch("http://localhost:3001/api/getUsers/", {credentials: 'include'})
         .then(response => response.json())
         .then(response => {
             if(response.code === 200){
@@ -31,6 +31,8 @@ export default function HomeScreen(){
                 //console.log(newUsersArr);
                 setUsersArr(newUsersArr);
                 setDisplayMask(new Array(newUsersArr.length).fill(true))
+            } else if(response.code === 499 || response.code === 498){
+                return;
             }
         })
     }, [modalData])
