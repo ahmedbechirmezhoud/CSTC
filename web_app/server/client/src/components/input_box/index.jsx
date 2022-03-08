@@ -5,7 +5,7 @@ export default function InputBox(props){
         <>
             <div className='inputArea'>
                 <b>{props.label}</b>
-                <input className="loginInput" placeholder={props.hint} onChange={props.onChange} value={props.value} />
+                <input type={props.type} className="loginInput" placeholder={props.hint} onChange={props.onChange} value={props.value} />
             </div>
         </>
     );

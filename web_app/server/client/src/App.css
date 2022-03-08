@@ -1,0 +1,13 @@
+body{
+  background-color: #011330d2;
+  background-image: url("./../build/img/bg.jpg");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.clickable{
+  cursor: pointer;
+}

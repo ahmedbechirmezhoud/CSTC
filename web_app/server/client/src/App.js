@@ -8,7 +8,7 @@ function App() {
   console.log(loggedIn);
   useEffect(async ()=>{
     await fetch(
-      "http://localhost:3001/api/authAdmin",
+      "/api/authAdmin",
       {
           method: "POST",
           headers: {

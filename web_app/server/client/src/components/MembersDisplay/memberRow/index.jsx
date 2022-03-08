@@ -15,7 +15,7 @@ export default function MemberRow(props){
                 <div 
                     className={"statusDisplay clickable " + (props.paidFee ? "paidStatus" : "notPaidStatus")}
                     onClick={()=>{
-                        props.modalController({display: true, users:[props]})
+                        props.modalController({display: true, users:[props], resetCheckbox:props.resetCheckbox })
                         
                     }}>
                     {(props.paidFee ? "Paid" : "Not paid")}

@@ -5,17 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "export GOOGLE_APPLICATION_CREDENTIALS=./privKey.json; nodemon index.js"
+    "start": "node index.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && cd client && npm install && npm run build"
   },
   "author": "M0ngi",
   "license": "ISC",
   "dependencies": {
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "express": "^4.17.3",
     "express-session": "^1.17.2",
     "firebase-admin": "^10.0.2"
-  },
-  "devDependencies": {
-    "dotenv": "^16.0.0"
   }
 }

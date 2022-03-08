@@ -66,7 +66,8 @@ export default function MembersDisplay(props){
                     {
                         props.rows.map((row, index)=>{
                             if(props.displayMask[index])
-                                return <MemberRow 
+                                return <MemberRow
+                                    resetCheckbox={resetCheckbox}
                                     modalController={props.modalController} 
                                     checked={checkedUsers[index]} 
                                     key={index} 

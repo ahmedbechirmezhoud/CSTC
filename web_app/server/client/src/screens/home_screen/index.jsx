@@ -19,12 +19,12 @@ export default function HomeScreen(props){
     let [displayMask, setDisplayMask] = useState(new Array(usersArr.length).fill(true));
 
     const signOut = async ()=>{
-        await fetch("http://localhost:3001/api/signout", {credentials: 'include'});
+        await fetch("/api/signout", {credentials: 'include'});
         props.loginState(false);
     }
 
     useEffect(()=>{
-        fetch("http://localhost:3001/api/getUsers/", {credentials: 'include'})
+        fetch("/api/getUsers/", {credentials: 'include'})
         .then(response => response.json())
         .then(response => {
             if(response.code === 200){

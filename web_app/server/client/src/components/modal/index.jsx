@@ -7,7 +7,7 @@ export default function ModalPopup(props){
         const confirmPayment = async () => {
             for(let i=0; i<props.users.length; i++){
                 await fetch(
-                    "http://localhost:3001/api/changeUserStatus",
+                    "/api/changeUserStatus",
                     {
                         "method": "POST",
                         "headers": {

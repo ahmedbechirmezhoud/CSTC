@@ -1,4 +1,4 @@
-import { useState } from 'react/cjs/react.development';
+import React, { useState } from 'react';
 import InputBox from '../../components/input_box';
 import './style.css';
 
@@ -8,7 +8,7 @@ export default function LoginScreen(props){
 
     const authUser = async ()=>{
         await fetch(
-            "http://localhost:3001/api/authAdmin",
+            "/api/authAdmin",
             {
                 method: "POST",
                 headers: {
@@ -36,8 +36,8 @@ export default function LoginScreen(props){
             <div className='loginRoot'>
                 <h2>Sign in to continue</h2>
                 <div className='form'>
-                <InputBox label="Username" hint="Enter your username" value={username} onChange={(e)=>{setUserName(e.target.value)}} />
-                <InputBox label="Password" hint="Enter your password" value={password} onChange={(e)=>{setPassword(e.target.value)}} />
+                <InputBox type="text" label="Username" hint="Enter your username" value={username} onChange={(e)=>{setUserName(e.target.value)}} />
+                <InputBox type="password" label="Password" hint="Enter your password" value={password} onChange={(e)=>{setPassword(e.target.value)}} />
 
                 <button className='loginBtn clickable' onClick={authUser}>Login</button>
                 </div>

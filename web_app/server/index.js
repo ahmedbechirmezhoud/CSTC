@@ -2,6 +2,7 @@ const { app } = require("./config");
 const express = require("express");
 const firestore = require('./firestore');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -80,3 +81,9 @@ app.post("/api/changeUserStatus", async (req, res)=>{
     res.json( await firestore.updateUserPayment(req.body.uid, req.body.paid) );
 })
 
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
+  });
+  // --------------------------------

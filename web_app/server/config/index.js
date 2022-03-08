@@ -1,13 +1,22 @@
 const firebaseAdmin = require("firebase-admin");
 const express = require("express");
 const expressSession = require('express-session');
+const path = require('path');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+const cors = require("cors");
+
 firebaseAdmin.initializeApp({
     credential: firebaseAdmin.credential.applicationDefault()
 });
+
+app.use(cors());
+
+app.use(express.static('./client/build'));
+    
+app.use(express.static(path.join(__dirname, './client/build')));
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
@@ -23,7 +32,7 @@ app.use(function(req, res, next) {
 
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(expressSession({
-    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    secret: "REDACTED",
     saveUninitialized:true,
     cookie: { 
         maxAge: oneDay,
