@@ -32,7 +32,7 @@ app.use(function(req, res, next) {
 
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(expressSession({
-    secret: "REDACTED",
+    secret: "HonU4pGi5h5fAi299xojkx2SCQ8cpaZWMO81H4b7djWt94p3lZFi6n840sL6MzLOhvFcUeR0e7itGLYFutYySXue0F8x9rm",
     saveUninitialized:true,
     cookie: { 
         maxAge: oneDay,

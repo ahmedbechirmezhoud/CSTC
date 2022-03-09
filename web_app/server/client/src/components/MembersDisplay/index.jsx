@@ -9,6 +9,7 @@ export default function MembersDisplay(props){
     );
     let [selectedCount, setSelectedCount] = useState(0);
     let [isInverseChecked, setInverseChecked] = useState(false);
+    let [statusDisplay, setStatusDisplay] = useState(0);
 
     useEffect(()=>{
         resetCheckbox();
@@ -37,6 +38,11 @@ export default function MembersDisplay(props){
         setSelectedCount(0);
         setCheckedState(new Array(props.rows.length).fill(false));
     };
+
+    const changeStatusFilter = ()=>{
+        setStatusDisplay((statusDisplay+1) % 3)
+    }
+
     return (
         <div className='displayContainer'>
             <div className='selectedDisplay'>
@@ -59,13 +65,31 @@ export default function MembersDisplay(props){
                         <th>Name</th>
                         <th>Email</th>
                         <th>Payment</th>
-                        <th>Status</th>
+                        <th>Amount</th>
+                        <th onClick={changeStatusFilter} className='clickable'>Status <br/>({(()=>{
+                            switch(statusDisplay){
+                                case 0:{
+                                    return "All";
+                                }
+                                case 1:{
+                                    return "Paid";
+                                }
+                                case 2:{
+                                    return "Not paid"
+                                }
+                            }
+                        })()})</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
                         props.rows.map((row, index)=>{
-                            if(props.displayMask[index])
+                            if(props.displayMask[index] && 
+                                (
+                                    (statusDisplay === 0) || 
+                                    (statusDisplay === 1 && row.paidFee) ||
+                                    (statusDisplay === 2 && !row.paidFee)
+                                ))
                                 return <MemberRow
                                     resetCheckbox={resetCheckbox}
                                     modalController={props.modalController} 

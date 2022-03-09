@@ -9,8 +9,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 //username and password
-const myusername = 'REDACTED'
-const mypassword = 'REDACTED'
+const myusername = process.env.LOGIN_USER ?? "REDACTED"
+const mypassword = process.env.LOGIN_PASS ?? "REDACTED"
 
 let authToken = "";
 

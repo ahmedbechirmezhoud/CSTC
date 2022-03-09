@@ -9,10 +9,16 @@ export default function HomeScreen(props){
     let [searchOption, setSearchOption] = useState("-1");
     let [usersArr, setUsersArr] = useState(
         [   
-            // {name: "hi", uid: "123", email: "test@gmail.com", paidFee: false, cin: "12345678"},
-            // {name: "hi", uid: "123", email: "test@gmail.com", paidFee: false, cin: "12345678"},
-            // {name: "hi", uid: "123", email: "test@gmail.com", paidFee: false, cin: "12345678"},
-            // {name: "hifff", uid: "123", email: "test@gmail.com", paidFee: false, cin: "12345678"}
+            /* 
+            {
+                name: "hifff", 
+                uid: "123", 
+                email: "test@gmail.com", 
+                paidFee: false, 
+                cin: "12345678",
+                roomType: 3
+            } 
+            */
         ]
     );
     let [modalData, setModalData] = useState({display: false});

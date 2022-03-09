@@ -30,7 +30,8 @@ module.exports.getUsers = async (page) => {
                 name: data.name ?? "",
                 paidFee: data.paidFee ? true : false,
                 cin: data.cin,
-                payementMethod: data.payementMethod ? data.payementMethod : "Not set"
+                payementMethod: data.payementMethod ? data.payementMethod : "Not set",
+                roomType: data.roomType
             }
         }
 

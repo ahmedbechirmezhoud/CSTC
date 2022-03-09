@@ -1,6 +1,9 @@
 import './style.css';
 
 export default function MemberRow(props){
+    const prices = [190, 160, 150, 145]; // 1- 2 - 3 - 4
+    const toTitleCase = (str) => str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
+
     return (
         <tr className='memberRow'>
             <td className='selector'><input type='checkbox' className='clickable' onChange={props.onChange} checked={props.checked}/></td>
@@ -10,7 +13,8 @@ export default function MemberRow(props){
                 <div className='userID'>#{props.uid}</div>
             </td>
             <td className='emailCol'>{props.email}</td>
-            <td className='paymentOptCol'>{props.payementMethod}</td>
+            <td className='paymentOptCol'>{toTitleCase(props.payementMethod)}</td>
+            <td className='roomCol'>{prices[props.roomType-1]}TND</td>
             <td className='statCol'>
                 <div 
                     className={"statusDisplay clickable " + (props.paidFee ? "paidStatus" : "notPaidStatus")}
