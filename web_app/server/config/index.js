@@ -2,11 +2,11 @@ const firebaseAdmin = require("firebase-admin");
 const express = require("express");
 const expressSession = require('express-session');
 const path = require('path');
+const cookieParser = require('cookie-parser');
+const cors = require("cors");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
-
-const cors = require("cors");
 
 firebaseAdmin.initializeApp({
     credential: firebaseAdmin.credential.applicationDefault()
@@ -15,8 +15,10 @@ firebaseAdmin.initializeApp({
 app.use(cors());
 
 app.use(express.static('./client/build'));
-    
-app.use(express.static(path.join(__dirname, './client/build')));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
@@ -32,7 +34,7 @@ app.use(function(req, res, next) {
 
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(expressSession({
-    secret: "HonU4pGi5h5fAi299xojkx2SCQ8cpaZWMO81H4b7djWt94p3lZFi6n840sL6MzLOhvFcUeR0e7itGLYFutYySXue0F8x9rm",
+    secret: process.env.COOKIE_SECRET ?? "REDACTED",
     saveUninitialized:true,
     cookie: { 
         maxAge: oneDay,
@@ -41,5 +43,5 @@ app.use(expressSession({
     resave: false
 }));
 
-module.exports.app = app;
-module.exports.firebaseAdmin = firebaseAdmin;
+global.app = app;
+global.firebaseAdmin = firebaseAdmin;

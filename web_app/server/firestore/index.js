@@ -21,7 +21,15 @@ module.exports.getUsers = async (page) => {
             console.log("Load")
             const data = (await firestore.doc("users/"+jsonArr.uid).get()).data();
             if(data === undefined){
-                usersList[i] = {uid: jsonArr.uid, name: "[!] NOT FOUND", email: "[!] NOT FOUND", paidFee: true, cin: "00000000"}
+                usersList[i] = {
+                    uid: jsonArr.uid,
+                    name: "[!] NOT FOUND",
+                    email: "[!] NOT FOUND",
+                    paidFee: true,
+                    cin: "00000000",
+                    payementMethod: "NONE",
+                    roomType: 0
+                }
                 continue;
             }
 

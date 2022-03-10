@@ -2,7 +2,7 @@ import './style.css';
 
 export default function MemberRow(props){
     const prices = [190, 160, 150, 145]; // 1- 2 - 3 - 4
-    const toTitleCase = (str) => str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
+    const toTitleCase = (ch) => {if(ch) return ch.charAt(0).toUpperCase() + ch.substr(1).toLowerCase(); else return "HERE";}
 
     return (
         <tr className='memberRow'>
