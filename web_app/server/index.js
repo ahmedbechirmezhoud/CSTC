@@ -1,6 +1,6 @@
 require("./config");
-require('./auth');
 
+const auth = require('./auth');
 const firestore = require('./firestore');
 const path = require('path');
 const log = require('./log');
@@ -9,22 +9,9 @@ const requestIp = require('request-ip');
 const app = global.app;
 
 app.get("/api/getUsers", async (req, res) => {
-    res.setHeader('Access-Control-Allow-Credentials', 'true')
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-    if(!req.session.userid || !req.session || !req.session.token){
-        var clientIp = requestIp.getClientIp(req);
-        log.logEvent(clientIp, "Get users", 2, "No session");
-
-        res.json({code: 499, error: "Not authed"});
-        return;
-    }
-    if(req.session.token !== global.authToken){
-        var clientIp = requestIp.getClientIp(req);
-        log.logEvent(clientIp, "Get users", 2, "Invalid token");
-
-        res.json({code: 498, error: "Not authed"});
-        return;
-    }
+    if(!auth.isUserAuthed("Get users", req, res)) return;
 
     let page = -1;
     if(req.query.page) page = parseInt(req.query.page, 10);
@@ -35,29 +22,16 @@ app.get("/api/getUsers", async (req, res) => {
         log.logEvent(clientIp, "Get users", level=1);
 
     } catch(e){
-        console.log(e);
+        console.log("Error: " + e);
         log.logEvent(clientIp, "Get users", 2, e);
         res.json({ code: 500, error: e});
     }
 });
 
 app.get("/api/getLogs", async (req, res) => {
-    res.setHeader('Access-Control-Allow-Credentials', 'true')
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-    if(!req.session.userid || !req.session || !req.session.token){
-        var clientIp = requestIp.getClientIp(req);
-        log.logEvent(clientIp, "View logs", 2, "No session");
-
-        res.json({code: 499, error: "Not authed"});
-        return;
-    }
-    if(req.session.token !== global.authToken){
-        var clientIp = requestIp.getClientIp(req);
-        log.logEvent(clientIp, "View logs", 2, "Invalid token");
-
-        res.json({code: 498, error: "Not authed"});
-        return;
-    }
+    if(!auth.isUserAuthed("View logs", req, res)) return;
 
     res.json({code: 200, res: log.getLogs()});
 
@@ -66,20 +40,9 @@ app.get("/api/getLogs", async (req, res) => {
 });
 
 app.post("/api/changeUserStatus", async (req, res)=>{
-    if(!req.session.userid || !req.session || !req.session.token){
-        var clientIp = requestIp.getClientIp(req);
-        log.logEvent(clientIp, "Change user status", 2, "No session");
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-        res.json({code: 499, error: "Not authed"});
-        return;
-    }
-    if(req.session.token !== global.authToken){
-        var clientIp = requestIp.getClientIp(req);
-        log.logEvent(clientIp, "Change user status", 2, "Invalid token");
-
-        res.json({code: 498, error: "Not authed"});
-        return;
-    }
+    if(!auth.isUserAuthed("Change user status", req, res)) return;
 
     // curl "http://localhost:3001/api/changeUserStatus" -d "{\"test\": true}" -H "Content-Type: application/json"
     if(!req.body.uid || req.body.paid === undefined){

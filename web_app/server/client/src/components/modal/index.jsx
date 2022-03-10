@@ -2,7 +2,6 @@ import ModalBtn from "./modalBtn";
 import "./style.css";
 
 export default function ModalPopup(props){
-    // console.log(props.users)
     if(props.display){
         const confirmPayment = async () => {
             for(let i=0; i<props.users.length; i++){

@@ -5,7 +5,6 @@ import LoginScreen from './screens/login_screen';
 
 function App() {
   let [loggedIn, setLoggedIn] = useState(false);
-  console.log(loggedIn);
   useEffect(async ()=>{
     await fetch(
       "/api/authAdmin",

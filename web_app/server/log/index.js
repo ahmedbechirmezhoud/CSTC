@@ -13,7 +13,7 @@ module.exports.logEvent = (ip, event, level=0, comment="")=>{
     fs.appendFile(
         LOG_NAME, 
         "[" + LEVELS[level] + "]" + "[" + getCurrentDate() + "]" + "[" + ip + "] " + event + (comment === "" ? "" : " - " + comment) + "\n",
-        (err)=>{console.log(err);}
+        (err)=>{console.log("Log error: " + err);}
         );
 }
 

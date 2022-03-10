@@ -12,11 +12,12 @@ app.get("/api/signoutd", (req, res) =>{
 const myusername = process.env.LOGIN_USER ?? "REDACTED"
 const mypassword = process.env.LOGIN_PASS ?? "REDACTED"
 
-global.authToken = "";
+global.lockToIP = "";
 
 app.post("/api/authAdmin", (req, res) =>{
+    var clientIp = requestIp.getClientIp(req);
+
     if(req.session.userid){
-        var clientIp = requestIp.getClientIp(req);
         log.logEvent(clientIp, "Signin", 1);
 
         res.json({ code: 200 })
@@ -29,7 +30,6 @@ app.post("/api/authAdmin", (req, res) =>{
     }
 
     if(req.body.uname !== myusername || req.body.pass != mypassword){
-        var clientIp = requestIp.getClientIp(req);
         log.logEvent(clientIp, "Signin", 2, "Bad creds: " + req.body.uname + ":" + req.body.pass);
 
         res.json({ code: 498, error: "Bad request." })
@@ -37,13 +37,30 @@ app.post("/api/authAdmin", (req, res) =>{
     }
 
     res.setHeader('Access-Control-Allow-Credentials', 'true')
-    global.authToken = Array(125).fill(0).map(x => Math.random().toString(36).charAt(2)).join('');
+    global.lockToIP = clientIp;
 
     req.session.userid = myusername;
-    req.session.token = global.authToken;
 
     res.json({ code: 200 });
     
-    var clientIp = requestIp.getClientIp(req);
     log.logEvent(clientIp, "Signin", 1);
 });
+
+module.exports.isUserAuthed = (log_title, req, res) => {
+    var clientIp = requestIp.getClientIp(req);
+
+    if(!req.session.userid || !req.session){
+        log.logEvent(clientIp, log_title, 2, "No session");
+
+        res.json({code: 499, error: "Not authed"});
+        return false;
+    }
+    if(clientIp !== global.lockToIP){
+        log.logEvent(clientIp, log_title, 2, "Invalid IP (Incomming: " + clientIp + " - Current: " + global.lockToIP);
+
+        res.json({code: 498, error: "Not authed"});
+        return false;
+    }
+
+    return true;
+}

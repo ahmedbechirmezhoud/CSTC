@@ -40,7 +40,6 @@ export default function HomeScreen(props){
                     newUsersArr.push(response.res[i]);
                     i++;
                 }
-                //console.log(newUsersArr);
                 setUsersArr(newUsersArr);
                 setDisplayMask(new Array(newUsersArr.length).fill(true))
             } else if(response.code === 499 || response.code === 498){
@@ -51,7 +50,6 @@ export default function HomeScreen(props){
 
     useEffect(()=>{
         let newArr = usersArr.map((user)=>{
-            // console.log(searchOption)
             if(searchOption === "-1") return true;
             else if(searchOption === "0"){
                 if(user.name.toUpperCase().match(searchQuery.toUpperCase())){
@@ -64,7 +62,6 @@ export default function HomeScreen(props){
                 }
             }
             else if(searchOption === "2"){
-                console.log(user);
                 if(user.cin.toUpperCase().match(searchQuery.toUpperCase())){
                     return true;
                 }
