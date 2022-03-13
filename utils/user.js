@@ -1,26 +1,28 @@
-export class CurrentUser{
-    static uid;
-    static name;
-    static email;
-    static emailLogin;
-    static phone;
-    static checkedIn;
-    static fbToken;
-    static notificationToken;
+export const userData = {
+    address: null,
+    birthday: null,
+    checkedIn: false,
+    cin: null,
+    name: null,
+    paidFee: false,
+    paymentMethod: null,
+    phone: null,
+    roomMates: null,
+    roomType: null,
+    university: null,
+    votedFor: null,
+    message: null,
+    notificationToken: null
+}
 
-    static login(uid, uname, email, emailLogin, checkedIn, phone, notifTkn){
-        CurrentUser.uid = uid;
-        CurrentUser.uname = uname;
-        CurrentUser.email = email;
-        CurrentUser.emailLogin = emailLogin;
-        CurrentUser.checkedIn = checkedIn;
-        CurrentUser.phone = phone;
-        CurrentUser.votedFor = votedFor;
-        CurrentUser.fbToken = null;
-        CurrentUser.notificationToken = notifTkn;
+class CurrentUserStructure{
+    loginJson(data){
+        Object.assign(this, {...userData, ...data});
     }
 
-    static loginJson(data){
-        Object.assign(CurrentUser, data);
+    logout(){
+        Object.assign(this, {...userData});
     }
 }
+
+export var CurrentUser = new CurrentUserStructure();

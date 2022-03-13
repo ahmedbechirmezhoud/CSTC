@@ -2,7 +2,7 @@ import { auth, firestore } from './../../configInit'; // Init config
 import { setDoc, doc, getDocFromServer, runTransaction, updateDoc, collection, where, query, getDoc, getDocs } from 'firebase/firestore';
 import { FirebaseError } from '@firebase/util';
 import { ErrorCodes } from '../../const/errorCodes';
-import { CurrentUser } from '../../utils/user';
+import { CurrentUser, userData } from '../../utils/user';
 import { registerForPushNotificationsAsync } from '../Notification';
 
 
@@ -24,20 +24,16 @@ export async function updatePathValues(path, values){
     )
 }
 
-export async function initCurrentUser(emailSignup, fbToken=null){
+export async function initCurrentUser(data){
     if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN, "No user is logged in.");
     let token = await registerForPushNotificationsAsync();
 
     await setPathValues(
         "users/" + auth.currentUser.uid,
         {
-            checkedIn: false,
-            email: emailSignup,
-            fbToken: fbToken,
-            notificationToken: token,
-            votedFor: null,
-            email: auth.currentUser.email,
-            phone: null
+            ...userData,
+            ...data,
+            notificationToken: token
         }
     )
 }
@@ -53,9 +49,6 @@ export async function getCurrentUserData(){
 
     data = (await getPath("users/"+auth.currentUser.uid)).data();
     if(!data) throw FirebaseError(ErrorCodes.UNKNOWN_ERROR, "An unknown error has occured.")
-
-    let phonePath = (await readDataFromPath("emailsToNumber/"+auth.currentUser.email));
-    data.phone = (phonePath ? phonePath.phone : null);
   
     return data;
 }

@@ -83,19 +83,17 @@ export async function signinWithEmail(email, password) {
   const user = (await signInWithEmailAndPassword(auth, email, password)).user;
 
   userInfo = await getCurrentUserData();
-  CurrentUser.login(
-    user.uid, 
-    user.displayName, 
-    user.email, 
-    userInfo.email, 
-    userInfo.checkedIn, 
-    userInfo.phone,
-    userInfo.notificationToken
+  CurrentUser.loginJson(
+    {
+      uid: user.uid, 
+      email: user.email, 
+      ...userInfo
+    }
   );
 
   updateNotificationToken();  
 
-  if(!(await isUserVerified(user))) { // Force to verify using phone/FB/Email so don't logout
+  if(!(isUserVerified(user))) { // Force to verify using phone/FB/Email so don't logout
     verifyUserEmail(user)
     throw new FirebaseError(ErrorCodes.EMAIL_NOT_VERIFIED, 'User email is not verified');
   }
@@ -112,7 +110,7 @@ export async function signinWithEmail(email, password) {
  */
 export async function signOut(){
   await firebaseSignOut(auth);
-  CurrentUser.login(null, null, null, null, null, null, null);
+  CurrentUser.logout();
   return true;
 }
 
@@ -150,25 +148,25 @@ export async function signinWithFacebook() {
     if(!auth.currentUser) {
       console.log('here')
       await signInWithCredential(auth, credential);      
-      if(!(await isCurrentUserInited())) await initCurrentUser(false, token);
+      if(!(await isCurrentUserInited())) 
+        await initCurrentUser({fbToken: token, name:respJson.name});
 
       userInfo = await getCurrentUserData();
-      CurrentUser.login(
-        auth.currentUser.uid, 
-        auth.currentUser.displayName, 
-        auth.currentUser.email, 
-        userInfo.email, 
-        userInfo.checkIn, 
-        userInfo.phone,
-        userInfo.notificationToken
+      CurrentUser.loginJson(
+        {
+          uid: auth.currentUser.uid, 
+          email: auth.currentUser.email, 
+          ...userInfo,
+          fbToken: token
+        }
       );
-      CurrentUser.fbToken = token;
     }
     else {
       await linkWithCredential(auth.currentUser, credential); // Or link fb account
 
-      if(!auth.currentUser.displayName) await updateProfile(auth.currentUser, {displayName: respJson.name});
-      CurrentUser.uname = response.name;
+      if(CurrentUser.name !== respJson.name) 
+        await updateProfile(auth.currentUser, {displayName: respJson.name});
+      CurrentUser.name = respJson.name;
       CurrentUser.fbToken = token;
     }
     updateNotificationToken();
@@ -191,5 +189,5 @@ export async function signinWithFacebook() {
 export async function isUserVerified(user){
   let methods = await fetchSignInMethodsForEmail(auth, user.email)
   
-  return (user.emailVerified || methods.indexOf("facebook.com") != -1)
+  return (CurrentUser.paidFee || user.emailVerified || methods.indexOf("facebook.com") != -1)
 }
