@@ -17,7 +17,6 @@ import Seperator from "../../components/Seperator/Seperator";
 import FacebookLoginButton from "../../components/FacebookLogin/FacebookLogin";
 import { CurrentUser } from "../../utils/user";
 
-import { signUpEmail } from "../../services/auth/signupService";
 import { signinWithFacebook } from "../../services/auth/loginService";
 import { useNavigation } from "@react-navigation/core";
 
@@ -32,6 +31,11 @@ export default RegisterPage = () => {
 	const [isSecureText, setIsSecureText] = useState(true);
 	const [eyeIcon, setEyeIcon] = useState("eye");
 	const navigation = useNavigation();
+
+	const signUpEmail = (a, b)=>{
+		// TODO : Remove this
+		// Added only to fix the errors till the UI Change
+	}
 
 	const nameInputHandler = (textInput) => {
 		setNameInput(textInput);

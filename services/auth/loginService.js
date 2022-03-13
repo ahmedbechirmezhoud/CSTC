@@ -21,7 +21,7 @@ import {
 } from '../firestore/userFuncs';
 import { CurrentUser } from '../../utils/user';
 import { ErrorCodes } from '../../const/errorCodes';
-import { verifyUserEmail } from './signupService';
+import { verifyUserEmail } from './accountService';
 
 import { updateNotificationToken } from './accountService';
 
