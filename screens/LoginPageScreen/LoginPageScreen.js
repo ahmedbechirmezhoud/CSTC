@@ -9,7 +9,7 @@ import {
 
 import { Entypo, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
-import GradientBackground from "../../components/GradientBackground/GradientBackground";
+import Background from "../../components/Background/Background";
 import { signinWithFacebook, loginUser } from "../../services/auth/loginService";
 import { useNavigation } from "@react-navigation/core";
 import { CurrentUser } from "../../utils/user";
@@ -79,7 +79,7 @@ export default LoginPageScreen = () => {
 	};
 
 	return (
-		<GradientBackground>
+		<Background>
 			<FontAwesome5 name='react' size={80} color='white' />
 			<View style={styles.inputContainers}>
 				<View style={styles.inputContainer}>
@@ -145,6 +145,6 @@ export default LoginPageScreen = () => {
 				onPress={() => navigation.navigate("Register")}
 				style={{ marginVertical: 16 }}
 			/>
-		</GradientBackground>
+		</Background>
 	);
 };

@@ -1,6 +1,4 @@
 import LoginPageScreen from '../screens/LoginPageScreen/LoginPageScreen'
-import RegisterScreen from '../screens/Register/RegisterScreen';
-import FbRegistrationScreen from '../screens/FbRegistrationScreen/FbRegistrationScreen';
 import ForgotPwdScreen from '../screens/ForgotPwdScreen/ForgotPwdScreen';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
 import AddEmail from '../screens/Settings/AddEmail/AddEmail';
@@ -8,7 +6,6 @@ import ChangeEmail from '../screens/Settings/ChangeEmail/ChangeEmail';
 import ChangePwd from '../screens/Settings/ChangePwd/ChangePwd';
 import TimelineScreen from '../screens/TimelineScreen/TimelineScreen';
 import VoteScreen from '../screens/VoteScreen/VoteScreen';
-import RegistrationClosedScreen from '../screens/Register/RegistrationClosedScreen';
 import VoteClosedScreen from '../screens/VoteScreen/VoteClosedSreen';
 import WelcomeScreen from '../screens/WelcomeScreen/WelcomeScreen';
 import ErrorModal from '../screens/ErrorModal';
@@ -96,8 +93,6 @@ function AuthNavigator() {
     <Stack.Navigator>
       {firstTime && <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />}
       <Stack.Screen name="Login" component={LoginPageScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="Register" component={EnableRegistration ? RegisterScreen : RegistrationClosedScreen} options={{ headerShown: false }} />
-      {EnableRegistration && <Stack.Screen name="FbRegistrationCompletion" component={FbRegistrationScreen} options={{ headerShown: false }} />}
       <Stack.Screen name="ForgotPwd" component={ForgotPwdScreen} options={{ headerShown: false }} />
    </Stack.Navigator>
   );
@@ -119,21 +114,27 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="Settings"
       screenOptions={{
-        tabBarActiveTintColor: '#2f95dc',
+        tabBarActiveTintColor: '#fff',
+        tabBarInactiveTintColor:"#777777",
+        tabBarHideOnKeyboard:true,
+        tabBarStyle: {backgroundColor: "#001C31", position: "absolute", bottom:0, height:50, borderTopRightRadius:10, borderTopLeftRadius:10, height:60 },
+        
       }}>
       <BottomTab.Screen
         name="Timeline"
         component={TimelineScreen}
         options={{
           title: 'Timeline',
+          headerShown:false,
           tabBarIcon: ({ color }) => <TabBarIcon name="timer" color={color} />
         }}
       />
-      <BottomTab.Screen
+      <BottomTab.Screen 
         name="Vote"
         component={EnableVote ? VoteScreen : VoteClosedScreen}
         options={{
           title: 'Vote',
+          headerShown:false,
           tabBarIcon: ({ color }) => <MaterialCommunityIcons name="vote" color={color} size={30} style={{ marginBottom: -3 }} />
         }}
       />
@@ -142,6 +143,7 @@ function BottomTabNavigator() {
         component={SettingsScreen}
         options={{
           title: 'Settings',
+          headerShown:false,
           tabBarIcon: ({ color }) => <TabBarIcon name="settings" color={color} />
         }}
       />

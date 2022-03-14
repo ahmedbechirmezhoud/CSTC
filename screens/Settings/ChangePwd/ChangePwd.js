@@ -1,7 +1,7 @@
 import { View, StyleSheet, TextInput,Alert } from "react-native";
 import React, { useState } from "react";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
-import GradientBackground from "../../../components/GradientBackground/GradientBackground";
+import Background from "../../../components/Background/Background";
 import BlueButton from "../../../components/BlueButton/BlueButton";
 import { updateUserPassword } from "../../../services/auth/accountService";
 
@@ -38,7 +38,7 @@ export default ChangePwd = () => {
 	};
 
 	return (
-		<GradientBackground>
+		<Background>
 			<View style={styles.inputContainers}>
 
 				<View style={styles.inputContainer}>
@@ -67,7 +67,7 @@ export default ChangePwd = () => {
 				</View>
 			</View>
 			<BlueButton text={"Confirm"} buttonHandler={confirmButtonHandler} />
-		</GradientBackground>
+		</Background>
 	);
 };
 

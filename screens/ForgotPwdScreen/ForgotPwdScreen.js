@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, TextInput, Alert, ScrollView } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 
-import GradientBackground from "../../components/GradientBackground/GradientBackground";
+import Background from "../../components/Background/Background";
 import BlueButton from "../../components/BlueButton/BlueButton";
 import { useNavigation } from "@react-navigation/core";
 import styles from "./ForgotPwdScreenStyles";
@@ -29,7 +29,7 @@ export default function FbRegistrationScreen() {
 	};
 
 	return (
-		<GradientBackground>
+		<Background>
 					<View style={styles.inputContainers}>
 						<View style={styles.inputContainer}>
 							{/*email Box */}
@@ -54,6 +54,6 @@ export default function FbRegistrationScreen() {
 						text={"Reset password"}
 						buttonHandler={resetButtonHandler}
 					/>
-		</GradientBackground>
+		</Background>
 	);
 }

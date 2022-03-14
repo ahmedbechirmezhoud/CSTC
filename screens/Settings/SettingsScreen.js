@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Alert, Keyboard, Text, View, TextInput } from "react-native";
 
-import GradientBackground from "../../components/GradientBackground/GradientBackground";
+import Background from "../../components/Background/Background";
 import BlueButton from "../../components/BlueButton/BlueButton";
 import FacebookLoginButton from "../../components/FacebookLogin/FacebookLogin";
 import SvgQRCode from "react-native-qrcode-svg";
@@ -51,7 +51,7 @@ export default SettingsScreen = () => {
 		
 	};
 	return (
-		<GradientBackground>
+		<Background>
 			<QRCode1 />
 			<BlueButton
 				text={"Change password"}
@@ -78,6 +78,6 @@ export default SettingsScreen = () => {
 				text={"Sign out"}
 				buttonHandler={signOutButtonHandler}
 			/>
-		</GradientBackground>
+		</Background>
 	);
 };

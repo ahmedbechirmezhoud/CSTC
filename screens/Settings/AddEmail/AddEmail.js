@@ -1,7 +1,7 @@
 import { View, StyleSheet, TextInput,Alert } from "react-native";
 import React, { useState } from "react";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
-import GradientBackground from "../../../components/GradientBackground/GradientBackground";
+import Background from "../../../components/Background/Background";
 import BlueButton from "../../../components/BlueButton/BlueButton";
 
 export default AddEmail = () => {
@@ -40,7 +40,7 @@ export default AddEmail = () => {
 	};
 
 	return (
-		<GradientBackground>
+		<Background>
 			<View style={styles.inputContainers}>
 				<View style={styles.inputContainer}>
 					{/*Email Box */}
@@ -86,7 +86,7 @@ export default AddEmail = () => {
 				</View>
 			</View>
 			<BlueButton text={"Confirm"} buttonHandler={confirmButtonHandler} />
-		</GradientBackground>
+		</Background>
 	);
 };
 
