@@ -48,20 +48,25 @@ import { updateNotificationToken } from './accountService';
 export async function loginUser(identifier, password){
   identifier = identifier.replace(/\n/g, '');
   identifier = identifier.replace(/ /g, '');
+  if(identifier.length === 0)
+    throw new FirebaseError(ErrorCodes.INVALID_EMAIL[0], ErrorCodes.INVALID_EMAIL[1])
 
   if(identifier.startsWith('+')) identifier = identifier.substr(1);
   if(identifier.length == 11){
     if(identifier.startsWith('216')) identifier = identifier.substr(3);
     else {
       if(identifier.search(new RegExp('^[0-9]{1,}$'))) // Just numbers
-        throw new FirebaseError(AuthErrorCodes.INVALID_PHONE_NUMBER, 'Invalid phone number.');
+        throw new FirebaseError(ErrorCodes.INVALID_PHONE_NUMBER[0], ErrorCodes.INVALID_PHONE_NUMBER[1]);
     }
   }
 
-  if(identifier.search(new RegExp('^[1-9]{1}[0-9]{7}')) != -1) identifier = await phoneToEmail(identifier);
+  if(identifier.search(new RegExp('^[0-9]{1,7}$')) != -1) 
+    throw new FirebaseError(ErrorCodes.INVALID_PHONE_NUMBER[0], ErrorCodes.INVALID_PHONE_NUMBER[1]);
+
+  if(identifier.search(new RegExp('^[1-9]{1}[0-9]{7}$')) != -1) identifier = await phoneToEmail(identifier);
 
   if(identifier) return (await signinWithEmail(identifier, password));
-  else throw new FirebaseError(ErrorCodes.PHONE_DOESNT_EXIST, 'Phone number doesn\'t exist.')
+  else throw new FirebaseError(ErrorCodes.PHONE_DOESNT_EXIST[0], ErrorCodes.PHONE_DOESNT_EXIST[1])
 }
 
 /**
@@ -80,7 +85,19 @@ export async function loginUser(identifier, password){
  * @public
 */
 export async function signinWithEmail(email, password) {
-  const user = (await signInWithEmailAndPassword(auth, email, password)).user;
+  const user = (await signInWithEmailAndPassword(auth, email, password).catch((err)=>{
+    console.log(err.code);
+    if(err instanceof FirebaseError){
+      switch(err.code){
+        case "auth/invalid-email":{
+          err.message = ErrorCodes.INVALID_EMAIL[1];
+          break;
+        }
+      }
+      throw err;
+    }
+    throw new FirebaseError(ErrorCodes.UNKNOWN_ERROR[0], ErrorCodes.UNKNOWN_ERROR[1]);
+  })).user;
 
   userInfo = await getCurrentUserData();
   CurrentUser.loginJson(
@@ -95,7 +112,7 @@ export async function signinWithEmail(email, password) {
 
   if(!(isUserVerified(user))) { // Force to verify using phone/FB/Email so don't logout
     verifyUserEmail(user)
-    throw new FirebaseError(ErrorCodes.EMAIL_NOT_VERIFIED, 'User email is not verified');
+    throw new FirebaseError(ErrorCodes.EMAIL_NOT_VERIFIED[0], ErrorCodes.EMAIL_NOT_VERIFIED[1]);
   }
   return user;
 
@@ -171,7 +188,7 @@ export async function signinWithFacebook() {
     }
     updateNotificationToken();
 
-  } else throw new FirebaseError(ErrorCodes.FB_LOGIN_CANCEL, "Facebook login canceled by user");
+  } else throw new FirebaseError(ErrorCodes.FB_LOGIN_CANCEL[0], ErrorCodes.FB_LOGIN_CANCEL[1]);
 
   return true;
 }

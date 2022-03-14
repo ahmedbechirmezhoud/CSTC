@@ -47,7 +47,7 @@ describe('Email signin test', ()=>{
             data = await authServ.signinWithEmail(EMAIL, PASS);
         } catch(e){
             expect(e).toBeInstanceOf(FirebaseError);
-            expect(e.code).toBe(ErrorCodes.EMAIL_NOT_VERIFIED)
+            expect(e.code).toBe(ErrorCodes.EMAIL_NOT_VERIFIED[0])
         }
 
         expect(data).toBe(null); // No error was thrown? (Acc isn't verified)
@@ -69,7 +69,7 @@ describe('Email signin test', ()=>{
             data = await authServ.loginUser(EMAIL, PASS);
         } catch(e){
             expect(e).toBeInstanceOf(FirebaseError);
-            expect(e.code).toBe(ErrorCodes.EMAIL_NOT_VERIFIED)
+            expect(e.code).toBe(ErrorCodes.EMAIL_NOT_VERIFIED[0])
         }
 
         expect(data).toBe(null); // No error was thrown? (Acc isn't verified)
