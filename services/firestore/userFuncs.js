@@ -79,11 +79,13 @@ export async function linkPhoneToEmail(phone){
 
 export async function phoneToEmail(number){
     const usersColl = collection(firestore, "users");
-    const q1 = query(usersColl, where("phone", "==", number));
+    const q1 = query(usersColl, where("phone", "==", parseInt(number, 10)));
 
     const phoneCheck = await getDocs(q1);
 
-    if(phoneCheck.size == 1) return phoneCheck.docs[0].data().email;
+    if(phoneCheck.size == 1) {
+        return phoneCheck.docs[0].data().email;
+    }
     return null;
     
   }

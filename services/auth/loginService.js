@@ -8,7 +8,6 @@ import {
     signInWithCredential,
     linkWithCredential,
     updateProfile,
-    AuthErrorCodes,
     fetchSignInMethodsForEmail,
     User
 } from 'firebase/auth';
@@ -73,7 +72,7 @@ export async function loginUser(identifier, password){
  * Logins a user using an email & a password
  * 
  * @remarks
- * Throws a {@link FirebaseError}) with error code {@link ErrorCodes.EMAIL_NOT_VERIFIED} 
+ * Throws a {@link FirebaseError}
  * if the user hasn't verified his account.
  * The user is not logged out.
  * 
@@ -115,10 +114,10 @@ export async function signinWithEmail(email, password) {
   })).user;
 
   userInfo = await getCurrentUserData();
+
   CurrentUser.loginJson(
     {
       uid: user.uid, 
-      email: user.email, 
       ...userInfo
     }
   );
@@ -186,7 +185,6 @@ export async function signinWithFacebook() {
       CurrentUser.loginJson(
         {
           uid: auth.currentUser.uid, 
-          email: auth.currentUser.email, 
           ...userInfo,
           fbToken: token
         }

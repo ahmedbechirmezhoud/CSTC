@@ -12,7 +12,8 @@ export const userData = {
     university: null,
     votedFor: null,
     message: null,
-    notificationToken: null
+    notificationToken: null,
+    email: null
 }
 
 class CurrentUserStructure{
