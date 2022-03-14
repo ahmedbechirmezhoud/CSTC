@@ -86,11 +86,26 @@ export async function loginUser(identifier, password){
 */
 export async function signinWithEmail(email, password) {
   const user = (await signInWithEmailAndPassword(auth, email, password).catch((err)=>{
-    console.log(err.code);
     if(err instanceof FirebaseError){
       switch(err.code){
         case "auth/invalid-email":{
           err.message = ErrorCodes.INVALID_EMAIL[1];
+          break;
+        }
+        case "auth/wrong-password":{
+          err.message = ErrorCodes.WRONG_PASSWORD[1];
+          break;
+        }
+        case "auth/network-request-failed":{
+          err.message = ErrorCodes.NETWORK_ERROR[1];
+          break;
+        }
+        case "auth/too-many-requests":{
+          err.message = ErrorCodes.TOO_MANY_REQUEST[1];
+          break;
+        }
+        case "auth/user-disabled":{
+          err.message = ErrorCodes.ACC_DISABLED[1];
           break;
         }
       }
@@ -163,7 +178,6 @@ export async function signinWithFacebook() {
 
     // Sign in with the credential from the Facebook user.
     if(!auth.currentUser) {
-      console.log('here')
       await signInWithCredential(auth, credential);      
       if(!(await isCurrentUserInited())) 
         await initCurrentUser({fbToken: token, name:respJson.name});
