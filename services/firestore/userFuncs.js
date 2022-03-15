@@ -2,7 +2,7 @@ import { auth, firestore } from './../../configInit'; // Init config
 import { setDoc, doc, getDocFromServer, runTransaction, updateDoc, collection, where, query, getDoc, getDocs } from 'firebase/firestore';
 import { FirebaseError } from '@firebase/util';
 import { ErrorCodes } from '../../const/errorCodes';
-import { CurrentUser } from '../../utils/user';
+import { CurrentUser, userData } from '../../utils/user';
 import { registerForPushNotificationsAsync } from '../Notification';
 
 
@@ -24,38 +24,31 @@ export async function updatePathValues(path, values){
     )
 }
 
-export async function initCurrentUser(emailSignup, fbToken=null){
-    if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN, "No user is logged in.");
+export async function initCurrentUser(data){
+    if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
     let token = await registerForPushNotificationsAsync();
 
     await setPathValues(
         "users/" + auth.currentUser.uid,
         {
-            checkedIn: false,
-            email: emailSignup,
-            fbToken: fbToken,
-            notificationToken: token,
-            votedFor: null,
-            email: auth.currentUser.email,
-            phone: null
+            ...userData,
+            ...data,
+            notificationToken: token
         }
     )
 }
 
 export async function isCurrentUserInited(){
-    if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN, "No user is logged in.");
+    if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
 
     return (await getPath("users/"+auth.currentUser.uid)).exists()
 }
 
 export async function getCurrentUserData(){
-    if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN, "No user is logged in.");
+    if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
 
     data = (await getPath("users/"+auth.currentUser.uid)).data();
-    if(!data) throw FirebaseError(ErrorCodes.UNKNOWN_ERROR, "An unknown error has occured.")
-
-    let phonePath = (await readDataFromPath("emailsToNumber/"+auth.currentUser.email));
-    data.phone = (phonePath ? phonePath.phone : null);
+    if(!data) throw FirebaseError(ErrorCodes.UNKNOWN_ERROR[0], ErrorCodes.UNKNOWN_ERROR[1])
   
     return data;
 }
@@ -76,7 +69,7 @@ export async function linkPhoneToEmail(phone){
         const phoneCheck = await getDocs(q1);
 
         if(phoneCheck.size != 0){
-            throw new FirebaseError(ErrorCodes.PHONE_ALREADY_INUSE, "Phone number is already used.")
+            throw new FirebaseError(ErrorCodes.PHONE_ALREADY_INUSE[0], ErrorCodes.PHONE_ALREADY_INUSE[1])
         }
 
         transaction.update(userDoc, {phone: phone});
@@ -86,9 +79,13 @@ export async function linkPhoneToEmail(phone){
 
 export async function phoneToEmail(number){
     const usersColl = collection(firestore, "users");
-    const q1 = query(usersColl, where("phone", "==", number));
+    const q1 = query(usersColl, where("phone", "==", parseInt(number, 10)));
+
     const phoneCheck = await getDocs(q1);
-    if(phoneCheck.size == 1) return phoneCheck.docs[0].data().email;
+
+    if(phoneCheck.size == 1) {
+        return phoneCheck.docs[0].data().email;
+    }
     return null;
     
   }

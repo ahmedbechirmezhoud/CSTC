@@ -8,7 +8,6 @@ import {
     signInWithCredential,
     linkWithCredential,
     updateProfile,
-    AuthErrorCodes,
     fetchSignInMethodsForEmail,
     User
 } from 'firebase/auth';
@@ -21,7 +20,7 @@ import {
 } from '../firestore/userFuncs';
 import { CurrentUser } from '../../utils/user';
 import { ErrorCodes } from '../../const/errorCodes';
-import { verifyUserEmail } from './signupService';
+import { verifyUserEmail } from './accountService';
 
 import { updateNotificationToken } from './accountService';
 
@@ -48,27 +47,32 @@ import { updateNotificationToken } from './accountService';
 export async function loginUser(identifier, password){
   identifier = identifier.replace(/\n/g, '');
   identifier = identifier.replace(/ /g, '');
+  if(identifier.length === 0)
+    throw new FirebaseError(ErrorCodes.INVALID_EMAIL[0], ErrorCodes.INVALID_EMAIL[1])
 
   if(identifier.startsWith('+')) identifier = identifier.substr(1);
   if(identifier.length == 11){
     if(identifier.startsWith('216')) identifier = identifier.substr(3);
     else {
       if(identifier.search(new RegExp('^[0-9]{1,}$'))) // Just numbers
-        throw new FirebaseError(AuthErrorCodes.INVALID_PHONE_NUMBER, 'Invalid phone number.');
+        throw new FirebaseError(ErrorCodes.INVALID_PHONE_NUMBER[0], ErrorCodes.INVALID_PHONE_NUMBER[1]);
     }
   }
 
-  if(identifier.search(new RegExp('^[1-9]{1}[0-9]{7}')) != -1) identifier = await phoneToEmail(identifier);
+  if(identifier.search(new RegExp('^[0-9]{1,7}$')) != -1) 
+    throw new FirebaseError(ErrorCodes.INVALID_PHONE_NUMBER[0], ErrorCodes.INVALID_PHONE_NUMBER[1]);
+
+  if(identifier.search(new RegExp('^[1-9]{1}[0-9]{7}$')) != -1) identifier = await phoneToEmail(identifier);
 
   if(identifier) return (await signinWithEmail(identifier, password));
-  else throw new FirebaseError(ErrorCodes.PHONE_DOESNT_EXIST, 'Phone number doesn\'t exist.')
+  else throw new FirebaseError(ErrorCodes.PHONE_DOESNT_EXIST[0], ErrorCodes.PHONE_DOESNT_EXIST[1])
 }
 
 /**
  * Logins a user using an email & a password
  * 
  * @remarks
- * Throws a {@link FirebaseError}) with error code {@link ErrorCodes.EMAIL_NOT_VERIFIED} 
+ * Throws a {@link FirebaseError}
  * if the user hasn't verified his account.
  * The user is not logged out.
  * 
@@ -80,24 +84,49 @@ export async function loginUser(identifier, password){
  * @public
 */
 export async function signinWithEmail(email, password) {
-  const user = (await signInWithEmailAndPassword(auth, email, password)).user;
+  const user = (await signInWithEmailAndPassword(auth, email, password).catch((err)=>{
+    if(err instanceof FirebaseError){
+      switch(err.code){
+        case "auth/invalid-email":{
+          err.message = ErrorCodes.INVALID_EMAIL[1];
+          break;
+        }
+        case "auth/wrong-password":{
+          err.message = ErrorCodes.WRONG_PASSWORD[1];
+          break;
+        }
+        case "auth/network-request-failed":{
+          err.message = ErrorCodes.NETWORK_ERROR[1];
+          break;
+        }
+        case "auth/too-many-requests":{
+          err.message = ErrorCodes.TOO_MANY_REQUEST[1];
+          break;
+        }
+        case "auth/user-disabled":{
+          err.message = ErrorCodes.ACC_DISABLED[1];
+          break;
+        }
+      }
+      throw err;
+    }
+    throw new FirebaseError(ErrorCodes.UNKNOWN_ERROR[0], ErrorCodes.UNKNOWN_ERROR[1]);
+  })).user;
 
   userInfo = await getCurrentUserData();
-  CurrentUser.login(
-    user.uid, 
-    user.displayName, 
-    user.email, 
-    userInfo.email, 
-    userInfo.checkedIn, 
-    userInfo.phone,
-    userInfo.notificationToken
+
+  CurrentUser.loginJson(
+    {
+      uid: user.uid, 
+      ...userInfo
+    }
   );
 
   updateNotificationToken();  
 
-  if(!(await isUserVerified(user))) { // Force to verify using phone/FB/Email so don't logout
+  if(!(isUserVerified(user))) { // Force to verify using phone/FB/Email so don't logout
     verifyUserEmail(user)
-    throw new FirebaseError(ErrorCodes.EMAIL_NOT_VERIFIED, 'User email is not verified');
+    throw new FirebaseError(ErrorCodes.EMAIL_NOT_VERIFIED[0], ErrorCodes.EMAIL_NOT_VERIFIED[1]);
   }
   return user;
 
@@ -112,7 +141,7 @@ export async function signinWithEmail(email, password) {
  */
 export async function signOut(){
   await firebaseSignOut(auth);
-  CurrentUser.login(null, null, null, null, null, null, null);
+  CurrentUser.logout();
   return true;
 }
 
@@ -148,32 +177,30 @@ export async function signinWithFacebook() {
 
     // Sign in with the credential from the Facebook user.
     if(!auth.currentUser) {
-      console.log('here')
       await signInWithCredential(auth, credential);      
-      if(!(await isCurrentUserInited())) await initCurrentUser(false, token);
+      if(!(await isCurrentUserInited())) 
+        await initCurrentUser({fbToken: token, name:respJson.name});
 
       userInfo = await getCurrentUserData();
-      CurrentUser.login(
-        auth.currentUser.uid, 
-        auth.currentUser.displayName, 
-        auth.currentUser.email, 
-        userInfo.email, 
-        userInfo.checkIn, 
-        userInfo.phone,
-        userInfo.notificationToken
+      CurrentUser.loginJson(
+        {
+          uid: auth.currentUser.uid, 
+          ...userInfo,
+          fbToken: token
+        }
       );
-      CurrentUser.fbToken = token;
     }
     else {
       await linkWithCredential(auth.currentUser, credential); // Or link fb account
 
-      if(!auth.currentUser.displayName) await updateProfile(auth.currentUser, {displayName: respJson.name});
-      CurrentUser.uname = response.name;
+      if(CurrentUser.name !== respJson.name) 
+        await updateProfile(auth.currentUser, {displayName: respJson.name});
+      CurrentUser.name = respJson.name;
       CurrentUser.fbToken = token;
     }
     updateNotificationToken();
 
-  } else throw new FirebaseError(ErrorCodes.FB_LOGIN_CANCEL, "Facebook login canceled by user");
+  } else throw new FirebaseError(ErrorCodes.FB_LOGIN_CANCEL[0], ErrorCodes.FB_LOGIN_CANCEL[1]);
 
   return true;
 }
@@ -191,5 +218,5 @@ export async function signinWithFacebook() {
 export async function isUserVerified(user){
   let methods = await fetchSignInMethodsForEmail(auth, user.email)
   
-  return (user.emailVerified || methods.indexOf("facebook.com") != -1)
+  return (CurrentUser.paidFee || user.emailVerified || methods.indexOf("facebook.com") != -1)
 }

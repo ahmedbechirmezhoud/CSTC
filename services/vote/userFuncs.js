@@ -12,7 +12,7 @@ import { updatePathValues } from '../firestore/userFuncs';
  * @param {String} pID - The participant ID to be voted for
  */
 export async function voteForParticipant(pID){
-    //if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN, "Not logged in");
+    if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
 
     let refNewPart = ref(rtdb, "participants/"+pID);
     
