@@ -23,6 +23,7 @@ import { ErrorCodes } from '../../const/errorCodes';
 import { verifyUserEmail } from './accountService';
 
 import { updateNotificationToken } from './accountService';
+import { errorHandler } from '../exceptionHandler';
 
 
 /**
@@ -84,36 +85,9 @@ export async function loginUser(identifier, password){
  * @public
 */
 export async function signinWithEmail(email, password) {
-  const user = (await signInWithEmailAndPassword(auth, email, password).catch((err)=>{
-    if(err instanceof FirebaseError){
-      switch(err.code){
-        case "auth/invalid-email":{
-          err.message = ErrorCodes.INVALID_EMAIL[1];
-          break;
-        }
-        case "auth/wrong-password":{
-          err.message = ErrorCodes.WRONG_PASSWORD[1];
-          break;
-        }
-        case "auth/network-request-failed":{
-          err.message = ErrorCodes.NETWORK_ERROR[1];
-          break;
-        }
-        case "auth/too-many-requests":{
-          err.message = ErrorCodes.TOO_MANY_REQUEST[1];
-          break;
-        }
-        case "auth/user-disabled":{
-          err.message = ErrorCodes.ACC_DISABLED[1];
-          break;
-        }
-      }
-      throw err;
-    }
-    throw new FirebaseError(ErrorCodes.UNKNOWN_ERROR[0], ErrorCodes.UNKNOWN_ERROR[1]);
-  })).user;
+  const user = (await signInWithEmailAndPassword(auth, email, password).catch(errorHandler)).user;
 
-  userInfo = await getCurrentUserData();
+  userInfo = await getCurrentUserData().catch(errorHandler);
 
   CurrentUser.loginJson(
     {
@@ -140,7 +114,7 @@ export async function signinWithEmail(email, password) {
  * @public
  */
 export async function signOut(){
-  await firebaseSignOut(auth);
+  await firebaseSignOut(auth).catch(errorHandler);
   CurrentUser.logout();
   return true;
 }
@@ -164,11 +138,11 @@ export async function signinWithFacebook() {
   const { type, token, expirationDate, permissions, declinedPermissions } =
   await Facebook.logInWithReadPermissionsAsync({
     permissions: ['public_profile', 'email'],
-  });
+  }).catch(errorHandler);
         
   if (type === 'success') {
     // Get the user's name using Facebook's Graph API
-    const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email`);
+    const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email`).catch(errorHandler);
     const respJson = (await response.json());
     console.log('FB Logged in!'); 
     console.log(respJson); // User data
@@ -177,11 +151,11 @@ export async function signinWithFacebook() {
 
     // Sign in with the credential from the Facebook user.
     if(!auth.currentUser) {
-      await signInWithCredential(auth, credential);      
-      if(!(await isCurrentUserInited())) 
-        await initCurrentUser({fbToken: token, name:respJson.name});
+      await signInWithCredential(auth, credential).catch(errorHandler);      
+      if(!(await isCurrentUserInited().catch(errorHandler))) 
+        await initCurrentUser({fbToken: token, name:respJson.name}).catch(errorHandler);
 
-      userInfo = await getCurrentUserData();
+      userInfo = await getCurrentUserData().catch(errorHandler);
       CurrentUser.loginJson(
         {
           uid: auth.currentUser.uid, 
@@ -191,7 +165,7 @@ export async function signinWithFacebook() {
       );
     }
     else {
-      await linkWithCredential(auth.currentUser, credential); // Or link fb account
+      await linkWithCredential(auth.currentUser, credential).catch(errorHandler); // Or link fb account
 
       if(CurrentUser.name !== respJson.name) 
         await updateProfile(auth.currentUser, {displayName: respJson.name});

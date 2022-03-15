@@ -13,5 +13,6 @@ export const ErrorCodes = {
     NETWORK_ERROR: ["network-request-failed", "Verify your internet connection!"],
     TOO_MANY_REQUEST: ["too-many-requests", "Too many attempts, please try again in few minutes."],
     ACC_DISABLED: ["user-disabled", "Your account has been disabled, contact an administrator."],
+    USER_NOT_EXIST: ["user-not-found", "Account not found!"],
     UNKNOWN_ERROR: ["unknown-error", "An unknown error has occured."]
 }
