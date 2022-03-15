@@ -61,17 +61,8 @@ export async function readDataFromPath(path){
 export async function linkPhoneToEmail(phone){
     const userDoc = doc(firestore, "users", auth.currentUser.uid);
 
-    const usersColl = collection(firestore, "users");
-    const q1 = query(usersColl, where("phone", "==", phone));
-
     // Transactions: Do all or nothing
     await runTransaction(firestore, async (transaction)=>{
-        const phoneCheck = await getDocs(q1);
-
-        if(phoneCheck.size != 0){
-            throw new FirebaseError(ErrorCodes.PHONE_ALREADY_INUSE[0], ErrorCodes.PHONE_ALREADY_INUSE[1])
-        }
-
         transaction.update(userDoc, {phone: phone});
         CurrentUser.phone = phone;
     })

@@ -20,10 +20,11 @@ import {
 } from '../firestore/userFuncs';
 import { CurrentUser } from '../../utils/user';
 import { ErrorCodes } from '../../const/errorCodes';
-import { verifyUserEmail } from './accountService';
+import { verifyUserEmail } from '../account/accountService';
 
-import { updateNotificationToken } from './accountService';
+import { updateNotificationToken } from '../account/accountService';
 import { errorHandler } from '../exceptionHandler';
+import { isPhoneNumber, isValidPhoneNumber } from '../../utils/verification/phoneNumber';
 
 
 /**
@@ -46,27 +47,25 @@ import { errorHandler } from '../exceptionHandler';
  * @public
 */
 export async function loginUser(identifier, password){
-  identifier = identifier.replace(/\n/g, '');
-  identifier = identifier.replace(/ /g, '');
   if(identifier.length === 0)
     throw new FirebaseError(ErrorCodes.INVALID_EMAIL[0], ErrorCodes.INVALID_EMAIL[1])
+  
+  if(isPhoneNumber(identifier)){
+    const verifier = isValidPhoneNumber(identifier);
+    if(verifier[0]){ // Valid
+      identifier = await phoneToEmail(verifier[1]);
 
-  if(identifier.startsWith('+')) identifier = identifier.substr(1);
-  if(identifier.length == 11){
-    if(identifier.startsWith('216')) identifier = identifier.substr(3);
-    else {
-      if(identifier.search(new RegExp('^[0-9]{1,}$'))) // Just numbers
-        throw new FirebaseError(ErrorCodes.INVALID_PHONE_NUMBER[0], ErrorCodes.INVALID_PHONE_NUMBER[1]);
+      if(!identifier) throw new FirebaseError(ErrorCodes.PHONE_DOESNT_EXIST[0], ErrorCodes.PHONE_DOESNT_EXIST[1])
+    }
+    else throw new FirebaseError(ErrorCodes.INVALID_PHONE_NUMBER[0], ErrorCodes.INVALID_PHONE_NUMBER[1]);
+  }
+  else{
+    if(identifier.search('@') < 1){
+      throw new FirebaseError(ErrorCodes.INVALID_EMAIL[0], ErrorCodes.INVALID_EMAIL[1]);
     }
   }
 
-  if(identifier.search(new RegExp('^[0-9]{1,7}$')) != -1) 
-    throw new FirebaseError(ErrorCodes.INVALID_PHONE_NUMBER[0], ErrorCodes.INVALID_PHONE_NUMBER[1]);
-
-  if(identifier.search(new RegExp('^[1-9]{1}[0-9]{7}$')) != -1) identifier = await phoneToEmail(identifier);
-
-  if(identifier) return (await signinWithEmail(identifier, password));
-  else throw new FirebaseError(ErrorCodes.PHONE_DOESNT_EXIST[0], ErrorCodes.PHONE_DOESNT_EXIST[1])
+  return (await signinWithEmail(identifier, password));
 }
 
 /**

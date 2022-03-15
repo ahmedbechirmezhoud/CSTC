@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import Background from "../../../components/Background/Background";
 import BlueButton from "../../../components/BlueButton/BlueButton";
-import { updateUserPassword } from "../../../services/auth/accountService";
+import { updateUserPassword } from "../../../services/account/accountService";
 
 export default ChangePwd = () => {
 
