@@ -28,6 +28,7 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
+    "react-native-elements": "^3.4.2",
     "react-native-exception-handler": "^2.10.10",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-qrcode-svg": "^6.1.2",
