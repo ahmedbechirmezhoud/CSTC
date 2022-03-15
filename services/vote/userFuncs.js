@@ -32,5 +32,5 @@ export async function voteForParticipant(pID){
         CurrentUser.votedFor = null;
     }
     
-    updatePathValues("users/" + auth.currentUser.uid, {votedFor: CurrentUser.votedFor});
+    updatePathValues(USER_PATH + auth.currentUser.uid, {votedFor: CurrentUser.votedFor});
 }

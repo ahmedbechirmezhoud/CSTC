@@ -29,7 +29,7 @@ export async function initCurrentUser(data){
     let token = await registerForPushNotificationsAsync();
 
     await setPathValues(
-        "users/" + auth.currentUser.uid,
+        USER_PATH + auth.currentUser.uid,
         {
             ...userData,
             ...data,
@@ -41,13 +41,13 @@ export async function initCurrentUser(data){
 export async function isCurrentUserInited(){
     if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
 
-    return (await getPath("users/"+auth.currentUser.uid)).exists()
+    return (await getPath(USER_PATH+auth.currentUser.uid)).exists()
 }
 
 export async function getCurrentUserData(){
     if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
 
-    data = (await getPath("users/"+auth.currentUser.uid)).data();
+    data = (await getPath(USER_PATH+auth.currentUser.uid)).data();
     if(!data) throw FirebaseError(ErrorCodes.UNKNOWN_ERROR[0], ErrorCodes.UNKNOWN_ERROR[1])
   
     return data;
@@ -59,7 +59,7 @@ export async function readDataFromPath(path){
 }
 
 export async function linkPhoneToEmail(phone){
-    const userDoc = doc(firestore, "users", auth.currentUser.uid);
+    const userDoc = doc(firestore, USER_PATH + auth.currentUser.uid);
 
     // Transactions: Do all or nothing
     await runTransaction(firestore, async (transaction)=>{
@@ -69,7 +69,7 @@ export async function linkPhoneToEmail(phone){
 }
 
 export async function phoneToEmail(number){
-    const usersColl = collection(firestore, "users");
+    const usersColl = collection(firestore, USER_PATH);
     const q1 = query(usersColl, where("phone", "==", parseInt(number, 10)));
 
     const phoneCheck = await getDocs(q1);

@@ -2,7 +2,8 @@ import { auth } from '../../configInit';
 import { 
   sendEmailVerification,
   sendPasswordResetEmail,
-  updatePassword
+  updatePassword,
+  verifyBeforeUpdateEmail
 } from 'firebase/auth';
 import { FirebaseError } from '@firebase/util';
 import { 
@@ -35,15 +36,12 @@ export async function updateUserPassword(password){
   
   updatePassword(auth.currentUser, password);
 
-  if(!CurrentUser.emailLogin){
-    await setPathValues(
-        "users/" + auth.currentUser.uid,
-        {
-            email: true
-        }
-    )
-    CurrentUser.emailLogin = true;
-  }
+  await setPathValues(
+    USER_PATH + auth.currentUser.uid,
+    {
+      email: true
+    }
+  )
   return true;
 }
 
@@ -53,7 +51,7 @@ export async function updateUserPassword(password){
  */
 export async function updateNotificationToken(){
   let token = await registerForPushNotificationsAsync();
-  await updateDoc(doc(db, "users", CurrentUser.uid), {
+  await updateDoc(doc(db, USER_PATH + CurrentUser.uid), {
     notificationToken: token
   });
   CurrentUser.notificationToken = token;
@@ -141,6 +139,7 @@ export async function resetUserPassword(identifier){
     }
   }
 
+  // TODO : Use dynamic links to redirect the code to the app
   // const actionCodeSettings = {
   //      url: 'https://cstc-2a071.web.app',
   //      handleCodeInApp: true
@@ -148,4 +147,24 @@ export async function resetUserPassword(identifier){
     
   // Identifier == email now
   await sendPasswordResetEmail(auth, identifier).catch(errorHandler);
+}
+
+/**
+ * Sends a confirmation email to the new email.
+ * If the email is confirmed, it'll be set as a new email.
+ * 
+ * @remarks
+ * Throws a {@link FirebaseError}) with error code {@link ErrorCodes.NOT_LOGGED_IN} 
+ * if no user is logged in.
+ * 
+ * Throws a {@link FirebaseError}) with error code {@link ErrorCodes.INVALID_EMAIL} 
+ * if the given email is invalid.
+ * 
+ * @param {String} newemail : new email to use
+ */
+export async function changeUserEmail(newemail){
+  if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
+  if(!isValidEmail(newemail)) throw new FirebaseError(ErrorCodes.INVALID_EMAIL[0], ErrorCodes.INVALID_EMAIL[1]);
+
+  await verifyBeforeUpdateEmail(auth.currentUser, newemail).catch(errorHandler);
 }

@@ -24,6 +24,10 @@ class CurrentUserStructure{
     logout(){
         Object.assign(this, {...userData});
     }
+
+    updateInfo(data){
+        Object.assign(this, data);
+    }
 }
 
 export var CurrentUser = new CurrentUserStructure();

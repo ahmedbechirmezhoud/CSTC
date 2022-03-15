@@ -19,7 +19,7 @@ const db = getFirestore();
 export async function getTokens(){
   let PushTokens = [];
   
-  const querySnapshot = await getDocs(collection(db, "users"));
+  const querySnapshot = await getDocs(collection(db, USER_PATH));
 
   querySnapshot.forEach((doc) => {
     PushTokens.push(doc.data()?.notificationToken);
