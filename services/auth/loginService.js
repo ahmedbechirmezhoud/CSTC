@@ -25,13 +25,14 @@ import { verifyUserEmail } from '../account/accountService';
 import { updateNotificationToken } from '../account/accountService';
 import { errorHandler } from '../exceptionHandler';
 import { isPhoneNumber, isValidPhoneNumber } from '../../utils/verification/phoneNumber';
+import { isValidEmail } from '../../utils/verification/emailAddress';
 
 
 /**
  * Logins a user using an identifier & a password.
  * 
  * @remarks
- * Throws a {@link FirebaseError}) with error code {@link AuthErrorCodes.INVALID_PHONE_NUMBER} 
+ * Throws a {@link FirebaseError}) with error code {@link ErrorCodes.INVALID_PHONE_NUMBER} 
  * if the given number is invalid.
  * 
  * Throws a {@link FirebaseError}) with error code {@link ErrorCodes.PHONE_DOESNT_EXIST} 
@@ -60,7 +61,7 @@ export async function loginUser(identifier, password){
     else throw new FirebaseError(ErrorCodes.INVALID_PHONE_NUMBER[0], ErrorCodes.INVALID_PHONE_NUMBER[1]);
   }
   else{
-    if(identifier.search('@') < 1){
+    if(!isValidEmail(identifier)){
       throw new FirebaseError(ErrorCodes.INVALID_EMAIL[0], ErrorCodes.INVALID_EMAIL[1]);
     }
   }
