@@ -12,10 +12,8 @@ export default function TimelineScreen(){
 
     const [events, setEvents] = useState(undefined);
     const [timePercentage, setTimePercentage] = useState(0);
+    const { dispatchInfo } = useContext(InfoContext);
 
-    function totalSeconds(date){
-        return date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds();
-    }
 
     useEffect(() => {
         getDocs(query(collection(db, "timeline"), orderBy("dateTime", "asc"))).then((querySnapshot) => {
@@ -77,7 +75,6 @@ const styles = StyleSheet.create({
     logo:{
         width:"40%",
         resizeMode: "contain",
-        
     },
     paragraph: {
       margin: 24,

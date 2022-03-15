@@ -9,16 +9,17 @@ export default styles = StyleSheet.create({
         justifyContent: "center"
       },
       seperatorText: {
-        color: "#ffffff99",
+        color: "#00000099",
         fontSize: 18,
+        fontWeight:"bold",
         textAlign: "center"
     
       },
       straightLine: {
-        height: 1,
+        height: 2,
         flex: 1,
-        backgroundColor: "#ffffff99",
-        maxWidth: "28%"
+        backgroundColor: "#00000099",
+        maxWidth: "50%"
     
       }
 });

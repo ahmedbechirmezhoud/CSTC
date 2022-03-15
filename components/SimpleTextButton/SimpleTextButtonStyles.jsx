@@ -6,11 +6,12 @@ import { StyleSheet } from "react-native";
 export default styles = StyleSheet.create(
   {
     TextButtonText: {
-      color: "white",
-      fontSize: 16,
+      fontSize: 14,
       marginTop: 12,
       marginBottom: 20,
-      alignSelf: "center"
+      alignSelf: "flex-end",
+      textAlign:"right",
+      textDecorationLine: "underline"
 
     },
   }

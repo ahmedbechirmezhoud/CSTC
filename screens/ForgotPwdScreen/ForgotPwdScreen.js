@@ -1,27 +1,24 @@
+import { View, StyleSheet, TextInput,Alert, Image, Text, Dimensions } from "react-native";
 import React, { useState } from "react";
-import { View, TextInput, Alert, ScrollView } from "react-native";
-import { Entypo } from "@expo/vector-icons";
-
 import Background from "../../components/Background/Background";
 import BlueButton from "../../components/BlueButton/BlueButton";
-import { useNavigation } from "@react-navigation/core";
-import styles from "./ForgotPwdScreenStyles";
-export default function FbRegistrationScreen() {
-	const [emailInput, setEmailInput] = useState("");
-	const navigation = useNavigation();
+import { Card } from 'react-native-elements';
+
+export default ChangeEmail = () => {
+
+	const [emailInput, setEmailInputInput] = useState("");
 
 	const emailInputHandler = (textInput) => {
-		setEmailInput(textInput);
+		setEmailInputInput(textInput);
 	};
-	const resetButtonHandler = () => {
-		//Insert function here
+
+	const confirmButtonHandler = () => {
 		Alert.alert(
-			"Check your email",
-			"You'll find your new password in your email",
+			"Done!",
+			"Your Email has changed",
 			[
 				{
 					text: "OK",
-					onPress: () => navigation.navigate("Login"),
 					style: "cancel",
 				},
 			]
@@ -30,30 +27,64 @@ export default function FbRegistrationScreen() {
 
 	return (
 		<Background>
-					<View style={styles.inputContainers}>
-						<View style={styles.inputContainer}>
-							{/*email Box */}
-							<Entypo
-								name='email'
-								size={20}
-								color='#507686'
-								style={styles.inputIcon}
-							/>
-							<TextInput
-								style={styles.inputBox}
-								placeholder={"E-mail"}
-								placeholderTextColor='#507686'
-								keyboardType='email-address'
-								onChangeText={emailInputHandler}
-								value={emailInput}
-							/>
-						</View>
-					</View>
+			<Image
+                source={require('../../assets/logo-name-slogan.png')}
+                style={styles.logo}
+            />
 
-					<BlueButton
-						text={"Reset password"}
-						buttonHandler={resetButtonHandler}
-					/>
+			<Card title="Local Modules" containerStyle={styles.container} >				
+					<Text style ={{fontSize: 15, fontWeight: "bold"}} >Forgot your password ?</Text>
+					<Text style ={{fontSize: 10, fontWeight: "100", marginBottom: 25}} >No problem, You’ll receive a mail containing the change password link</Text>
+					<View style={styles.inputContainer}>
+						<TextInput
+							style={styles.inputBox}
+							placeholder={"Your email"}
+							placeholderTextColor='#507686'
+							onChangeText={emailInputHandler}
+							value={emailInput}
+						/>
+					</View>
+				<BlueButton text={"Send Mail"} buttonHandler={confirmButtonHandler} />
+			</Card>
+
 		</Background>
 	);
-}
+};
+
+const styles = StyleSheet.create({
+	inputContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		width: "100%",
+		backgroundColor: "#F8F8F8",
+		borderColor: "#A8A8A8",
+		borderWidth: 1,
+		borderRadius: 10,
+		marginVertical: 10,
+		alignSelf: "center"
+
+	},
+	inputIcon: {
+		marginLeft: 10,
+	},
+	inputBox: {
+		flex: 1,
+		width:"60%",
+		color: "#525252",
+		fontSize: 16,
+		padding: 10,
+		fontWeight:"bold"
+	},
+	logo:{
+        width:"70%",
+        resizeMode: "contain",
+    },
+	container:{
+		borderRadius: 21,
+		width:Dimensions.get("screen").width-50,
+		display:"flex",
+		alignItems: "center",
+		justifyContent: "center"
+
+	}
+});

@@ -44,7 +44,7 @@ export default SettingsScreen = () => {
 		navigation.navigate("ChangePwd");
 	};
 	const updatePorfileButtonHandler = () => {
-		navigation.navigate("ChangePwd");
+		navigation.navigate("UpdateProfile");
 	};
     const signUpFBHandler = () => {
 		
@@ -76,8 +76,8 @@ export default SettingsScreen = () => {
 
 				{CurrentUser.fbToken 
 				? <BlueButton
-						text={"Link your email"}
-						buttonHandler={addEmailButtonHandler}
+						text={"Linked to Facebook"}
+						disabled={true}
 					/>
 				: <BlueButton
 						text={"Link your Facebook"}

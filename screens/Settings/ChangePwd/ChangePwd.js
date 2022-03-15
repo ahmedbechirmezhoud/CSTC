@@ -1,9 +1,10 @@
-import { View, StyleSheet, TextInput,Alert } from "react-native";
+import { View, StyleSheet, TextInput,Alert, Image, Text, Dimensions } from "react-native";
 import React, { useState } from "react";
-import { Entypo, MaterialIcons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import Background from "../../../components/Background/Background";
 import BlueButton from "../../../components/BlueButton/BlueButton";
 import { updateUserPassword } from "../../../services/auth/accountService";
+import { Card } from 'react-native-elements';
 
 export default ChangePwd = () => {
 
@@ -39,57 +40,82 @@ export default ChangePwd = () => {
 
 	return (
 		<Background>
-			<View style={styles.inputContainers}>
+			<Image
+                source={require('../../../assets/logo-name-slogan.png')}
+                style={styles.logo}
+            />
 
-				<View style={styles.inputContainer}>
-					{/*Password Box */}
-					<MaterialIcons
-						name='lock'
-						size={20}
-						color='#507686'
-						style={styles.inputIcon}
-					/>
-					<TextInput
-						style={styles.inputBox}
-						placeholder={"Password"}
-						placeholderTextColor='#507686'
-						secureTextEntry={isSecureText}
-						onChangeText={passwordInputHandler}
-						value={passwordInput}
-					/>
-					<Entypo
-						name={eyeIcon}
-						size={20}
-						color='#507686'
-						style={(styles.inputIcon, { marginRight: 10 })}
-						onPress={handlePasswordVisibility}
-					/>
-				</View>
-			</View>
-			<BlueButton text={"Confirm"} buttonHandler={confirmButtonHandler} />
+			<Card title="Local Modules" containerStyle={styles.container} >				
+					<Text style ={{fontSize: 15, fontWeight: "bold"}} >Change password </Text>
+					<Text style ={{fontSize: 10, fontWeight: "100", marginBottom: 25}} >Memorize it!</Text>
+					<View style={styles.inputContainer}>
+						<TextInput
+							style={styles.inputBox}
+							placeholder={"Password"}
+							placeholderTextColor='#507686'
+							secureTextEntry={isSecureText}
+							onChangeText={passwordInputHandler}
+							value={passwordInput}
+						/>
+						<Entypo
+							name={eyeIcon}
+							size={20}
+							color='#507686'
+							style={(styles.inputIcon, { marginRight: 10 })}
+							onPress={handlePasswordVisibility}
+						/>
+					</View>
+					<View style={styles.inputContainer}>
+						<TextInput
+							style={styles.inputBox}
+							placeholder={"Confirm password"}
+							placeholderTextColor='#507686'
+							secureTextEntry={isSecureText}
+							onChangeText={passwordInputHandler}
+							value={passwordInput}
+						/>
+					</View>
+				<BlueButton text={"Confirm"} buttonHandler={confirmButtonHandler} />
+			</Card>
+
 		</Background>
 	);
 };
 
 const styles = StyleSheet.create({
-	inputContainers: {
-		width: "70%",
-	},
 	inputContainer: {
 		flexDirection: "row",
 		alignItems: "center",
 		width: "100%",
-		backgroundColor: "white",
-		borderRadius: 180,
-		marginTop: 36,
+		backgroundColor: "#F8F8F8",
+		borderColor: "#A8A8A8",
+		borderWidth: 1,
+		borderRadius: 10,
+		marginVertical: 10,
+		alignSelf: "center"
+
 	},
 	inputIcon: {
 		marginLeft: 10,
 	},
 	inputBox: {
 		flex: 1,
-		color: "#507686",
+		width:"60%",
+		color: "#525252",
 		fontSize: 16,
 		padding: 10,
+		fontWeight:"bold"
 	},
+	logo:{
+        width:"70%",
+        resizeMode: "contain",
+    },
+	container:{
+		borderRadius: 21,
+		width:Dimensions.get("screen").width-50,
+		display:"flex",
+		alignItems: "center",
+		justifyContent: "center"
+
+	}
 });

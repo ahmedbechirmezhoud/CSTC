@@ -1,7 +1,6 @@
 import LoginPageScreen from '../screens/LoginPageScreen/LoginPageScreen'
 import ForgotPwdScreen from '../screens/ForgotPwdScreen/ForgotPwdScreen';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
-import AddEmail from '../screens/Settings/AddEmail/AddEmail';
 import ChangeEmail from '../screens/Settings/ChangeEmail/ChangeEmail';
 import ChangePwd from '../screens/Settings/ChangePwd/ChangePwd';
 import TimelineScreen from '../screens/TimelineScreen/TimelineScreen';
@@ -23,6 +22,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'; 
 import LoadingScreen from "../screens/LoadingScreen"
+import UpdateProfile from '../screens/Settings/UpdateProfile';
 
 export default function Navigator() {
 
@@ -64,7 +64,7 @@ function RootNavigator() {
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="AddEmail" component={AddEmail} options={{headerTitle : "",  headerTransparent:true, headerTintColor:"#fff"}} />
+        <Stack.Screen name="UpdateProfile" component={UpdateProfile} options={{headerTitle : "",  headerTransparent:true, headerTintColor:"#fff"}} />
         <Stack.Screen name="ChangePwd" component={ChangePwd} options={{headerTitle : "",  headerTransparent:true, headerTintColor:"#fff"}} />
         <Stack.Screen name="ChangeEmail" component={ChangeEmail} options={{headerTitle : "", headerTransparent:true, headerTintColor:"#fff"}} />
       </Stack.Group>
