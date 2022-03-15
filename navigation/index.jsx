@@ -22,15 +22,20 @@ import { onSnapshot, doc } from "firebase/firestore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'; 
+import LoadingScreen from "../screens/LoadingScreen"
 
 export default function Navigator() {
 
 
-  const [user, setUser] = useState(auth.currentUser);
-  
+  const [user, setUser] = useState(undefined);
+  const [loading, setLoading] = useState(true);
   auth.onAuthStateChanged(() => {
      setUser(auth.currentUser);
   });
+
+  useEffect(() =>{
+    (!((user)===undefined)) && setLoading(false);
+  }, [user]);
 
   return (
     <InfoConsumer>
@@ -43,7 +48,7 @@ export default function Navigator() {
         return(
         <NavigationContainer>
           <ErrorModal />
-          {user ? <RootNavigator /> : <AuthNavigator />}
+          {(info?.loading || loading) ? <LoadingScreen /> :  (user ? <RootNavigator /> : <AuthNavigator />)}
         </NavigationContainer>);
       }}
     </InfoConsumer>
@@ -59,9 +64,9 @@ function RootNavigator() {
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="AddEmail" component={AddEmail} options={{headerTitle : ""}} />
-        <Stack.Screen name="ChangePwd" component={ChangePwd} options={{headerTitle : ""}} />
-        <Stack.Screen name="ChangeEmail" component={ChangeEmail} options={{headerTitle : ""}} />
+        <Stack.Screen name="AddEmail" component={AddEmail} options={{headerTitle : "",  headerTransparent:true, headerTintColor:"#fff"}} />
+        <Stack.Screen name="ChangePwd" component={ChangePwd} options={{headerTitle : "",  headerTransparent:true, headerTintColor:"#fff"}} />
+        <Stack.Screen name="ChangeEmail" component={ChangeEmail} options={{headerTitle : "", headerTransparent:true, headerTintColor:"#fff"}} />
       </Stack.Group>
     </Stack.Navigator>
   );
@@ -70,29 +75,25 @@ function RootNavigator() {
 
 function AuthNavigator() {
 
-  const [EnableRegistration, setEnableRegistration] = useState(null);
-  const [firstTime, setFirstTime] = useState(true);
+  const [firstTime, setFirstTime] = useState(undefined);
   const { dispatchInfo } = useContext(InfoContext);
 
-  onSnapshot(doc(db, "config", "registrationwindow"), (doc) => {
-    const currentDate = new Date();
-    setEnableRegistration((new Date(doc.data()["start"].seconds*1000) < currentDate) && (new Date(doc.data()["end"].seconds*1000) > currentDate));
-  });
-
   useEffect(() => {
+    if(firstTime===undefined) dispatchInfo({payload : {error: null,message : undefined, loading : false}})
     AsyncStorage.getItem("firstTime", (error, result) => {
       if(error) dispatchInfo({payload : {error}});
       if(result == null){
-          setFirstTime(true)
+          setFirstTime(true);
           AsyncStorage.setItem("firstTime", "false");
       }else setFirstTime(false);
+      dispatchInfo({payload : {error: null, message : undefined, loading : false}})
   });
   }, [])
 
   return (
     <Stack.Navigator>
       {firstTime && <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />}
-      <Stack.Screen name="Login" component={LoginPageScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Login" component={LoginPageScreen} options={{ headerShown: false, headerTransparent:true }} />
       <Stack.Screen name="ForgotPwd" component={ForgotPwdScreen} options={{ headerShown: false }} />
    </Stack.Navigator>
   );

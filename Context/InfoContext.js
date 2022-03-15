@@ -31,7 +31,7 @@ export const InfoProvider = ({ children }) => {
     const defaultInfo = {
         error: null,
         message : undefined,
-        loading : true
+        loading : false
     }
   
     const [info, dispatchInfo] = useReducer(reducer, defaultInfo);
