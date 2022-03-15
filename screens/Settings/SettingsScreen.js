@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Alert, Keyboard, Text, View, TextInput } from "react-native";
+import { Alert, StyleSheet, Dimensions, Text, View, TextInput } from "react-native";
+import { Card } from 'react-native-elements';
 
 import Background from "../../components/Background/Background";
 import BlueButton from "../../components/BlueButton/BlueButton";
@@ -10,15 +11,10 @@ import { CurrentUser } from "../../utils/user";
 import { signOut } from "../../services/auth/loginService";
 import { useNavigation } from "@react-navigation/native";
 
-/*
-****************************** REMEMBER TO VERIFY BEFORE MERGING  : ******************************
-./QRCode()
-index/navigation
-LoginScreen/forgotButtonHandler
-*/
+
+
 const QRCode1 = () => {
 	return <SvgQRCode value={CurrentUser.uid} size={150} />;
-	// return <SvgQRCode value={"AvqqJxKlARfijulINHYkbciM58z1"} />;
 };
 
 export default SettingsScreen = () => {
@@ -47,37 +43,110 @@ export default SettingsScreen = () => {
 	const changePwdButtonHandler = () => {
 		navigation.navigate("ChangePwd");
 	};
+	const updatePorfileButtonHandler = () => {
+		navigation.navigate("ChangePwd");
+	};
     const signUpFBHandler = () => {
 		
 	};
+
+	generateBoxShadowStyle(-2, 4, '#171717', 0.2, 3, 4, '#171717');
+
 	return (
 		<Background>
+			<Card containerStyle={[styles.QRcontainer, styles.boxShadow]} >
 			<QRCode1 />
-			<BlueButton
-				text={"Change password"}
-				buttonHandler={changePwdButtonHandler}
-			/>
-			<BlueButton
-				text={"Change email"}
-				buttonHandler={changeEmailButtonHandler}
-			/>
-
-			{CurrentUser.fbToken 
-            ? <BlueButton
-					text={"Link your email"}
-					buttonHandler={addEmailButtonHandler}
+			<Text style={{ fontSize:10, textAlign:"center", paddingTop:3 }} >Participant <Text style={{ fontWeight:"bold" }} >ID</Text></Text>
+			</Card>
+			
+			<Card title="Local Modules" containerStyle={styles.container} >
+			<Text style={{ fontSize:10, textAlign:"center", paddingTop:3, marginTop: Dimensions.get("screen").height/20}} >Update your Acount <Text style={{ fontWeight:"bold" }} >Credentials</Text></Text>
+				<BlueButton
+					text={"Change password"}
+					buttonHandler={changePwdButtonHandler}
 				/>
-			 : <FacebookLoginButton
-					text={"Link your Facebook account"}
-					onPress={signUpFBHandler}
-                    style={{    marginBottom: 16,marginTop: 16}}
+				<BlueButton
+					text={"Change email"}
+					buttonHandler={changeEmailButtonHandler}
 				/>
-			}
+				<BlueButton
+					text={"Update profile"}
+					buttonHandler={updatePorfileButtonHandler}
+				/>
 
-			<BlueButton
-				text={"Sign out"}
-				buttonHandler={signOutButtonHandler}
-			/>
+				{CurrentUser.fbToken 
+				? <BlueButton
+						text={"Link your email"}
+						buttonHandler={addEmailButtonHandler}
+					/>
+				: <BlueButton
+						text={"Link your Facebook"}
+						buttonHandler={signUpFBHandler}
+					/>
+				}
+
+				<BlueButton
+					text={"SignOut"}
+					buttonHandler={signOutButtonHandler}
+				/>
+
+			</Card>
+
 		</Background>
 	);
 };
+
+
+const styles = StyleSheet.create({
+	QRcontainer:{
+		borderRadius: 20,
+		transform : [{ translateY: 50 }],
+		zIndex:500
+		
+	},
+    container:{
+        borderRadius: 20,
+        width: "100%",
+        height:Dimensions.get("screen").height/1.7,
+        display:"flex",
+        flexDirection: "column",
+        alignItems:"center",
+        justifyContent:"flex-start"
+    },
+    logo:{
+        width:"40%",
+        resizeMode: "contain",
+        
+    },
+    paragraph: {
+      margin: 24,
+      fontSize: 18,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      color: '#34495e'
+    },
+  });
+
+  const generateBoxShadowStyle = (
+	xOffset,
+	yOffset,
+	shadowColorIos,
+	shadowOpacity,
+	shadowRadius,
+	elevation,
+	shadowColorAndroid,
+  ) => {
+	if (Platform.OS === 'ios') {
+	  styles.boxShadow = {
+		shadowColor: shadowColorIos,
+		shadowOffset: {width: xOffset, height: yOffset},
+		shadowOpacity,
+		shadowRadius,
+	  };
+	} else if (Platform.OS === 'android') {
+	  styles.boxShadow = {
+		elevation,
+		shadowColor: shadowColorAndroid,
+	  };
+	}
+  };

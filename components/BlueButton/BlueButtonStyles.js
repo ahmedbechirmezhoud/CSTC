@@ -1,6 +1,6 @@
 
 import React from "react"
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
 const styles = StyleSheet.create({
 
@@ -8,16 +8,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    width: "70%",
+    width: Dimensions.get("screen").width*3.2/4 ,
     height: 47,
-    borderRadius: 180,
-    marginVertical: 20,
-    backgroundColor: "#024069",
+    borderRadius: 4,
+    marginVertical: 10,
+    backgroundColor: "#14212E",
     
   },
   signInButtonText: {
     color: "white",
-    fontSize: 24,
+    fontSize: 19,
     fontWeight: "bold",
     
   },
