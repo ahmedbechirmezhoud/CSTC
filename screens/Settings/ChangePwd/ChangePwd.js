@@ -2,9 +2,9 @@ import { StyleSheet, Alert, Image, Text, Dimensions } from "react-native";
 import React, { useState } from "react";
 import Background from "../../../components/Background/Background";
 import BlueButton from "../../../components/BlueButton/BlueButton";
-import { updateUserPassword } from "../../../services/auth/accountService";
 import { Card } from 'react-native-elements';
 import PasswordInput from "../../../components/PasswordInput";
+import { updateUserPassword } from "../../../services/account/accountService";
 
 export default ChangePwd = () => {
 

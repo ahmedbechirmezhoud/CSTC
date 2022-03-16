@@ -20,16 +20,19 @@ import {
 } from '../firestore/userFuncs';
 import { CurrentUser } from '../../utils/user';
 import { ErrorCodes } from '../../const/errorCodes';
-import { verifyUserEmail } from './accountService';
+import { verifyUserEmail } from '../account/accountService';
 
-import { updateNotificationToken } from './accountService';
+import { updateNotificationToken } from '../account/accountService';
+import { errorHandler } from '../exceptionHandler';
+import { isPhoneNumber, isValidPhoneNumber } from '../../utils/verification/phoneNumber';
+import { isValidEmail } from '../../utils/verification/emailAddress';
 
 
 /**
  * Logins a user using an identifier & a password.
  * 
  * @remarks
- * Throws a {@link FirebaseError}) with error code {@link AuthErrorCodes.INVALID_PHONE_NUMBER} 
+ * Throws a {@link FirebaseError}) with error code {@link ErrorCodes.INVALID_PHONE_NUMBER} 
  * if the given number is invalid.
  * 
  * Throws a {@link FirebaseError}) with error code {@link ErrorCodes.PHONE_DOESNT_EXIST} 
@@ -45,27 +48,25 @@ import { updateNotificationToken } from './accountService';
  * @public
 */
 export async function loginUser(identifier, password){
-  identifier = identifier.replace(/\n/g, '');
-  identifier = identifier.replace(/ /g, '');
   if(identifier.length === 0)
     throw new FirebaseError(ErrorCodes.INVALID_EMAIL[0], ErrorCodes.INVALID_EMAIL[1])
+  
+  if(isPhoneNumber(identifier)){
+    const verifier = isValidPhoneNumber(identifier);
+    if(verifier[0]){ // Valid
+      identifier = await phoneToEmail(verifier[1]);
 
-  if(identifier.startsWith('+')) identifier = identifier.substr(1);
-  if(identifier.length == 11){
-    if(identifier.startsWith('216')) identifier = identifier.substr(3);
-    else {
-      if(identifier.search(new RegExp('^[0-9]{1,}$'))) // Just numbers
-        throw new FirebaseError(ErrorCodes.INVALID_PHONE_NUMBER[0], ErrorCodes.INVALID_PHONE_NUMBER[1]);
+      if(!identifier) throw new FirebaseError(ErrorCodes.PHONE_DOESNT_EXIST[0], ErrorCodes.PHONE_DOESNT_EXIST[1])
+    }
+    else throw new FirebaseError(ErrorCodes.INVALID_PHONE_NUMBER[0], ErrorCodes.INVALID_PHONE_NUMBER[1]);
+  }
+  else{
+    if(!isValidEmail(identifier)){
+      throw new FirebaseError(ErrorCodes.INVALID_EMAIL[0], ErrorCodes.INVALID_EMAIL[1]);
     }
   }
 
-  if(identifier.search(new RegExp('^[0-9]{1,7}$')) != -1) 
-    throw new FirebaseError(ErrorCodes.INVALID_PHONE_NUMBER[0], ErrorCodes.INVALID_PHONE_NUMBER[1]);
-
-  if(identifier.search(new RegExp('^[1-9]{1}[0-9]{7}$')) != -1) identifier = await phoneToEmail(identifier);
-
-  if(identifier) return (await signinWithEmail(identifier, password));
-  else throw new FirebaseError(ErrorCodes.PHONE_DOESNT_EXIST[0], ErrorCodes.PHONE_DOESNT_EXIST[1])
+  return (await signinWithEmail(identifier, password));
 }
 
 /**
@@ -84,36 +85,9 @@ export async function loginUser(identifier, password){
  * @public
 */
 export async function signinWithEmail(email, password) {
-  const user = (await signInWithEmailAndPassword(auth, email, password).catch((err)=>{
-    if(err instanceof FirebaseError){
-      switch(err.code){
-        case "auth/invalid-email":{
-          err.message = ErrorCodes.INVALID_EMAIL[1];
-          break;
-        }
-        case "auth/wrong-password":{
-          err.message = ErrorCodes.WRONG_PASSWORD[1];
-          break;
-        }
-        case "auth/network-request-failed":{
-          err.message = ErrorCodes.NETWORK_ERROR[1];
-          break;
-        }
-        case "auth/too-many-requests":{
-          err.message = ErrorCodes.TOO_MANY_REQUEST[1];
-          break;
-        }
-        case "auth/user-disabled":{
-          err.message = ErrorCodes.ACC_DISABLED[1];
-          break;
-        }
-      }
-      throw err;
-    }
-    throw new FirebaseError(ErrorCodes.UNKNOWN_ERROR[0], ErrorCodes.UNKNOWN_ERROR[1]);
-  })).user;
+  const user = (await signInWithEmailAndPassword(auth, email, password).catch(errorHandler)).user;
 
-  userInfo = await getCurrentUserData();
+  userInfo = await getCurrentUserData().catch(errorHandler);
 
   CurrentUser.loginJson(
     {
@@ -140,7 +114,7 @@ export async function signinWithEmail(email, password) {
  * @public
  */
 export async function signOut(){
-  await firebaseSignOut(auth);
+  await firebaseSignOut(auth).catch(errorHandler);
   CurrentUser.logout();
   return true;
 }
@@ -159,29 +133,25 @@ export async function signOut(){
  * @public
  */
 export async function signinWithFacebook() {
-  const provider = new FacebookAuthProvider();
-
   const { type, token, expirationDate, permissions, declinedPermissions } =
   await Facebook.logInWithReadPermissionsAsync({
-    permissions: ['public_profile', 'email'],
-  });
+    permissions: ['public_profile'],
+  }).catch(errorHandler);
         
   if (type === 'success') {
-    // Get the user's name using Facebook's Graph API
-    const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email`);
-    const respJson = (await response.json());
     console.log('FB Logged in!'); 
-    console.log(respJson); // User data
 
     const credential = FacebookAuthProvider.credential(token);
 
     // Sign in with the credential from the Facebook user.
     if(!auth.currentUser) {
-      await signInWithCredential(auth, credential);      
-      if(!(await isCurrentUserInited())) 
-        await initCurrentUser({fbToken: token, name:respJson.name});
+      await signInWithCredential(auth, credential).catch(errorHandler);      
+      if(!(await isCurrentUserInited().catch(errorHandler))){
+        await auth.currentUser.delete();
+        throw FirebaseError(ErrorCodes.REGISTRATION_DISABLED[0], ErrorCodes.REGISTRATION_DISABLED[1])
+      }
 
-      userInfo = await getCurrentUserData();
+      userInfo = await getCurrentUserData().catch(errorHandler);
       CurrentUser.loginJson(
         {
           uid: auth.currentUser.uid, 
@@ -191,11 +161,8 @@ export async function signinWithFacebook() {
       );
     }
     else {
-      await linkWithCredential(auth.currentUser, credential); // Or link fb account
+      await linkWithCredential(auth.currentUser, credential).catch(errorHandler); // Or link fb account
 
-      if(CurrentUser.name !== respJson.name) 
-        await updateProfile(auth.currentUser, {displayName: respJson.name});
-      CurrentUser.name = respJson.name;
       CurrentUser.fbToken = token;
     }
     updateNotificationToken();
