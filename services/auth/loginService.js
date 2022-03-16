@@ -152,8 +152,10 @@ export async function signinWithFacebook() {
     // Sign in with the credential from the Facebook user.
     if(!auth.currentUser) {
       await signInWithCredential(auth, credential).catch(errorHandler);      
-      if(!(await isCurrentUserInited().catch(errorHandler))) 
-        await initCurrentUser({fbToken: token, name:respJson.name}).catch(errorHandler);
+      if(!(await isCurrentUserInited().catch(errorHandler))){
+        await auth.currentUser.delete();
+        throw FirebaseError(ErrorCodes.REGISTRATION_DISABLED[0], ErrorCodes.REGISTRATION_DISABLED[1])
+      }
 
       userInfo = await getCurrentUserData().catch(errorHandler);
       CurrentUser.loginJson(

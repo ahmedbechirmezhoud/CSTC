@@ -17,5 +17,6 @@ export const ErrorCodes = {
     VOTE_ERROR: ["vote-error", "An error has occured while submiting your vote."],
     USER_DATA_NOT_FOUND: ["user-data-not-found", "Unable to fetch your info, please contact an administrator."],
     ERROR_LINK_PHONE: ["link-phone-error", "Unable to link phone number."],
+    REGISTRATION_DISABLED:["registration-disabled", "This facebook account isn't linked to any account."],
     UNKNOWN_ERROR: ["unknown-error", "An unknown error has occured."]
 }

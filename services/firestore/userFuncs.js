@@ -6,6 +6,7 @@ import { USER_PATH, PHONE_EMAIL_PATH } from './../../const/firestorePaths';
 import { CurrentUser, userData } from '../../utils/user';
 import { registerForPushNotificationsAsync } from '../Notification';
 import { ref, get } from 'firebase/database';
+import { signOut } from '../auth/loginService';
 
 
 export async function getPath(path){
@@ -51,6 +52,7 @@ export async function getCurrentUserData(){
 
     let data = await getPath(USER_PATH+auth.currentUser.uid).catch(
         ()=>{
+            signOut();
             throw FirebaseError(ErrorCodes.USER_DATA_NOT_FOUND[0], ErrorCodes.USER_DATA_NOT_FOUND[1])
         }
     );
@@ -59,11 +61,15 @@ export async function getCurrentUserData(){
 
     let phone = await getPath(PHONE_EMAIL_PATH+auth.currentUser.uid).catch(
         ()=>{
+            signOut();
             throw FirebaseError(ErrorCodes.USER_DATA_NOT_FOUND[0], ErrorCodes.USER_DATA_NOT_FOUND[1])
         }
     );
     phone = phone.data();
-    if(!phone) throw FirebaseError(ErrorCodes.USER_DATA_NOT_FOUND[0], ErrorCodes.USER_DATA_NOT_FOUND[1])
+    if(!phone) {
+        signOut();
+        throw FirebaseError(ErrorCodes.USER_DATA_NOT_FOUND[0], ErrorCodes.USER_DATA_NOT_FOUND[1])
+    }
     
     let email = phone.email;
     if(phone.newEmail){

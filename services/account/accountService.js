@@ -1,5 +1,7 @@
 import { auth } from '../../configInit';
 import { 
+  EmailAuthProvider,
+  reauthenticateWithCredential,
   sendEmailVerification,
   sendPasswordResetEmail,
   updatePassword,
@@ -29,14 +31,18 @@ import { errorHandler } from '../exceptionHandler';
  * Throws {@link FirebaseError} with error code {@link ErrorCodes.NOT_LOGGED_IN}
  * if no user is logged in.
  * 
+ * @param {String} currentpass - Current password.
  * @param {String} password - New password to use.
  * 
  * @returns {boolean} true on success.
  */
-export async function updateUserPassword(password){
+export async function updateUserPassword(currentpass, password){
   if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
   
-  updatePassword(auth.currentUser, password);
+  let creds = EmailAuthProvider.credential(auth.currentUser.email, currentpass);
+  await reauthenticateWithCredential(auth.currentUser, creds).catch(errorHandler);
+
+  await updatePassword(auth.currentUser, password).catch(errorHandler);
 
   await setPathValues(
     USER_PATH + auth.currentUser.uid,
@@ -162,12 +168,16 @@ export async function resetUserPassword(identifier){
  * Throws a {@link FirebaseError}) with error code {@link ErrorCodes.INVALID_EMAIL} 
  * if the given email is invalid.
  * 
+ * @param {String} password : current password
  * @param {String} newemail : new email to use
  */
-export async function changeUserEmail(newemail){
+export async function changeUserEmail(password, newemail){
   if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
   if(!isValidEmail(newemail)) throw new FirebaseError(ErrorCodes.INVALID_EMAIL[0], ErrorCodes.INVALID_EMAIL[1]);
 
+  let creds = EmailAuthProvider.credential(auth.currentUser.email, password);
+  await reauthenticateWithCredential(auth.currentUser, creds).catch(errorHandler);
+
   await verifyBeforeUpdateEmail(auth.currentUser, newemail).catch(errorHandler);
-  await updatePathValues(PHONE_EMAIL_PATH+auth.currentUser.uid, {newEmail: newemail})
+  await updatePathValues(PHONE_EMAIL_PATH+auth.currentUser.uid, {newEmail: newemail}).catch(errorHandler);
 }
