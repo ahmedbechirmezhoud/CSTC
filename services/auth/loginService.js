@@ -133,19 +133,13 @@ export async function signOut(){
  * @public
  */
 export async function signinWithFacebook() {
-  const provider = new FacebookAuthProvider();
-
   const { type, token, expirationDate, permissions, declinedPermissions } =
   await Facebook.logInWithReadPermissionsAsync({
-    permissions: ['public_profile', 'email'],
+    permissions: ['public_profile'],
   }).catch(errorHandler);
         
   if (type === 'success') {
-    // Get the user's name using Facebook's Graph API
-    const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email`).catch(errorHandler);
-    const respJson = (await response.json());
     console.log('FB Logged in!'); 
-    console.log(respJson); // User data
 
     const credential = FacebookAuthProvider.credential(token);
 
@@ -169,9 +163,6 @@ export async function signinWithFacebook() {
     else {
       await linkWithCredential(auth.currentUser, credential).catch(errorHandler); // Or link fb account
 
-      if(CurrentUser.name !== respJson.name) 
-        await updateProfile(auth.currentUser, {displayName: respJson.name});
-      CurrentUser.name = respJson.name;
       CurrentUser.fbToken = token;
     }
     updateNotificationToken();
