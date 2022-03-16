@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import {
 	View,
-	Alert,
 	TextInput,
 	Image,
 	Keyboard,
@@ -18,21 +17,11 @@ import { signinWithFacebook, loginUser } from "../../services/auth/loginService"
 import { useNavigation } from "@react-navigation/core";
 
 import BlueButton from "../../components/BlueButton/BlueButton";
-import FacebookLoginButton from "../../components/FacebookLogin/FacebookLogin";
 import SimpleTextButton from "../../components/SimpleTextButton/SimpleTextButton.js";
 import Seperator from "../../components/Seperator/Seperator";
 import { InfoContext } from "../../Context/InfoContext";
 
-const IncorrectPasswordPopup = () =>
-	Alert.alert(
-		"Please try again...",
-		"The email and password you entered did not match our records. Please try again.",
-		[{ text: "OK", style: "cancel" }]
-	);
 
-
-
-const CreateAccountButtonHandler = () => {};
 
 export default LoginPageScreen = () => {
 	const [emailInput, setEmailInput] = useState("");

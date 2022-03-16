@@ -2,12 +2,13 @@ import { View, StyleSheet, TextInput,Alert, Image, Text, Dimensions } from "reac
 import React, { useState } from "react";
 import Background from "../../../components/Background/Background";
 import BlueButton from "../../../components/BlueButton/BlueButton";
-import { updateUserPassword } from "../../../services/auth/accountService";
 import { Card } from 'react-native-elements';
+import PasswordInput from "../../../components/PasswordInput";
 
 export default ChangeEmail = () => {
 
 	const [emailInput, setEmailInputInput] = useState("");
+	const [passwordInput, setPassowrdInput] = useState("");
 	const [validEmail, setValidEmail] = useState(true);
 	const emailInputHandler = (textInput) => {
 		setEmailInputInput(textInput);
@@ -52,6 +53,7 @@ export default ChangeEmail = () => {
 							value={emailInput}
 						/>
 					</View>
+					<PasswordInput placeholder={"Your password"} value={passwordInput} onChange={setPassowrdInput} />
 				<BlueButton text={"Confirm"} buttonHandler={confirmButtonHandler} />
 			</Card>
 

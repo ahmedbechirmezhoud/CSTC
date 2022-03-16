@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Alert, StyleSheet, Dimensions, Text, View, TextInput } from "react-native";
+import React from "react";
+import { Alert, StyleSheet, Dimensions, Text } from "react-native";
 import { Card } from 'react-native-elements';
 
 import Background from "../../components/Background/Background";
@@ -68,10 +68,6 @@ export default SettingsScreen = () => {
 				<BlueButton
 					text={"Change email"}
 					buttonHandler={changeEmailButtonHandler}
-				/>
-				<BlueButton
-					text={"Update profile"}
-					buttonHandler={updatePorfileButtonHandler}
 				/>
 
 				{CurrentUser.fbToken 

@@ -22,7 +22,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'; 
 import LoadingScreen from "../screens/LoadingScreen"
-import UpdateProfile from '../screens/Settings/UpdateProfile';
 
 export default function Navigator() {
 
@@ -64,7 +63,6 @@ function RootNavigator() {
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="UpdateProfile" component={UpdateProfile} options={{headerTitle : "",  headerTransparent:true, headerTintColor:"#fff"}} />
         <Stack.Screen name="ChangePwd" component={ChangePwd} options={{headerTitle : "",  headerTransparent:true, headerTintColor:"#fff"}} />
         <Stack.Screen name="ChangeEmail" component={ChangeEmail} options={{headerTitle : "", headerTransparent:true, headerTintColor:"#fff"}} />
       </Stack.Group>
