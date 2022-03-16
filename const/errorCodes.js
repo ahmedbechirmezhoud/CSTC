@@ -16,5 +16,6 @@ export const ErrorCodes = {
     USER_NOT_EXIST: ["user-not-found", "Account not found!"],
     VOTE_ERROR: ["vote-error", "An error has occured while submiting your vote."],
     USER_DATA_NOT_FOUND: ["user-data-not-found", "Unable to fetch your info, please contact an administrator."],
+    ERROR_LINK_PHONE: ["link-phone-error", "Unable to link phone number."],
     UNKNOWN_ERROR: ["unknown-error", "An unknown error has occured."]
 }

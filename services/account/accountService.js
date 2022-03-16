@@ -9,11 +9,12 @@ import { FirebaseError } from '@firebase/util';
 import { 
   linkPhoneToEmail,
     phoneToEmail,
-    setPathValues
+    setPathValues,
+    updatePathValues
 } from '../firestore/userFuncs';
 import { CurrentUser } from '../../utils/user';
 import { ErrorCodes } from '../../const/errorCodes';
-import {USER_PATH} from './../../const/firestorePaths';
+import {PHONE_EMAIL_PATH, USER_PATH} from './../../const/firestorePaths';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../configInit';
 import { registerForPushNotificationsAsync } from '../Notification';
@@ -168,4 +169,5 @@ export async function changeUserEmail(newemail){
   if(!isValidEmail(newemail)) throw new FirebaseError(ErrorCodes.INVALID_EMAIL[0], ErrorCodes.INVALID_EMAIL[1]);
 
   await verifyBeforeUpdateEmail(auth.currentUser, newemail).catch(errorHandler);
+  await updatePathValues(PHONE_EMAIL_PATH+auth.currentUser.uid, {newEmail: newemail})
 }

@@ -2,7 +2,7 @@ import { auth, firestore, rtdb } from './../../configInit'; // Init config
 import { setDoc, doc, getDocFromServer, runTransaction, updateDoc, collection, where, query, getDoc, getDocs } from 'firebase/firestore';
 import { FirebaseError } from '@firebase/util';
 import { ErrorCodes } from '../../const/errorCodes';
-import {USER_PATH} from './../../const/firestorePaths';
+import { USER_PATH, PHONE_EMAIL_PATH } from './../../const/firestorePaths';
 import { CurrentUser, userData } from '../../utils/user';
 import { registerForPushNotificationsAsync } from '../Notification';
 import { ref, get } from 'firebase/database';
@@ -49,14 +49,36 @@ export async function isCurrentUserInited(){
 export async function getCurrentUserData(){
     if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
 
-    data = (await getPath(USER_PATH+auth.currentUser.uid)).data();
-    if(!data) throw FirebaseError(ErrorCodes.USER_DATA_NOT_FOUND[0], ErrorCodes.USER_DATA_NOT_FOUND[1])
+    let data = await getPath(USER_PATH+auth.currentUser.uid).catch(
+        ()=>{
+            throw FirebaseError(ErrorCodes.USER_DATA_NOT_FOUND[0], ErrorCodes.USER_DATA_NOT_FOUND[1])
+        }
+    );
+    data = data.data();
+    if(!data) throw FirebaseError(ErrorCodes.USER_DATA_NOT_FOUND[0], ErrorCodes.USER_DATA_NOT_FOUND[1]);
+
+    let phone = await getPath(PHONE_EMAIL_PATH+auth.currentUser.uid).catch(
+        ()=>{
+            throw FirebaseError(ErrorCodes.USER_DATA_NOT_FOUND[0], ErrorCodes.USER_DATA_NOT_FOUND[1])
+        }
+    );
+    phone = phone.data();
+    if(!phone) throw FirebaseError(ErrorCodes.USER_DATA_NOT_FOUND[0], ErrorCodes.USER_DATA_NOT_FOUND[1])
+    
+    let email = phone.email;
+    if(phone.newEmail){
+        if(phone.newEmail !== phone.email && auth.currentUser.email === phone.newEmail){
+            await updatePathValues(PHONE_EMAIL_PATH+auth.currentUser.uid, {email: phone.newEmail});
+            email = phone.newEmail;
+            
+        }
+    }
 
     let userPath = ref(rtdb, USER_PATH + auth.currentUser.uid);
     let vote = (await get(userPath));
 
-    if(!vote.exists()) return {...data, votedFor: null};
-    return {data, votedFor: vote.votedFor};
+    if(!vote.exists()) return {...data, votedFor: null, phone: phone.phone, email: email};
+    return {data, votedFor: vote.votedFor, phone: phone.phone, email: email};
 }
 
 export async function readDataFromPath(path){
@@ -66,17 +88,21 @@ export async function readDataFromPath(path){
 
 export async function linkPhoneToEmail(phone){
     const userDoc = doc(firestore, USER_PATH + auth.currentUser.uid);
+    const phoneDoc = doc(firestore, PHONE_EMAIL_PATH + auth.currentUser.uid);
 
     // Transactions: Do all or nothing
     await runTransaction(firestore, async (transaction)=>{
-        transaction.update(userDoc, {phone: phone});
+        //transaction.update(userDoc, {phone: parseInt(phone, 10)});
+        transaction.update(phoneDoc, {phone: phone})
         CurrentUser.phone = phone;
+    }).catch(()=>{
+        throw FirebaseError(ErrorCodes.ERROR_LINK_PHONE[0], ErrorCodes.ERROR_LINK_PHONE[1]);
     })
 }
 
 export async function phoneToEmail(number){
-    const usersColl = collection(firestore, USER_PATH);
-    const q1 = query(usersColl, where("phone", "==", parseInt(number, 10)));
+    const usersColl = collection(firestore, PHONE_EMAIL_PATH);
+    const q1 = query(usersColl, where("phone", "==", number));
 
     const phoneCheck = await getDocs(q1);
 
@@ -84,5 +110,4 @@ export async function phoneToEmail(number){
         return phoneCheck.docs[0].data().email;
     }
     return null;
-    
-  }
+}

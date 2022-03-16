@@ -2,7 +2,7 @@ import { auth } from "../../configInit";
 import { ErrorCodes } from "../../const/errorCodes";
 import { CurrentUser, userData } from "../../utils/user";
 import { updatePathValues } from "../firestore/userFuncs";
-import {USER_PATH} from './../../const/firestorePaths';
+import {PHONE_EMAIL_PATH, USER_PATH} from './../../const/firestorePaths';
 s
 /**
  * Updates user info stored in Firestore.
@@ -18,5 +18,8 @@ export function updateUserInfo(data){
     if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
 
     updatePathValues(USER_PATH + auth.currentUser.uid, data);
+    if(CurrentUser.phone !== data.phone)
+        updatePathValues(PHONE_EMAIL_PATH + auth.currentUser.uid, {phone: data.phone});
+    
     CurrentUser.updateInfo(data);
 }
