@@ -81,9 +81,9 @@ export async function getCurrentUserData(){
 
     let userPath = ref(rtdb, USER_PATH + auth.currentUser.uid);
     let vote = (await get(userPath));
-
+    
     if(!vote.exists()) return {...data, votedFor: null, phone: phone.phone, email: email};
-    return {data, votedFor: vote.votedFor, phone: phone.phone, email: email};
+    return {data, votedFor: vote.toJSON().votedFor, phone: phone.phone, email: email};
 }
 
 export async function readDataFromPath(path){
