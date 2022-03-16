@@ -15,36 +15,23 @@ export async function voteForParticipant(pID){
     (CurrentUser.votedFor === undefined) && (CurrentUser.votedFor = null);
     if(CurrentUser.votedFor === pID) return;
 
-    let refNewPart = ref(rtdb, PART_PATH+pID);
-    let userPath = ref(rtdb, USER_PATH+auth.currentUser.uid);
+    let obj = {}
+    obj[USER_PATH+auth.currentUser.uid] = {};
+    obj[PART_PATH+pID] = {};
 
     if(CurrentUser.votedFor != null){ // User is changing vote
-        let refOldPart = ref(rtdb, PART_PATH+CurrentUser.votedFor);
-        await update(refOldPart, {
-            votes: increment(-1)
-        })
+        obj[PART_PATH+CurrentUser.votedFor] = {};
+        obj[PART_PATH+CurrentUser.votedFor].votes = increment(-1);
     }
 
-    if(CurrentUser.votedFor != pID){
-        await update(refNewPart, {
-            votes: increment(1)
+    obj[PART_PATH+pID].votes = increment(1);
+
+    CurrentUser.votedFor = pID;
+    obj[USER_PATH+auth.currentUser.uid].votedFor = CurrentUser.votedFor;
+
+    await update(ref(rtdb), obj)
+        .catch((err) => {
+            console.log(err)
+            throw new FirebaseError(ErrorCodes.VOTE_ERROR[0], ErrorCodes.VOTE_ERROR[1])
         })
-        CurrentUser.votedFor = pID;
-    } else {
-        CurrentUser.votedFor = null;
-    }
-
-    console.log("herde");
-
-
-    await update(userPath, {
-        votedFor: CurrentUser.votedFor
-    })
-
-    // }).catch((err) => {
-    //     console.log(err)
-    //     throw new FirebaseError(ErrorCodes.VOTE_ERROR[0], ErrorCodes.VOTE_ERROR[1])
-    // })
-
-    
 }
