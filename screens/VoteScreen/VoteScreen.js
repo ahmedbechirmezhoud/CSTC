@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet, Text, Image } from "react-native";
 import Background from "../../components/Background/Background";
 import { Card } from 'react-native-elements';
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { InfoContext } from "../../Context/InfoContext";
 import BlueButton from "../../components/BlueButton/BlueButton";
 
