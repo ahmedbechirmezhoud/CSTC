@@ -1,14 +1,11 @@
-import { Dimensions, StyleSheet, Text, Image, View } from "react-native";
+import { Dimensions, StyleSheet, Text, Image } from "react-native";
 import Background from "../../components/Background/Background";
 import { Card } from 'react-native-elements';
-import Event from "../../components/Event";
-import { collection, onSnapshot, query, orderBy, getDocs } from "firebase/firestore";
-import { useEffect, useState, useContext } from "react";
-import { db } from "../../configInit";
+import { useState, useContext } from "react";
 import { InfoContext } from "../../Context/InfoContext";
 import BlueButton from "../../components/BlueButton/BlueButton";
 
-import { CheckBox, Icon } from 'react-native-elements';
+import { CheckBox } from 'react-native-elements';
 import { getParticipantList, voteForParticipant } from "../../services/vote/userFuncs";
 import { CurrentUser } from "../../utils/user";
 
