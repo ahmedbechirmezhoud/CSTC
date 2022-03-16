@@ -5,14 +5,18 @@ import Event from "../../components/Event";
 import { collection, onSnapshot, query, orderBy, getDocs } from "firebase/firestore";
 import { useEffect, useState, useContext } from "react";
 import { db } from "../../configInit";
-import Svg, {Rect} from "react-native-svg";
 import { InfoContext } from "../../Context/InfoContext";
 import BlueButton from "../../components/BlueButton/BlueButton";
+
+import { CheckBox, Icon } from 'react-native-elements';
+
 
 export default function VoteScreen(){
 
     const { dispatchInfo } = useContext(InfoContext);
-
+    const [universities, setUniversities] = useState(["INSAT", "ESPRIT", "MSU"]);
+    const [choosed, setchoosed] = useState(null);
+    const [voted, setVoted] = useState(null);
 
     return(
         <Background>
@@ -22,10 +26,23 @@ export default function VoteScreen(){
                 style={styles.logo}
             />
             <Text style={{ fontSize:12, textAlign: "center" }} >Vote for the best video among</Text>
-            <BlueButton 
-                text="ESPRIT"
-            />
-           
+            { (universities && 
+            (<>
+            {universities.map((university, i) => (
+                <CheckBox
+                key={i}
+                center
+                title={university}
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                containerStyle={ [styles.votebtn, (choosed === university) && styles.selected, (voted === university) && styles.voted ]}
+                textStyle={{ fontWeight:"bold", color:"#fff" }}
+                wrapperStyle={{ alignSelf: "flex-start" }}
+                checked={choosed === university}
+                onPress={() => setchoosed(university)}              
+            />))}
+            <BlueButton text="Vote" style={{ alignSelf: "center", marginTop: Dimensions.get("screen").height/10 }} buttonHandler={() => setVoted(choosed)} />
+            </>))}
             </Card>
         </Background>
     )
@@ -43,10 +60,24 @@ const styles = StyleSheet.create({
         justifyContent:"flex-start"
     },
     logo:{
-        width:Dimensions.get("screen").width/3,
+        height:Dimensions.get("screen").width/3,
         alignSelf: "center",
         resizeMode: "center",
         zIndex:500
     },
+    votebtn:{
+        width:Dimensions.get("screen").width*7/8,
+        backgroundColor:"#9A9A9A",
+        borderRadius: 2,
+    },
+    selected:{
+        borderColor:"#009FF9",
+        backgroundColor:"#009FF9",
+        borderWidth: 4
+    },
+    voted:{
+        backgroundColor:"#192630"
+    }
+    
   });
   

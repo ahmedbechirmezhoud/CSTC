@@ -39,17 +39,22 @@ export default LoginPageScreen = () => {
 	const [passwordInput, setPassowrdInput] = useState("");
 	const [isSecureText, setIsSecureText] = useState(true);
 	const [eyeIcon, setEyeIcon] = useState("eye");
+	const [validEmail, setValidEmail] = useState(true);
+	const [validPassword, setValidPassword] = useState(true);
+
 	const navigation = useNavigation();
 	const {dispatchInfo} = useContext(InfoContext);
 
 	const signUpButtonHandler = () => {
-		Keyboard.dismiss();
-		dispatchInfo({payload : {loading: true}});	
-		loginUser(emailInput, passwordInput)
-		.then(() => dispatchInfo({payload : {loading: false}})	)
-		.catch((error)=> {
-			dispatchInfo({payload : { error}});	
-		})
+		if((validEmail && validPassword)){
+			Keyboard.dismiss();
+			dispatchInfo({payload : {loading: true}});	
+			loginUser(emailInput, passwordInput)
+			.then(() => dispatchInfo({payload : {loading: false}})	)
+			.catch((error)=> {
+				dispatchInfo({payload : { error}});	
+			})
+		}
 
 		
 	};
@@ -65,9 +70,15 @@ export default LoginPageScreen = () => {
 	};
 	const emailInputHandler = (textInput) => {
 		setEmailInput(textInput);
+		(String(textInput)
+		.toLowerCase()
+		.match(
+		  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+		)) ? setValidEmail(true) : setValidEmail(false);
 	};
 	const passwordInputHandler = (textInput) => {
 		setPassowrdInput(textInput);
+		(textInput.length >= 8) ? setValidPassword(true) : setValidPassword(false);
 	};
 	const forgotButtonHandler = () => {
 		Keyboard.dismiss();
@@ -92,7 +103,7 @@ export default LoginPageScreen = () => {
 			<Card title="Local Modules" containerStyle={styles.container} >	
 				<Text style ={{fontSize: 20, fontWeight: "bold"}} >Welcome Back!</Text>
 				<Text style ={{fontSize: 10, fontWeight: "100", marginBottom: 25}} >Memorize it!</Text>	
-				<View style={styles.inputContainer}>
+				<View style={[styles.inputContainer, !validEmail && styles.invalidInput]}>
 					{/*Email Box */}
 					<Entypo
 						name='email'
@@ -110,7 +121,7 @@ export default LoginPageScreen = () => {
 					/>
 				</View>
 
-				<View style={styles.inputContainer}>
+				<View style={[styles.inputContainer, !validPassword && styles.invalidInput ]}>
 					{/*Password Box */}
 					<MaterialIcons
 						name='lock'
@@ -200,6 +211,10 @@ const styles = StyleSheet.create({
 		padding: 10,
 		fontWeight:"bold"
 	},
+	invalidInput:{
+		borderColor: "red",
+		borderWidth: 2
+	}
 
   });
 

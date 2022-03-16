@@ -7,22 +7,31 @@ import { Card } from 'react-native-elements';
 export default ChangeEmail = () => {
 
 	const [emailInput, setEmailInputInput] = useState("");
+	const [validEmail, setValidEmail] = useState(true);
 
 	const emailInputHandler = (textInput) => {
 		setEmailInputInput(textInput);
+		(String(textInput)
+		.toLowerCase()
+		.match(
+		  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+		)) ? setValidEmail(true) : setValidEmail(false);
 	};
 
 	const confirmButtonHandler = () => {
-		Alert.alert(
-			"Done!",
-			"Your Email has changed",
-			[
-				{
-					text: "OK",
-					style: "cancel",
-				},
-			]
-		);
+		if(validEmail){
+			Alert.alert(
+				"Done!",
+				"an Email has been sentd",
+				[
+					{
+						text: "OK",
+						style: "cancel",
+					},
+				]
+			);
+
+		}
 	};
 
 	return (
@@ -35,7 +44,7 @@ export default ChangeEmail = () => {
 			<Card title="Local Modules" containerStyle={styles.container} >				
 					<Text style ={{fontSize: 15, fontWeight: "bold"}} >Forgot your password ?</Text>
 					<Text style ={{fontSize: 10, fontWeight: "100", marginBottom: 25}} >No problem, You’ll receive a mail containing the change password link</Text>
-					<View style={styles.inputContainer}>
+					<View style={[styles.inputContainer, !validEmail && styles.invalidInput]}>
 						<TextInput
 							style={styles.inputBox}
 							placeholder={"Your email"}
@@ -86,5 +95,9 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center"
 
+	},
+	invalidInput:{
+		borderColor: "red",
+		borderWidth: 2
 	}
 });
