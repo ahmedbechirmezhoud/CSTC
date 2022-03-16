@@ -6,16 +6,28 @@ import { InfoContext } from "../../Context/InfoContext";
 import BlueButton from "../../components/BlueButton/BlueButton";
 
 import { CheckBox } from 'react-native-elements';
-import { voteForParticipant } from "../../services/vote/userFuncs";
+import { getParticipantList, voteForParticipant } from "../../services/vote/userFuncs";
 
 
 export default function VoteScreen(){
 
     const { dispatchInfo } = useContext(InfoContext);
-    const [universities, setUniversities] = useState(["INSAT", "ESPRIT", "MSU"]);
+    const [universities, setUniversities] = useState([]); // ["INSAT", "ESPRIT", "MSU"]
     const [choosed, setchoosed] = useState(null);
     const [voted, setVoted] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    useEffect(()=>{
+        getParticipantList()
+            .then((arr)=>{
+                setUniversities(arr);
+            })
+            .catch(error => {
+                dispatchInfo({ payload : { error } });
+                console.log(error);
+                setLoading(false);
+            });
+    }, [])
 
     const handleSubmit = () => {
         setLoading(true);

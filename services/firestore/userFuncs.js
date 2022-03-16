@@ -76,7 +76,6 @@ export async function getCurrentUserData(){
         if(phone.newEmail !== phone.email && auth.currentUser.email === phone.newEmail){
             await updatePathValues(PHONE_EMAIL_PATH+auth.currentUser.uid, {email: phone.newEmail});
             email = phone.newEmail;
-            
         }
     }
 
@@ -93,7 +92,7 @@ export async function readDataFromPath(path){
 }
 
 export async function linkPhoneToEmail(phone){
-    const userDoc = doc(firestore, USER_PATH + auth.currentUser.uid);
+    //const userDoc = doc(firestore, USER_PATH + auth.currentUser.uid);
     const phoneDoc = doc(firestore, PHONE_EMAIL_PATH + auth.currentUser.uid);
 
     // Transactions: Do all or nothing

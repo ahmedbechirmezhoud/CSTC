@@ -1,5 +1,5 @@
 import { FirebaseError } from 'firebase/app';
-import { increment, ref, update } from 'firebase/database';
+import { increment, ref, update, get } from 'firebase/database';
 import { rtdb, auth } from '../../configInit';
 import { ErrorCodes } from '../../const/errorCodes';
 import {USER_PATH, PART_PATH} from './../../const/firestorePaths';
@@ -34,4 +34,19 @@ export async function voteForParticipant(pID){
             console.log(err)
             throw new FirebaseError(ErrorCodes.VOTE_ERROR[0], ErrorCodes.VOTE_ERROR[1])
         })
+}
+
+export async function getParticipantList(){
+    if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
+
+    let partPath = ref(rtdb, PART_PATH);
+    let data = await get(partPath).catch(()=>{
+        throw new FirebaseError(ErrorCodes.UNABLE_TO_FETCH_TEAMS[0], ErrorCodes.UNABLE_TO_FETCH_TEAMS[1]);
+    });
+    let JSONObj = data.toJSON();
+
+    if(JSONObj){
+        return Object.keys(JSONObj);
+    }
+    return [];
 }
