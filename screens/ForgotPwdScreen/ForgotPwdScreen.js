@@ -1,14 +1,16 @@
 import { View, StyleSheet, TextInput,Alert, Image, Text, Dimensions } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Background from "../../components/Background/Background";
 import BlueButton from "../../components/BlueButton/BlueButton";
 import { Card } from 'react-native-elements';
+import { resetUserPassword } from "../../services/account/accountService";
+import { InfoContext } from "../../Context/InfoContext";
 
 export default ChangeEmail = () => {
 
 	const [emailInput, setEmailInputInput] = useState("");
 	const [validEmail, setValidEmail] = useState(true);
-
+	const { dispatchInfo } = useContext(InfoContext);
 	const emailInputHandler = (textInput) => {
 		setEmailInputInput(textInput);
 		(String(textInput)
@@ -20,17 +22,21 @@ export default ChangeEmail = () => {
 
 	const confirmButtonHandler = () => {
 		if(validEmail){
-			Alert.alert(
-				"Done!",
-				"an Email has been sentd",
-				[
-					{
-						text: "OK",
-						style: "cancel",
-					},
-				]
-			);
-
+			resetUserPassword(emailInput)
+				.then(() => {
+				Alert.alert(
+					"Done!",
+					"a Verification Email has been sent to " + emailInput,
+					[
+						{
+							text: "OK",
+							style: "cancel",
+						},
+					]
+				);}
+				)
+				.catch((e) => dispatchInfo({ payload : { error : e } }) )
+			
 		}
 	};
 

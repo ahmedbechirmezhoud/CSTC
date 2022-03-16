@@ -9,6 +9,7 @@ import { InfoContext } from "../../Context/InfoContext";
 import BlueButton from "../../components/BlueButton/BlueButton";
 
 import { CheckBox, Icon } from 'react-native-elements';
+import { voteForParticipant } from "../../services/vote/userFuncs";
 
 
 export default function VoteScreen(){
@@ -17,6 +18,22 @@ export default function VoteScreen(){
     const [universities, setUniversities] = useState(["INSAT", "ESPRIT", "MSU"]);
     const [choosed, setchoosed] = useState(null);
     const [voted, setVoted] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = () => {
+        setLoading(true);
+        voteForParticipant(choosed)
+            .then(() => {
+                setVoted(choosed);
+                setLoading(false);
+            })
+            .catch(error => {
+                dispatchInfo({ payload : { error } });
+                console.log(error);
+                setLoading(false);
+            } )
+        
+    }
 
     return(
         <Background>
@@ -41,7 +58,7 @@ export default function VoteScreen(){
                 checked={choosed === university}
                 onPress={() => setchoosed(university)}              
             />))}
-            <BlueButton text="Vote" style={{ alignSelf: "center", marginTop: Dimensions.get("screen").height/10 }} buttonHandler={() => setVoted(choosed)} />
+            <BlueButton text="Vote" disabled={loading} style={{ alignSelf: "center", marginTop: Dimensions.get("screen").height/10 }} buttonHandler={handleSubmit} />
             </>))}
             </Card>
         </Background>

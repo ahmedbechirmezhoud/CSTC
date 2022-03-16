@@ -1,25 +1,32 @@
 import { StyleSheet, Alert, Image, Text, Dimensions } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Background from "../../../components/Background/Background";
 import BlueButton from "../../../components/BlueButton/BlueButton";
 import { Card } from 'react-native-elements';
 import PasswordInput from "../../../components/PasswordInput";
 import { updateUserPassword } from "../../../services/account/accountService";
+import { InfoContext } from "../../../Context/InfoContext";
 
 export default ChangePwd = () => {
 
 	const [passwordInput, setPassowrdInput] = useState("");
 	const [currPass, setCurrPass ] = useState('');
 	const [confPass, setConfPass ] = useState('');
+	const { dispatchInfo } = useContext(InfoContext);
 
 	isValid = (password) => password.length >= 8 
 
 	const confirmButtonHandler = () => {
 		if(isValid(passwordInput) && isValid(currPass) && isValid(confPass) ){
-			updateUserPassword(passwordInput)
-			Alert.alert(
+			let done = false;
+			try{
+				done = updateUserPassword(currPass, passwordInput);
+			}catch(error){
+				dispatchInfo({ payload : {error} });
+			}
+			done && Alert.alert(
 				"Done!",
-				"Your password has changed",
+				"Your password has been changed",
 				[
 					{
 						text: "OK",

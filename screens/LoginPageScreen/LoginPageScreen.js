@@ -102,7 +102,7 @@ export default LoginPageScreen = () => {
 					/>
 					<TextInput
 						style={styles.inputBox}
-						placeholder={"E-mail"}
+						placeholder={"E-mail or phone"}
 						placeholderTextColor='#507686'
 						keyboardType='email-address'
 						onChangeText={emailInputHandler}

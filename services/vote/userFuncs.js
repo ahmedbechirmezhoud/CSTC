@@ -12,13 +12,15 @@ import { CurrentUser } from '../../utils/user';
  */
 export async function voteForParticipant(pID){
     if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
+    (CurrentUser.votedFor === undefined) && (CurrentUser.votedFor = null);
     if(CurrentUser.votedFor === pID) return;
 
     let refNewPart = ref(rtdb, PART_PATH+pID);
     let userPath = ref(rtdb, USER_PATH+auth.currentUser.uid);
-    
+
     // Transaction : Do all or nothing
-    await runTransaction(rtdb, ()=>{
+
+    await runTransaction(refNewPart, async () => {
         if(CurrentUser.votedFor != null){ // User is changing vote
             let refOldPart = ref(rtdb, PART_PATH+CurrentUser.votedFor);
             await update(refOldPart, {
@@ -39,6 +41,7 @@ export async function voteForParticipant(pID){
             votedFor: CurrentUser.votedFor
         })
     }).catch((err) => {
+        console.log(err)
         throw new FirebaseError(ErrorCodes.VOTE_ERROR[0], ErrorCodes.VOTE_ERROR[1])
     })
 

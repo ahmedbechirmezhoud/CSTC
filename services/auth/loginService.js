@@ -16,7 +16,8 @@ import {
   getCurrentUserData,
   initCurrentUser,
   isCurrentUserInited,
-  phoneToEmail
+  phoneToEmail,
+  updatePathValues
 } from '../firestore/userFuncs';
 import { CurrentUser } from '../../utils/user';
 import { ErrorCodes } from '../../const/errorCodes';
@@ -26,7 +27,7 @@ import { updateNotificationToken } from '../account/accountService';
 import { errorHandler } from '../exceptionHandler';
 import { isPhoneNumber, isValidPhoneNumber } from '../../utils/verification/phoneNumber';
 import { isValidEmail } from '../../utils/verification/emailAddress';
-
+import { USER_PATH } from "../../const/firestorePaths";
 
 /**
  * Logins a user using an identifier & a password.
@@ -114,6 +115,7 @@ export async function signinWithEmail(email, password) {
  * @public
  */
 export async function signOut(){
+  updatePathValues(USER_PATH + auth.currentUser.uid, { notificationToken: null } );
   await firebaseSignOut(auth).catch(errorHandler);
   CurrentUser.logout();
   return true;
