@@ -2,7 +2,8 @@ import { auth } from "../../configInit";
 import { ErrorCodes } from "../../const/errorCodes";
 import { CurrentUser, userData } from "../../utils/user";
 import { updatePathValues } from "../firestore/userFuncs";
-
+import {USER_PATH} from './../../const/firestorePaths';
+s
 /**
  * Updates user info stored in Firestore.
  * This consumes 1 write only.

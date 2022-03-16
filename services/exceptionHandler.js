@@ -1,3 +1,6 @@
+import { FirebaseError } from "firebase/app";
+import { ErrorCodes } from "../const/errorCodes";
+
 export function errorHandler(err){
     if(err instanceof FirebaseError){
         switch(err.code){
@@ -28,5 +31,6 @@ export function errorHandler(err){
         }
         throw err;
     }
+    console.log(err)
     throw new FirebaseError(ErrorCodes.UNKNOWN_ERROR[0], ErrorCodes.UNKNOWN_ERROR[1]);
 }

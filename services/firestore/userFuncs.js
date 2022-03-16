@@ -1,9 +1,11 @@
-import { auth, firestore } from './../../configInit'; // Init config
+import { auth, firestore, rtdb } from './../../configInit'; // Init config
 import { setDoc, doc, getDocFromServer, runTransaction, updateDoc, collection, where, query, getDoc, getDocs } from 'firebase/firestore';
 import { FirebaseError } from '@firebase/util';
 import { ErrorCodes } from '../../const/errorCodes';
+import {USER_PATH} from './../../const/firestorePaths';
 import { CurrentUser, userData } from '../../utils/user';
 import { registerForPushNotificationsAsync } from '../Notification';
+import { ref, get } from 'firebase/database';
 
 
 export async function getPath(path){
@@ -48,9 +50,13 @@ export async function getCurrentUserData(){
     if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
 
     data = (await getPath(USER_PATH+auth.currentUser.uid)).data();
-    if(!data) throw FirebaseError(ErrorCodes.UNKNOWN_ERROR[0], ErrorCodes.UNKNOWN_ERROR[1])
-  
-    return data;
+    if(!data) throw FirebaseError(ErrorCodes.USER_DATA_NOT_FOUND[0], ErrorCodes.USER_DATA_NOT_FOUND[1])
+
+    let userPath = ref(rtdb, USER_PATH + auth.currentUser.uid);
+    let vote = (await get(userPath));
+
+    if(!vote.exists()) return {...data, votedFor: null};
+    return {data, votedFor: vote.votedFor};
 }
 
 export async function readDataFromPath(path){

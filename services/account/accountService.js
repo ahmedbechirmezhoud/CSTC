@@ -13,6 +13,7 @@ import {
 } from '../firestore/userFuncs';
 import { CurrentUser } from '../../utils/user';
 import { ErrorCodes } from '../../const/errorCodes';
+import {USER_PATH} from './../../const/firestorePaths';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../configInit';
 import { registerForPushNotificationsAsync } from '../Notification';
