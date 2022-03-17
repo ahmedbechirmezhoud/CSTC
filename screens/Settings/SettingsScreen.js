@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Alert, StyleSheet, Dimensions, Text } from "react-native";
 import { Card } from 'react-native-elements';
 
@@ -10,7 +10,8 @@ import SvgQRCode from "react-native-qrcode-svg";
 import { CurrentUser } from "../../utils/user";
 import { signOut } from "../../services/auth/loginService";
 import { useNavigation } from "@react-navigation/native";
-
+import { signinWithFacebook } from "../../services/auth/loginService";
+import { InfoContext } from "../../Context/InfoContext";
 
 
 const QRCode1 = () => {
@@ -19,6 +20,8 @@ const QRCode1 = () => {
 
 export default SettingsScreen = () => {
 	const navigation = useNavigation();
+	const {dispatchInfo} = useContext(InfoContext);
+
 	const signOutButtonHandler = () => {
 		Alert.alert("Are you sure that you want to sign out?", "", [
 			{
@@ -43,11 +46,11 @@ export default SettingsScreen = () => {
 	const changePwdButtonHandler = () => {
 		navigation.navigate("ChangePwd");
 	};
-	const updatePorfileButtonHandler = () => {
-		navigation.navigate("UpdateProfile");
-	};
     const signUpFBHandler = () => {
-		
+		signinWithFacebook().catch((error)=> {
+			dispatchInfo({payload : {error}});	
+		})
+
 	};
 
 	generateBoxShadowStyle(-2, 4, '#171717', 0.2, 3, 4, '#171717');
@@ -84,6 +87,7 @@ export default SettingsScreen = () => {
 				<BlueButton
 					text={"SignOut"}
 					buttonHandler={signOutButtonHandler}
+					style= {{  backgroundColor: "#FF3333" }}
 				/>
 
 			</Card>

@@ -17,23 +17,25 @@ export default ChangePwd = () => {
 	isValid = (password) => password.length >= 8 
 
 	const confirmButtonHandler = () => {
-		if(isValid(passwordInput) && isValid(currPass) && isValid(confPass) ){
+		if(isValid(passwordInput) && isValid(currPass) && isValid(confPass) && (confPass === passwordInput) ){
 			let done = false;
 			try{
 				done = updateUserPassword(currPass, passwordInput);
 			}catch(error){
 				dispatchInfo({ payload : {error} });
 			}
-			done && Alert.alert(
-				"Done!",
-				"Your password has been changed",
-				[
-					{
-						text: "OK",
-						style: "cancel",
-					},
-				]
-			);
+			if(done){
+				Alert.alert(
+					"Done!",
+					"Your password has been changed",
+					[
+						{
+							text: "OK",
+							style: "cancel",
+						},
+					]
+				);
+			}
 		};
 		}
 
