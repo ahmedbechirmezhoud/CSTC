@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
-import {USER_PATH}  from './../const/firestorePaths';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBQH0riI5e09XX-pEcjvhCMAQEz2gvhDMY",
@@ -20,10 +19,13 @@ const db = getFirestore();
 export async function getTokens(){
   let PushTokens = [];
   
-  const querySnapshot = await getDocs(collection(db, USER_PATH));
+  const querySnapshot = await getDocs(collection(db, "users/"));
 
   querySnapshot.forEach((doc) => {
-    PushTokens.push(doc.data()?.notificationToken);
+    if(doc.data()?.notificationToken){
+      PushTokens.push(doc.data()?.notificationToken);
+      console.log("sending to " + doc.data()?.name);
+    }
   });
 
   return PushTokens;

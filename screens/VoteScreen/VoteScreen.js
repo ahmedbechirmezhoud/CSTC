@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet, Text, Image } from "react-native";
 import Background from "../../components/Background/Background";
 import { Card } from 'react-native-elements';
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { InfoContext } from "../../Context/InfoContext";
 import BlueButton from "../../components/BlueButton/BlueButton";
 
@@ -12,7 +12,7 @@ import { getParticipantList, voteForParticipant } from "../../services/vote/user
 export default function VoteScreen(){
 
     const { dispatchInfo } = useContext(InfoContext);
-    const [universities, setUniversities] = useState([]); // ["INSAT", "ESPRIT", "MSU"]
+    const [universities, setUniversities] = useState([]);
     const [choosed, setchoosed] = useState(null);
     const [voted, setVoted] = useState(null);
     const [loading, setLoading] = useState(false);
