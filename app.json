@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#001c31"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,8 +24,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#001c31"
       },
       "package": "com.ieee.cstc",
       "googleServicesFile": "./google-services.json",
@@ -49,12 +49,9 @@
       [
         "expo-notifications",
         {
-          "icon": "./local/assets/notification-icon.png",
+          "icon": "./assets/icon.png",
           "color": "#ffffff",
-          "sounds": [
-            "./local/assets/notification-sound.wav",
-            "./local/assets/notification-sound-other.wav"
-          ]
+          "mode": "production"
         }
       ]
     ]

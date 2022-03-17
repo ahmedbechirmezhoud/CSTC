@@ -5,7 +5,7 @@ import styles from "./BlueButtonStyles"
 const BlueButton = (props) => {
 
     return (
-        <TouchableOpacity style={{...styles.signInButton,...props.style}} onPress={props.buttonHandler}>
+        <TouchableOpacity style={{...styles.signInButton,...props.style}} onPress={props.buttonHandler} disabled={props.disabled} >
             <Text style={styles.signInButtonText}>{props.text}</Text>
         </TouchableOpacity>
     );

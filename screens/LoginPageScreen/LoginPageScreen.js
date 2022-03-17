@@ -1,51 +1,49 @@
 import React, { useContext, useState } from "react";
 import {
 	View,
-	Alert,
 	TextInput,
-	TouchableOpacity,
+	Image,
 	Keyboard,
+	StyleSheet,
+	Dimensions,
+	Text
 } from "react-native";
+import { Card } from 'react-native-elements';
 
-import { Entypo, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+import { Entypo, MaterialIcons } from "@expo/vector-icons";
 
-import GradientBackground from "../../components/GradientBackground/GradientBackground";
+import Background from "../../components/Background/Background";
 import { signinWithFacebook, loginUser } from "../../services/auth/loginService";
 import { useNavigation } from "@react-navigation/core";
-import { CurrentUser } from "../../utils/user";
 
 import BlueButton from "../../components/BlueButton/BlueButton";
-import FacebookLoginButton from "../../components/FacebookLogin/FacebookLogin";
 import SimpleTextButton from "../../components/SimpleTextButton/SimpleTextButton.js";
 import Seperator from "../../components/Seperator/Seperator";
-import styles from "./LoginPageStyles";
 import { InfoContext } from "../../Context/InfoContext";
 
-const IncorrectPasswordPopup = () =>
-	Alert.alert(
-		"Please try again...",
-		"The email and password you entered did not match our records. Please try again.",
-		[{ text: "OK", style: "cancel" }]
-	);
 
-
-
-const CreateAccountButtonHandler = () => {};
 
 export default LoginPageScreen = () => {
 	const [emailInput, setEmailInput] = useState("");
 	const [passwordInput, setPassowrdInput] = useState("");
 	const [isSecureText, setIsSecureText] = useState(true);
 	const [eyeIcon, setEyeIcon] = useState("eye");
+	const [validEmail, setValidEmail] = useState(true);
+	const [validPassword, setValidPassword] = useState(true);
+
 	const navigation = useNavigation();
-	const {info, dispatchInfo} = useContext(InfoContext);
+	const {dispatchInfo} = useContext(InfoContext);
 
 	const signUpButtonHandler = () => {
-		Keyboard.dismiss();
-
-		loginUser(emailInput, passwordInput).catch((error)=> {
-			dispatchInfo({payload : {error}});	
-		})
+		if((validEmail && validPassword)){
+			Keyboard.dismiss();
+			dispatchInfo({payload : {loading: true}});	
+			loginUser(emailInput, passwordInput)
+			.then(() => dispatchInfo({payload : {loading: false}})	)
+			.catch((error)=> {
+				dispatchInfo({payload : { error}});	
+			})
+		}
 
 		
 	};
@@ -61,9 +59,15 @@ export default LoginPageScreen = () => {
 	};
 	const emailInputHandler = (textInput) => {
 		setEmailInput(textInput);
+		(String(textInput)
+		.toLowerCase()
+		.match(
+		  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+		)) ? setValidEmail(true) : setValidEmail(false);
 	};
 	const passwordInputHandler = (textInput) => {
 		setPassowrdInput(textInput);
+		(textInput.length >= 8) ? setValidPassword(true) : setValidPassword(false);
 	};
 	const forgotButtonHandler = () => {
 		Keyboard.dismiss();
@@ -79,10 +83,16 @@ export default LoginPageScreen = () => {
 	};
 
 	return (
-		<GradientBackground>
-			<FontAwesome5 name='react' size={80} color='white' />
-			<View style={styles.inputContainers}>
-				<View style={styles.inputContainer}>
+		<Background>
+			<Image
+                source={require('../../assets/logo-name-slogan.png')}
+                style={styles.logo}
+            />
+
+			<Card title="Local Modules" containerStyle={styles.container} >	
+				<Text style ={{fontSize: 20, fontWeight: "bold"}} >Welcome Back!</Text>
+				<Text style ={{fontSize: 10, fontWeight: "100", marginBottom: 25}} >Memorize it!</Text>	
+				<View style={[styles.inputContainer, !validEmail && styles.invalidInput]}>
 					{/*Email Box */}
 					<Entypo
 						name='email'
@@ -92,7 +102,7 @@ export default LoginPageScreen = () => {
 					/>
 					<TextInput
 						style={styles.inputBox}
-						placeholder={"E-mail"}
+						placeholder={"E-mail or phone"}
 						placeholderTextColor='#507686'
 						keyboardType='email-address'
 						onChangeText={emailInputHandler}
@@ -100,7 +110,7 @@ export default LoginPageScreen = () => {
 					/>
 				</View>
 
-				<View style={styles.inputContainer}>
+				<View style={[styles.inputContainer, !validPassword && styles.invalidInput ]}>
 					{/*Password Box */}
 					<MaterialIcons
 						name='lock'
@@ -126,25 +136,74 @@ export default LoginPageScreen = () => {
 				</View>
 
 				<SimpleTextButton
+					style={{ color: "#000", textDecorationLine: "underline"}}
 					text='Forgot password?'
 					onPress={forgotButtonHandler}
 				/>
-			</View>
 
 			<BlueButton text={"Sign in"} buttonHandler={signUpButtonHandler} />
 
 			<Seperator />
 
-			<FacebookLoginButton
+			<BlueButton
 				text={"Sign in with Facebook"}
-				onPress={SigninFBHandler}
+				buttonHandler={SigninFBHandler}
 			/>
+			</Card>
 
-			<SimpleTextButton
-				text='Create an account'
-				onPress={() => navigation.navigate("Register")}
-				style={{ marginVertical: 16 }}
-			/>
-		</GradientBackground>
+		</Background>
 	);
 };
+
+
+
+
+const styles = StyleSheet.create({
+    container:{
+        borderRadius: 20,
+        width: Dimensions.get("screen").width-50,
+        height:Dimensions.get("screen").height/1.7,
+        display:"flex",
+        flexDirection: "column",
+        alignItems:"center",
+        justifyContent:"flex-start",
+    },
+    logo:{
+        width:"70%",
+        resizeMode: "contain",
+        
+    },
+	loginContainer: {
+		justifyContent: "center",
+		alignItems: "center",
+		flex: 1,
+	},
+	inputContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		width: "100%",
+		backgroundColor: "#F8F8F8",
+		borderColor: "#A8A8A8",
+		borderWidth: 1,
+		borderRadius: 10,
+		marginVertical: 10,
+		alignSelf: "center"
+	},
+	inputIcon: {
+		marginLeft: 10,
+	},
+	inputBox: {
+		flex: 1,
+		width:"60%",
+		color: "#525252",
+		fontSize: 16,
+		padding: 10,
+		fontWeight:"bold"
+	},
+	invalidInput:{
+		borderColor: "red",
+		borderWidth: 2
+	}
+
+  });
+

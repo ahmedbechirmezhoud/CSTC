@@ -5,37 +5,29 @@ import { registerForPushNotificationsAsync } from "./services/Notification";
 import { useEffect, useState, useRef, useContext } from 'react';
 import { LogBox } from 'react-native'; 
 
-import ErrorModal from './screens/ErrorModal';
-import {setJSExceptionHandler} from 'react-native-exception-handler';
 import { InfoProvider } from './Context/InfoContext';
 import * as Notifications from 'expo-notifications';
-
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
   }),
 });
 
 export default function App() {
 
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState(false);
-  const [error, setError] = useState(null);
   const notificationListener = useRef();
   const responseListener = useRef();
 
+
   useEffect(() => {
 
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {});
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-    });
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {});
+    
 
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);
@@ -44,18 +36,11 @@ export default function App() {
   }, []);
 
 
-  setJSExceptionHandler((error, isFatal) => {
-    setError(error);
-  });
-
 
   return (
     <InfoProvider>
       <SafeAreaProvider>
-          
-          { /*info?.error && <ErrorModal error={info?.error} setModalVisible={setError} /> */ }
-          <Navigator />
-          
+          <Navigator />        
         <StatusBar />
       </SafeAreaProvider>
     </InfoProvider>

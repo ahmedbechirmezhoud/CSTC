@@ -18,14 +18,14 @@ model = cv2.imread('model.jpg') # Todo: Replace test model
 users = auth.list_users(app=app)
 while users:
     for user in users.users:
-        if user.display_name is None:
-            print('[!] User ID: {0} have no display name!'.format(user.uid))
-            continue
-
         userDoc = usersDoc.document(user.uid)
         userData = userDoc.get().to_dict()
         
         if userData['paidFee'] == False:
+            continue
+
+        if userData['name'] is None or userData['name'] == '':
+            print('[!] User ID: {0} have no display name!'.format(user.uid))
             continue
 
         print('[*] Created image for {0} (ID: {1})'.format(user.email, user.uid))

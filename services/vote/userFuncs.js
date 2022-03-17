@@ -1,36 +1,60 @@
 import { FirebaseError } from 'firebase/app';
-import { increment, ref, onValue, set, runTransaction, get, update, goOnline, goOffline } from 'firebase/database';
+import { increment, ref, update, get, goOffline, goOnline } from 'firebase/database';
 import { rtdb, auth } from '../../configInit';
 import { ErrorCodes } from '../../const/errorCodes';
+import {USER_PATH, PART_PATH} from './../../const/firestorePaths';
 import { CurrentUser } from '../../utils/user';
-import { updatePathValues } from '../firestore/userFuncs';
 
 /**
  * Adds a vote for the current logged in user, changes the vote if already voted.
- * Removes vote if already voted to pID.
  * 
  * @param {String} pID - The participant ID to be voted for
  */
 export async function voteForParticipant(pID){
-    //if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN, "Not logged in");
+    if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
+    (CurrentUser.votedFor === undefined) && (CurrentUser.votedFor = null);
+    if(CurrentUser.votedFor === pID) return;
 
-    let refNewPart = ref(rtdb, "participants/"+pID);
-    
-    if(CurrentUser.votedFor != null){
-        let refOldPart = ref(rtdb, "participants/"+CurrentUser.votedFor);
-        await update(refOldPart, {
-            votes: increment(-1)
-        })
+    let obj = {}
+    obj[USER_PATH+auth.currentUser.uid] = {};
+    obj[PART_PATH+pID] = {};
+
+    if(CurrentUser.votedFor != null){ // User is changing vote
+        obj[PART_PATH+CurrentUser.votedFor] = {};
+        obj[PART_PATH+CurrentUser.votedFor].votes = increment(-1);
     }
 
-    if(CurrentUser.votedFor != pID){
-        await update(refNewPart, {
-            votes: increment(1)
-        })
-        CurrentUser.votedFor = pID;
-    } else {
-        CurrentUser.votedFor = null;
+    obj[PART_PATH+pID].votes = increment(1);
+
+    CurrentUser.votedFor = pID;
+    obj[USER_PATH+auth.currentUser.uid].votedFor = CurrentUser.votedFor;
+
+    goOnline(rtdb);
+    await update(ref(rtdb), obj)
+        .catch((err) => {
+            console.log(err);
+            goOffline(rtdb);
+            throw new FirebaseError(ErrorCodes.VOTE_ERROR[0], ErrorCodes.VOTE_ERROR[1])
+        });
+    goOffline(rtdb);
+}
+
+export async function getParticipantList(){
+    if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
+
+    goOnline(rtdb);
+    let partPath = ref(rtdb, PART_PATH);
+    let data = await get(partPath)
+        .catch(()=>{
+            goOffline(rtdb);
+            throw new FirebaseError(ErrorCodes.UNABLE_TO_FETCH_TEAMS[0], ErrorCodes.UNABLE_TO_FETCH_TEAMS[1]);
+        });
+    goOffline(rtdb);
+    console.log(data);
+    let JSONObj = data.toJSON();
+
+    if(JSONObj){
+        return Object.keys(JSONObj);
     }
-    
-    updatePathValues("users/" + auth.currentUser.uid, {votedFor: CurrentUser.votedFor});
+    return [];
 }

@@ -13,18 +13,17 @@ export default function ErrorModal(){
         transparent={true}
         visible={info?.error != null}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
           dispatchInfo({payload : {error : null}});
         }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>{info.error?.message}</Text>
+            <Text style={styles.modalText}>{info.error?.message} <Text style={{ fontSize:10, fontWeight:"100" }} >{ '\n' + "if the error lasted long, please contact the IT team" }</Text> </Text>
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() =>  dispatchInfo({payload : {error : null}})}
             >
-              <Text style={styles.textStyle}>Hide Modal</Text>
+              <Text style={styles.textStyle}>Close</Text>
             </Pressable>
           </View>
         </View>
@@ -43,7 +42,7 @@ const styles = StyleSheet.create({
     modalView: {
       margin: 20,
       backgroundColor: "white",
-      borderRadius: 20,
+      borderRadius: 4,
       padding: 35,
       alignItems: "center",
       shadowColor: "#000",
@@ -56,7 +55,7 @@ const styles = StyleSheet.create({
       elevation: 5
     },
     button: {
-      borderRadius: 20,
+      borderRadius: 4,
       padding: 10,
       elevation: 2
     },
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
       backgroundColor: "#F194FF",
     },
     buttonClose: {
-      backgroundColor: "#2196F3",
+      backgroundColor: "#14212E",
     },
     textStyle: {
       color: "white",
@@ -73,7 +72,8 @@ const styles = StyleSheet.create({
     },
     modalText: {
       marginBottom: 15,
-      textAlign: "center"
+      textAlign: "left",
+      fontWeight: "bold"
     }
   });
   
