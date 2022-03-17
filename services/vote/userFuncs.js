@@ -1,5 +1,5 @@
 import { FirebaseError } from 'firebase/app';
-import { increment, ref, update, get } from 'firebase/database';
+import { increment, ref, update, get, goOffline, goOnline } from 'firebase/database';
 import { rtdb, auth } from '../../configInit';
 import { ErrorCodes } from '../../const/errorCodes';
 import {USER_PATH, PART_PATH} from './../../const/firestorePaths';
@@ -29,20 +29,28 @@ export async function voteForParticipant(pID){
     CurrentUser.votedFor = pID;
     obj[USER_PATH+auth.currentUser.uid].votedFor = CurrentUser.votedFor;
 
+    goOnline(rtdb);
     await update(ref(rtdb), obj)
         .catch((err) => {
-            console.log(err)
+            console.log(err);
+            goOffline(rtdb);
             throw new FirebaseError(ErrorCodes.VOTE_ERROR[0], ErrorCodes.VOTE_ERROR[1])
-        })
+        });
+    goOffline(rtdb);
 }
 
 export async function getParticipantList(){
     if(!auth.currentUser) throw new FirebaseError(ErrorCodes.NOT_LOGGED_IN[0], ErrorCodes.NOT_LOGGED_IN[1]);
 
+    goOnline(rtdb);
     let partPath = ref(rtdb, PART_PATH);
-    let data = await get(partPath).catch(()=>{
-        throw new FirebaseError(ErrorCodes.UNABLE_TO_FETCH_TEAMS[0], ErrorCodes.UNABLE_TO_FETCH_TEAMS[1]);
-    });
+    let data = await get(partPath)
+        .catch(()=>{
+            goOffline(rtdb);
+            throw new FirebaseError(ErrorCodes.UNABLE_TO_FETCH_TEAMS[0], ErrorCodes.UNABLE_TO_FETCH_TEAMS[1]);
+        });
+    goOffline(rtdb);
+    console.log(data);
     let JSONObj = data.toJSON();
 
     if(JSONObj){

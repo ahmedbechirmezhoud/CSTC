@@ -5,7 +5,7 @@ import { ErrorCodes } from '../../const/errorCodes';
 import { USER_PATH, PHONE_EMAIL_PATH } from './../../const/firestorePaths';
 import { CurrentUser, userData } from '../../utils/user';
 import { registerForPushNotificationsAsync } from '../Notification';
-import { ref, get } from 'firebase/database';
+import { ref, get, goOnline, goOffline } from 'firebase/database';
 import { signOut } from '../auth/loginService';
 
 
@@ -79,11 +79,13 @@ export async function getCurrentUserData(){
         }
     }
 
+    goOnline(rtdb);
     let userPath = ref(rtdb, USER_PATH + auth.currentUser.uid);
     let vote = (await get(userPath));
-
+    goOffline(rtdb);
+    
     if(!vote.exists()) return {...data, votedFor: null, phone: phone.phone, email: email};
-    return {data, votedFor: vote.votedFor, phone: phone.phone, email: email};
+    return {data, votedFor: vote.toJSON().votedFor, phone: phone.phone, email: email};
 }
 
 export async function readDataFromPath(path){

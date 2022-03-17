@@ -7,6 +7,7 @@ import BlueButton from "../../components/BlueButton/BlueButton";
 
 import { CheckBox } from 'react-native-elements';
 import { getParticipantList, voteForParticipant } from "../../services/vote/userFuncs";
+import { CurrentUser } from "../../utils/user";
 
 
 export default function VoteScreen(){
@@ -14,10 +15,11 @@ export default function VoteScreen(){
     const { dispatchInfo } = useContext(InfoContext);
     const [universities, setUniversities] = useState([]);
     const [choosed, setchoosed] = useState(null);
-    const [voted, setVoted] = useState(null);
+    const [voted, setVoted] = useState(CurrentUser.votedFor);
     const [loading, setLoading] = useState(false);
 
     useEffect(()=>{
+        console.log(CurrentUser.votedFor)
         getParticipantList()
             .then((arr)=>{
                 setUniversities(arr);
