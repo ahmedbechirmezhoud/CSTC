@@ -22,15 +22,34 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'; 
 import LoadingScreen from "../screens/LoadingScreen"
+import { CurrentUser } from '../utils/user';
+import { getCurrentUserData } from '../services/firestore/userFuncs';
+import { errorHandler } from '../services/exceptionHandler';
 
 export default function Navigator() {
 
 
   const [user, setUser] = useState(undefined);
   const [loading, setLoading] = useState(true);
-  auth.onAuthStateChanged(() => {
-     setUser(auth.currentUser);
-  });
+  auth.onAuthStateChanged(async (currUser) => {
+    if(!currUser) return setUser(currUser);
+
+    if(currUser.uid !== CurrentUser.uid){
+        try{
+          let userInfo = await getCurrentUserData().catch(errorHandler); // Handle error msg
+
+          CurrentUser.loginJson(
+              {
+              uid: currUser.uid, 
+              ...userInfo
+              }
+          );
+        }catch(error){
+            dispatchInfo({payload : {error}}) // Display error msg
+        }
+    }
+    setUser(currUser);
+});
 
   useEffect(() =>{
     (!((user)===undefined)) && setLoading(false);
