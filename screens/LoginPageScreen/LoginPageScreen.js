@@ -91,7 +91,7 @@ export default LoginPageScreen = () => {
 
 			<Card title="Local Modules" containerStyle={styles.container} >	
 				<Text style ={{fontSize: 20, fontWeight: "bold"}} >Welcome Back!</Text>
-				<Text style ={{fontSize: 10, fontWeight: "100", marginBottom: 25}} >Memorize it!</Text>	
+				<Text style ={{fontSize: 10, fontWeight: "100", marginBottom: 25}} >The IT Team wish you a great experience⚡</Text>	
 				<View style={[styles.inputContainer, !validEmail && styles.invalidInput]}>
 					{/*Email Box */}
 					<Entypo

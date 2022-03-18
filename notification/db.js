@@ -16,10 +16,21 @@ initializeApp(firebaseConfig);
 const db = getFirestore();
 
 
-export async function getTokens(){
+export async function getTokens(Segment="ALL"){
   let PushTokens = [];
   
-  const querySnapshot = await getDocs(collection(db, "users/"));
+  let querySnapshot;
+
+  if(Segment === "ALL"){
+    querySnapshot = await getDocs(collection(db, "users/"));
+  }else if(Segment === "STAFF"){
+    querySnapshot = await getDocs(collection(db, "users/"), where("staff", "==", true));
+  }else if(Segment === "COMITE"){
+    querySnapshot = await getDocs(collection(db, "users/"), where("comite", "==", true));
+  }else if(Segment === "HACKATHON"){
+    querySnapshot = await getDocs(collection(db, "users/"), where("hackathon", "==", true));
+  }
+
 
   querySnapshot.forEach((doc) => {
     if(doc.data()?.notificationToken){
