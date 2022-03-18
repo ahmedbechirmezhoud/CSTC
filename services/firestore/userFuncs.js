@@ -85,7 +85,7 @@ export async function getCurrentUserData(){
     goOffline(rtdb);
     
     if(!vote.exists()) return {...data, votedFor: null, phone: phone.phone, email: email};
-    return {data, votedFor: vote.toJSON().votedFor, phone: phone.phone, email: email};
+    return {...data, votedFor: vote.toJSON().votedFor, phone: phone.phone, email: email};
 }
 
 export async function readDataFromPath(path){

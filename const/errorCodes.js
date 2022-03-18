@@ -5,6 +5,8 @@ export const ErrorCodes = {
     NOT_LOGGED_IN: ["user-not-logged-in", "You are not logged in!"],
     EMAIL_NOT_VERIFIED: ["email-not-verified", 'User email is not verified'],
     FB_LOGIN_CANCEL: ["facebook-login-canceled", "Facebook login canceled by user"],
+    FB_ALREADY_LINKED:["provider-already-linked", "This account is already linked."],
+    FB_ALREADY_USED:["credential-already-used", "This account is already being used by someone else!"],
     PHONE_ALREADY_INUSE: ["phone-already-used", "Phone number is already used."],
     PHONE_DOESNT_EXIST: ["phone-doesn't-exist", "Phone number doesn't exist."],
     INVALID_PHONE_NUMBER: ["invalid-phone-number", 'Invalid phone number.'],

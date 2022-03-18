@@ -28,6 +28,14 @@ export function errorHandler(err){
                 err.message = ErrorCodes.USER_NOT_EXIST[1];
                 break;
             }
+            case "auth/provider-already-linked":{
+                err.message = ErrorCodes.FB_ALREADY_LINKED[1];
+                break;
+            }
+            case "auth/credential-already-in-use":{
+                err.message = ErrorCodes.FB_ALREADY_USED[1];
+                break;
+            }
         }
         throw err;
     }
