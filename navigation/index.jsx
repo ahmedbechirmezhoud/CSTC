@@ -111,7 +111,7 @@ function AuthNavigator() {
     <Stack.Navigator>
       {firstTime && <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />}
       <Stack.Screen name="Login" component={LoginPageScreen} options={{ headerShown: false, headerTransparent:true }} />
-      <Stack.Screen name="ForgotPwd" component={ForgotPwdScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ForgotPwd" component={ForgotPwdScreen} options={{ presentation: 'modal', headerTitle : "",  headerTransparent:true, headerTintColor:"#fff" }} />
    </Stack.Navigator>
   );
 }

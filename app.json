@@ -3,7 +3,7 @@
     "name": "CSTC",
     "slug": "CSTC",
     "owner": "bechirmezhoud",
-    "version": "1.0.01",
+    "version": "1.0.02",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -30,7 +30,7 @@
       "package": "com.ieee.cstc",
       "googleServicesFile": "./google-services.json",
       "softwareKeyboardLayoutMode": "pan",
-      "versionCode": 2
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png",
