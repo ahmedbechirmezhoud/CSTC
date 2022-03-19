@@ -30,7 +30,7 @@ export default function Background({ children }) {
 
 const styles = StyleSheet.create({
 	background: {
-		flex: 1,
+		flex: 4,
 		justifyContent: "center",
 	},
 	registerContainer: {

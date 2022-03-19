@@ -29,7 +29,8 @@
       },
       "package": "com.ieee.cstc",
       "googleServicesFile": "./google-services.json",
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/favicon.png",

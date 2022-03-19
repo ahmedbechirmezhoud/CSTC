@@ -41,6 +41,7 @@ export default LoginPageScreen = () => {
 			loginUser(emailInput, passwordInput)
 			.then(() => dispatchInfo({payload : {loading: false}})	)
 			.catch((error)=> {
+				console.log(error)
 				dispatchInfo({payload : { error}});	
 			})
 		}

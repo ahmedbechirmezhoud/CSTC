@@ -44,17 +44,17 @@ export default function TimelineScreen(){
                 style={styles.logo}
             />
             {events && <Card title="Local Modules" containerStyle={styles.container} >
-                <View style={{ display:"flex", justifyContent: "space-between", height:Dimensions.get("screen").height, paddingBottom:70 }}>
+                <View style={{ display:"flex", justifyContent: "space-between", paddingBottom:70 }}>
                 {events && events.map((event, i) => <Event dateTime={event.dateTime} title={event.title} key={i} index={i} location={event.location} /> ) }
                 </View>
             <Svg
                 width={Dimensions.get("screen").width}
-                height={Dimensions.get("screen").height}
-                viewBox={"0 0 " + Dimensions.get("screen").width + " " + Dimensions.get("screen").height}
+                height={Dimensions.get("screen").height+2000}
+                viewBox={"0 0 " + Dimensions.get("screen").width + " " +( Dimensions.get("screen").height+2000)}
                 style={{ alignSelf:"center", position:"absolute", zIndex:-50 }}
             >
                 <Rect x={Dimensions.get("screen").width/2} y="15" width="0" height={Dimensions.get("screen").height*timePercentage} stroke="#373737" strokeWidth="7"  />
-                <Rect x={Dimensions.get("screen").width/2} y={15+Dimensions.get("screen").height*timePercentage} width="0" height={Dimensions.get("screen").height-Dimensions.get("screen").height*timePercentage} stroke="#e07a2e" strokeWidth="7"  />
+                <Rect x={Dimensions.get("screen").width/2} y={15} width="0" height={2000} stroke="#e07a2e" strokeWidth="7"  />
             </Svg>
             </Card>}
         </Background>
@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
     container:{
         borderRadius: 20,
         width: "100%",
-        height:Dimensions.get("screen").height,
         display:"flex",
         flexDirection: "column",
         alignItems:"center",

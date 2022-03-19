@@ -25,7 +25,7 @@ export default function Event({ index, title, location, dateTime }){
                 viewBox="0 0 70 70"
                 style={{ alignSelf:"center" }}  
                 >
-                <Text style={{ color: "#fff", fontWeight:"800", textAlign:"center",textAlignVertical:"top", height:65 }}><Text style={{ fontSize:6 }} >{days[date.getDay()]}</Text>{ '\n' + date.getHours() + "H" + date.getMinutes()}</Text>
+                <Text style={{ color: "#fff", fontWeight:"800", textAlign:"center",textAlignVertical:"top", height:65 }}><Text style={{ fontSize:6 }} >{days[date.getDay()]}</Text>{ '\n' + date.getHours() + "H" + date.getMinutes() }{((date.getMinutes()/10 === 0) && "0" ) }</Text>
                 <Circle r={35} opacity={1} cx={35} cy={35} fill={color} />
             </Svg>
         </View>

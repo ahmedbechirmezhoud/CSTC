@@ -5,7 +5,8 @@ import inquirer from 'inquirer';
 import figlet from 'figlet';
 import { createSpinner } from 'nanospinner';
 import SendNotication from './services';
-import { getTokens } from './db';
+import { getTokens, db } from './db';
+import { doc, getDoc } from 'firebase/firestore';
 
 var notification = {};
 
@@ -41,7 +42,10 @@ async function getMessage(){
 
 async function handleAnswer(notification){
     const spinner = createSpinner('Sending Notification...').start();
-    SendNotication(notification, await getTokens())
+    SendNotication(notification,
+         //await (await getDoc(doc(db, "users/FmQ8Z5SPwsXDxPejoWt40DCDLuh2"))).data().notificationToken
+         await getTokens()
+         )
         .then(() => spinner.success())
         .catch(() => spinner.error())
 }

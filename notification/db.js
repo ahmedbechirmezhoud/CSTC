@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { signInWithEmailAndPassword } from "@firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBQH0riI5e09XX-pEcjvhCMAQEz2gvhDMY",
@@ -13,13 +14,16 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 
-const db = getFirestore();
+export const db = getFirestore();
 
 
 export async function getTokens(Segment="ALL"){
   let PushTokens = [];
   
   let querySnapshot;
+
+  await signInWithEmailAndPassword("bechirmezhoud4@gmail.com", "SADDOKSADDOK")
+
 
   if(Segment === "ALL"){
     querySnapshot = await getDocs(collection(db, "users/"));
