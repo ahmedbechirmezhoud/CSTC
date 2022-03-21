@@ -9,6 +9,8 @@ import { getTokens, db } from './db';
 import { doc, getDoc } from 'firebase/firestore';
 
 var notification = {};
+let segment = "ALL";
+let uid ="";
 
 function Title(){
     console.clear();
@@ -29,6 +31,30 @@ async function getTitle(){
     notification.title = answers.title;
 }
 
+async function getSegment(){
+    console.clear()
+    const answers = await inquirer.prompt({
+        name: 'segment',
+        type: 'list',
+        message : "Enter the Notification Segment",
+        default: "ALL",
+        choices:["ALL", "STAFF", "UID"]
+    });
+
+    segment = answers.segment;
+}
+
+async function getUid(){
+    console.clear()
+    const answers = await inquirer.prompt({
+        name: 'uid',
+        type: 'input',
+        message : "Enter the Participant UID",
+    });
+
+    uid = answers.uid;
+}
+
 async function getMessage(){
     console.clear()
     const answers = await inquirer.prompt({
@@ -41,13 +67,22 @@ async function getMessage(){
 }
 
 async function handleAnswer(notification){
-    const spinner = createSpinner('Sending Notification...').start();
-    SendNotication(notification,
-         //await (await getDoc(doc(db, "users/FmQ8Z5SPwsXDxPejoWt40DCDLuh2"))).data().notificationToken
-         await getTokens()
-         )
-        .then(() => spinner.success())
-        .catch(() => spinner.error())
+    if(segment === "UID"){
+        getUid().then(() => {
+            const spinner = createSpinner('Sending Notification...').start();
+            db.collection("users").doc(uid).get().then(v => {
+                SendNotication(notification, [v.data().notificationToken]).then(() => spinner.success())
+                .catch(() => spinner.error())
+            }) 
+        })
+    }else{
+        const spinner = createSpinner('Sending Notification...').start();
+        SendNotication(notification,
+             await getTokens(segment)
+             )
+            .then(() => spinner.success())
+            .catch(() => spinner.error())    
+    }
 }
 
 
@@ -56,6 +91,7 @@ const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 Title();
 await sleep();
 await getTitle();
+await getSegment();
 await getMessage().then(() => handleAnswer(notification))
 
 
